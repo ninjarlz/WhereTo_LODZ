@@ -80,6 +80,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     Log.d("tag", "onComplete: latitude: " + latLng.latitude);
                     Log.d("tag", "onComplete: longtitude: " + latLng.longitude);
+                    
                 }
             }
         });
