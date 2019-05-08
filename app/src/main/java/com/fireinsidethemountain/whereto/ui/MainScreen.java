@@ -17,9 +17,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.fireinsidethemountain.whereto.R;
 import com.fireinsidethemountain.whereto.util.Constants;
 import com.fireinsidethemountain.whereto.model.User;
@@ -52,6 +56,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private TextView _email;
     //private ArrayList<String> _currentUserInfo;
     private FusedLocationProviderClient _fusedLocationClient;
+    private Button _logOut;
 
     private void initGoogleMaps(Bundle savedInstanceState) {
         // *** IMPORTANT ***
@@ -80,7 +85,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     Log.d("tag", "onComplete: latitude: " + latLng.latitude);
                     Log.d("tag", "onComplete: longtitude: " + latLng.longitude);
-                    
+
                 }
             }
         });
@@ -94,10 +99,13 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         //_recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         _username = (TextView) findViewById(R.id.username);
         _email = (TextView) findViewById(R.id.email);
+        _logOut = (Button) findViewById(R.id.sign_out);
+        _logOut.setOnClickListener(this);
         String email = _auth.getCurrentUser().getEmail();
         _currentUser = new User(email, email);
         _username.setText(_currentUser.getUsername());
         _email.setText(_currentUser.getEmail());
+        FacebookSdk.sdkInitialize(getApplicationContext());
     }
 
 
@@ -205,6 +213,12 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     @Override
     public void onClick(View view) {
 
+        if (view == _logOut) {
+            _auth.signOut();
+            LoginManager.getInstance().logOut();
+            AccessToken.setCurrentAccessToken(null);
+            finish();
+        }
     }
 
     @Override

@@ -7,6 +7,12 @@
     tools:context=".ui.MainScreen"
     android:orientation="vertical">
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="89dp"
+        android:text="Sign out"
+        android:id="@+id/sign_out"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

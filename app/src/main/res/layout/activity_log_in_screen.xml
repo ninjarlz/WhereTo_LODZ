@@ -4,49 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.LogInScreen"
-    android:orientation="vertical">
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".ui.LogInScreen">
+
 
     <ImageView
         android:id="@+id/logInLogo"
         android:layout_width="415dp"
         android:layout_height="415dp"
         android:layout_gravity="center"
-        android:src="@drawable/logo"
-        />
+        android:src="@drawable/logo" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="email"
-        android:id="@+id/email"/>
+    <Space
+        android:layout_width="67dp"
+        android:layout_height="45dp" />
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="password"
-        android:inputType="textPassword"/>
 
-    <Button
-        android:id="@+id/logIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Log In" />
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google"
+        android:layout_width="151dp"
+        android:layout_height="43dp" />
 
-    <Button
-        android:id="@+id/register"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register" />
+    <Space
+        android:layout_width="107dp"
+        android:layout_height="44dp" />
 
-    <!--<TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <com.facebook.login.widget.LoginButton
+        xmlns:facebook="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/facebook"
+        style="@null"
+        android:layout_width="204dp"
+        android:layout_height="43dp"
+        android:background="@null"
+        facebook:com_facebook_login_text="Logowanie się"
+        facebook:com_facebook_logout_text="Logowanie się"/>
+
+
+
+
 
 </LinearLayout>
