@@ -40,7 +40,6 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
 
     private SignInButton _googleBtn;
     private LoginButton _facebookBtn;
-    private EditText _email, _password;
     private FirebaseAuth _auth = FirebaseAuth.getInstance();
     private GoogleSignInClient _googleSignInClient;
     private Intent _mainScreen;
@@ -68,6 +67,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
         _error = builder.create();
 
         _mainScreen = new Intent(this, MainScreen.class);
+
 
         if (_auth.getCurrentUser() != null) {
             startActivity(_mainScreen);
@@ -183,7 +183,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
         } else if (view == _googleBtn) {
             logInGoogle();
         }
-        
+
     }
 
 
@@ -192,8 +192,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
         super.onResume();
         _googleSignInClient.signOut();
         if (isFbLoggedIn()) {
-            LoginManager.getInstance().logOut();
-            AccessToken.setCurrentAccessToken(null);
+            facebookLogout();
         }
     }
 
@@ -217,8 +216,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
                             _progressDialog.dismiss();
                             _error.show();
                             if (isFbLoggedIn()) {
-                                LoginManager.getInstance().logOut();
-                                AccessToken.setCurrentAccessToken(null);
+                                facebookLogout();
                             }
                         }
 
@@ -231,5 +229,10 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
         return accessToken != null;
     }
 
+    private void facebookLogout()
+    {
+        LoginManager.getInstance().logOut();
+        AccessToken.setCurrentAccessToken(null);
+    }
 
 }

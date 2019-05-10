@@ -25,7 +25,8 @@
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google"
         android:layout_width="151dp"
-        android:layout_height="43dp" />
+        android:layout_height="43dp"
+        android:text="@string/login_text"/>
 
     <Space
         android:layout_width="107dp"
@@ -39,11 +40,7 @@
         android:layout_width="204dp"
         android:layout_height="43dp"
         android:background="@null"
-        facebook:com_facebook_login_text="Logowanie się"
-        facebook:com_facebook_logout_text="Logowanie się"/>
-
-
-
-
+        facebook:com_facebook_login_text="@string/login_text"
+        facebook:com_facebook_logout_text="@string/login_text"/>
 
 </LinearLayout>

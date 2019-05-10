@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/food"
+        android:title="Food"
+        android:icon="@drawable/ic_local_dining_black_24dp"/>
+    <item android:id="@+id/stay"
+        android:title="Stay"
+        android:icon="@drawable/ic_local_hotel_black_24dp"/>
+    <item android:id="@+id/events"
+        android:title="Events"
+        android:icon="@drawable/ic_local_bar_black_24dp"/>
+    <item
+        android:id="@+id/facilities"
+        android:title="Facilities"
+        android:icon="@drawable/ic_directions_bike_black_24dp"/>
+</menu>

@@ -3,8 +3,8 @@
     <string name="google_map_api_key">AIzaSyAbLTNN-0q3NqDYwBRf9MIbqC_uUFlwMVc</string>
     <string name="facebook_app_id">2341358939256022</string>
     <string name="fb_login_protocol_scheme">fb2341358939256022</string>
-    <string name="login_text">Log in</string>
-    <string name="sidebarButtonDescription">Button to open sidebar menu</string>
+    <string name="login_text">Logowanie si\u0119</string>
+    <string name="sidebarButtonDescription">Przycisk do otwierania sidebara z menu</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
 </resources>
