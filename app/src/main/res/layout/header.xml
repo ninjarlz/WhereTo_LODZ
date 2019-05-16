@@ -1,8 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="37dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="266dp"
+        android:layout_height="96dp"
+        android:layout_marginLeft="0dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="40dp"
+        android:maxHeight="40dp"
+        android:scaleType="fitCenter"
+        tools:srcCompat="@drawable/profile" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="37dp" />
+
+    <ImageButton
+        android:id="@+id/button2"
+        android:layout_width="400dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="0dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="40dp"
+        android:maxHeight="40dp"
+        android:scaleType="fitStart"
+        android:src="@drawable/food_module" />
+
+    <ImageButton
+        android:id="@+id/button3"
+        android:layout_width="400dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="0dp"
+        android:maxWidth="40dp"
+        android:maxHeight="40dp"
+        android:scaleType="fitStart"
+        android:src="@drawable/stay_module" />
+
+    <ImageButton
+        android:id="@+id/button4"
+        android:layout_width="400dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="0dp"
+        android:maxWidth="40dp"
+        android:maxHeight="40dp"
+        android:scaleType="fitStart"
+        android:src="@drawable/events_module" />
+
+    <ImageButton
+        android:id="@+id/button5"
+        android:layout_width="400dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="0dp"
+        android:maxWidth="40dp"
+        android:maxHeight="40dp"
+        android:scaleType="fitStart"
+        android:src="@drawable/facilities_module" />
 </LinearLayout>

@@ -19,7 +19,7 @@
 
     <Space
         android:layout_width="67dp"
-        android:layout_height="45dp" />
+        android:layout_height="35dp" />
 
 
     <com.google.android.gms.common.SignInButton
@@ -30,7 +30,7 @@
 
     <Space
         android:layout_width="107dp"
-        android:layout_height="44dp" />
+        android:layout_height="35dp" />
 
 
     <com.facebook.login.widget.LoginButton

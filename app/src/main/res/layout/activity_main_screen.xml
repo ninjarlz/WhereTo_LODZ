@@ -7,7 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context=".ui.MainScreen">
+    tools:context=".ui.MainScreen"
+    tools:openDrawer="start">
     <!--android:background="@color/"-->
 
 
@@ -18,7 +19,7 @@
 
         <Button
             android:id="@+id/sign_out"
-            android:layout_width="match_parent"
+            android:layout_width="279dp"
             android:layout_height="89dp"
             android:contentDescription="@string/sidebarButtonDescription"
             android:text="Sign out" />
@@ -74,16 +75,12 @@
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
-        app:headerLayout="@layout/header"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        app:menu="@menu/drawermenu"
         android:layout_gravity="start"
-        >
-    </android.support.design.widget.NavigationView>
-
-
+        android:background="@color/white"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/drawermenu"></android.support.design.widget.NavigationView>
 
 
 </android.support.v4.widget.DrawerLayout>
