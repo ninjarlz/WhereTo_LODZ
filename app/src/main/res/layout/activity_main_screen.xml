@@ -7,8 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context=".ui.MainScreen"
-    tools:openDrawer="start">
+    tools:context=".ui.MainScreen">
+    <!--tools:openDrawer="start"-->
     <!--android:background="@color/"-->
 
 
@@ -19,7 +19,7 @@
 
         <Button
             android:id="@+id/sign_out"
-            android:layout_width="279dp"
+            android:layout_width="match_parent"
             android:layout_height="89dp"
             android:contentDescription="@string/sidebarButtonDescription"
             android:text="Sign out" />

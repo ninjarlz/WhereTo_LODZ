@@ -5,15 +5,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/darkgray">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="37dp" />
+    <ImageButton
+        android:id="@+id/home"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="5dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="110dp"
+        android:maxHeight="110dp"
+        android:scaleType="fitCenter"
+        tools:srcCompat="@drawable/home" />
+
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="266dp"
+        android:id="@+id/profile"
+        android:layout_width="279dp"
         android:layout_height="96dp"
         android:layout_marginLeft="0dp"
         android:adjustViewBounds="true"
@@ -24,46 +33,83 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="37dp" />
+        android:layout_height="8dp" />
 
     <ImageButton
-        android:id="@+id/button2"
-        android:layout_width="400dp"
-        android:layout_height="80dp"
+        android:id="@+id/profileButton"
+        android:layout_width="279dp"
+        android:layout_height="55dp"
         android:layout_marginLeft="0dp"
         android:adjustViewBounds="true"
         android:maxWidth="40dp"
         android:maxHeight="40dp"
-        android:scaleType="fitStart"
+        android:scaleType="fitCenter"
+        android:src="@drawable/profileButton" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <ImageButton
+        android:id="@+id/foodButton"
+        android:layout_width="279dp"
+        android:layout_height="75dp"
+        android:layout_marginLeft="0dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="40dp"
+        android:maxHeight="40dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/food_module" />
 
     <ImageButton
-        android:id="@+id/button3"
-        android:layout_width="400dp"
-        android:layout_height="80dp"
+        android:id="@+id/stayButton"
+        android:layout_width="279dp"
+        android:layout_height="75dp"
         android:layout_marginLeft="0dp"
         android:maxWidth="40dp"
         android:maxHeight="40dp"
-        android:scaleType="fitStart"
+        android:scaleType="fitCenter"
         android:src="@drawable/stay_module" />
 
     <ImageButton
-        android:id="@+id/button4"
-        android:layout_width="400dp"
-        android:layout_height="80dp"
+        android:id="@+id/eventsButton"
+        android:layout_width="279dp"
+        android:layout_height="75dp"
         android:layout_marginLeft="0dp"
         android:maxWidth="40dp"
         android:maxHeight="40dp"
-        android:scaleType="fitStart"
+        android:scaleType="fitCenter"
         android:src="@drawable/events_module" />
 
     <ImageButton
-        android:id="@+id/button5"
-        android:layout_width="400dp"
-        android:layout_height="80dp"
+        android:id="@+id/facilitiesButton"
+        android:layout_width="279dp"
+        android:layout_height="75dp"
         android:layout_marginLeft="0dp"
         android:maxWidth="40dp"
         android:maxHeight="40dp"
-        android:scaleType="fitStart"
+        android:scaleType="fitCenter"
         android:src="@drawable/facilities_module" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <ImageButton
+        android:id="@+id/creditsButton"
+        android:layout_width="279dp"
+        android:layout_height="55dp"
+        android:layout_marginLeft="0dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="40dp"
+        android:maxHeight="40dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/creditsButton" />
+
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="12dp" />
+
 </LinearLayout>
