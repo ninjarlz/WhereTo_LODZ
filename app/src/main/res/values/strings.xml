@@ -7,4 +7,10 @@
     <string name="sidebarButtonDescription">Button to open sidebar menu</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="profile">Profile</string>
+    <string name="food">Food</string>
+    <string name="stay">Stay</string>
+    <string name="events">Events</string>
+    <string name="facilities">Facilities</string>
+    <string name="credits">Credits</string>
 </resources>

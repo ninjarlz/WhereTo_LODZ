@@ -7,4 +7,10 @@
     <string name="sidebarButtonDescription">Przycisk do otwierania sidebara z menu</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="profile">Profil</string>
+    <string name="food">Jedzenie</string>
+    <string name="stay">Pobyt</string>
+    <string name="events">Wydarzenia</string>
+    <string name="facilities">Udogodnienia</string>
+    <string name="credits">Autorzy</string>
 </resources>

@@ -10,8 +10,8 @@
 
     <ImageButton
         android:id="@+id/home"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginLeft="5dp"
         android:adjustViewBounds="true"
         android:maxWidth="110dp"
@@ -35,81 +35,105 @@
         android:layout_width="match_parent"
         android:layout_height="8dp" />
 
-    <ImageButton
+    <Button
         android:id="@+id/profileButton"
-        android:layout_width="279dp"
-        android:layout_height="55dp"
-        android:layout_marginLeft="0dp"
-        android:adjustViewBounds="true"
-        android:maxWidth="40dp"
-        android:maxHeight="40dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/profileButton" />
+        android:layout_width="119dp"
+        android:layout_height="37dp"
+        android:layout_marginLeft="80dp"
+        android:background="@drawable/profileButton"
+        android:text="@string/profile"
+        android:textAllCaps="false"
+        android:textColor="@color/browser_actions_bg_grey"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="10dp" />
+        android:layout_height="30dp" />
 
-    <ImageButton
+    <Button
         android:id="@+id/foodButton"
-        android:layout_width="279dp"
-        android:layout_height="75dp"
-        android:layout_marginLeft="0dp"
-        android:adjustViewBounds="true"
-        android:maxWidth="40dp"
-        android:maxHeight="40dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/food_module" />
+        android:layout_width="169dp"
+        android:layout_height="56dp"
+        android:layout_marginLeft="55dp"
+        android:background="@drawable/food_module"
+        android:text="@string/food"
+        android:paddingLeft="42dp"
+        android:textAllCaps="false"
+        android:textColor="@color/browser_actions_bg_grey"
+        android:textSize="23sp"
+        android:textStyle="bold" />
 
-    <ImageButton
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
+
+    <Button
         android:id="@+id/stayButton"
-        android:layout_width="279dp"
-        android:layout_height="75dp"
-        android:layout_marginLeft="0dp"
-        android:maxWidth="40dp"
-        android:maxHeight="40dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/stay_module" />
+        android:layout_width="169dp"
+        android:layout_height="56dp"
+        android:layout_marginLeft="55dp"
+        android:background="@drawable/stay_module"
+        android:text="@string/stay"
+        android:paddingLeft="42dp"
+        android:textAllCaps="false"
+        android:textColor="@color/browser_actions_bg_grey"
+        android:textSize="23sp"
+        android:textStyle="bold" />
 
-    <ImageButton
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
+
+    <Button
         android:id="@+id/eventsButton"
-        android:layout_width="279dp"
-        android:layout_height="75dp"
-        android:layout_marginLeft="0dp"
-        android:maxWidth="40dp"
-        android:maxHeight="40dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/events_module" />
+        android:layout_width="169dp"
+        android:layout_height="56dp"
+        android:layout_marginLeft="55dp"
+        android:background="@drawable/events_module"
+        android:text="@string/events"
+        android:paddingLeft="43dp"
+        android:textAllCaps="false"
+        android:textColor="@color/browser_actions_bg_grey"
+        android:textSize="23sp"
+        android:textStyle="bold" />
 
-    <ImageButton
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
+
+    <Button
         android:id="@+id/facilitiesButton"
-        android:layout_width="279dp"
-        android:layout_height="75dp"
-        android:layout_marginLeft="0dp"
-        android:maxWidth="40dp"
-        android:maxHeight="40dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/facilities_module" />
+        android:layout_width="169dp"
+        android:layout_height="56dp"
+        android:layout_marginLeft="55dp"
+        android:background="@drawable/facilities_module"
+        android:text="@string/facilities"
+        android:paddingLeft="48sp"
+        android:textAllCaps="false"
+        android:textColor="@color/browser_actions_bg_grey"
+        android:textSize="23sp"
+        android:textStyle="bold" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="10dp" />
+        android:layout_height="40dp" />
 
-    <ImageButton
+    <Button
         android:id="@+id/creditsButton"
-        android:layout_width="279dp"
-        android:layout_height="55dp"
-        android:layout_marginLeft="0dp"
-        android:adjustViewBounds="true"
-        android:maxWidth="40dp"
-        android:maxHeight="40dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/creditsButton" />
-
+        android:layout_width="119dp"
+        android:layout_height="37dp"
+        android:layout_marginLeft="80dp"
+        android:background="@drawable/profileButton"
+        android:text="@string/credits"
+        android:textAllCaps="false"
+        android:textColor="@color/browser_actions_bg_grey"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="12dp" />
+        android:layout_height="71dp" />
 
 </LinearLayout>
