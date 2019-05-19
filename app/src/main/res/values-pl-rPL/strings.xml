@@ -7,6 +7,11 @@
     <string name="sidebarButtonDescription">Przycisk do otwierania sidebara z menu</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="app">Aplikacja</string>
+    <string name="database">Baza danych</string>
+    <string name="about">o \u0142odzi</string>
+    <string name="settings">Ustawienia</string>
+    <string name="signout">Wyloguj</string>
     <string name="profile">Profil</string>
     <string name="food">Jedzenie</string>
     <string name="stay">Pobyt</string>

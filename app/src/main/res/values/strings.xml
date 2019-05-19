@@ -7,6 +7,11 @@
     <string name="sidebarButtonDescription">Button to open sidebar menu</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="app">this app</string>
+    <string name="database">database</string>
+    <string name="about">about Lodz</string>
+    <string name="settings">settings</string>
+    <string name="signout">Sign out</string>
     <string name="profile">Profile</string>
     <string name="food">Food</string>
     <string name="stay">Stay</string>
