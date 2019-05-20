@@ -13,13 +13,20 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.fireinsidethemountain.whereto.R;
 import com.fireinsidethemountain.whereto.util.Constants;
 import com.fireinsidethemountain.whereto.model.User;
@@ -36,9 +43,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-
 import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
@@ -46,12 +51,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private boolean _locationPermissionGranted = false;
     private MapView _mapView;
     private FirebaseAuth _auth = FirebaseAuth.getInstance();
-    //private RecyclerView _recyclerView;
     private User _currentUser;
     private TextView _username;
     private TextView _email;
-    //private ArrayList<String> _currentUserInfo;
     private FusedLocationProviderClient _fusedLocationClient;
+    private Button _logOut;
+    private ActionBarDrawerToggle _toggle;
+    private DrawerLayout _drawerLayout;
+    private View _header;
 
     private void initGoogleMaps(Bundle savedInstanceState) {
         // *** IMPORTANT ***
@@ -80,24 +87,41 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     Log.d("tag", "onComplete: latitude: " + latLng.latitude);
                     Log.d("tag", "onComplete: longtitude: " + latLng.longitude);
-                    
+
                 }
             }
         });
     }
 
     @Override
+    public boolean onOptionsItemSelected (MenuItem item) {
+        if (_toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+
+        _drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        _toggle = new ActionBarDrawerToggle(this, _drawerLayout, R.string.open, R.string.close);
+        _drawerLayout.addDrawerListener(_toggle);
+        _toggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        _header = getLayoutInflater().inflate(R.layout.header, null);
         initGoogleMaps(savedInstanceState);
-        //_recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         _username = (TextView) findViewById(R.id.username);
         _email = (TextView) findViewById(R.id.email);
+        _logOut = (Button) findViewById(R.id.sign_out);
+        _logOut.setOnClickListener(this);
         String email = _auth.getCurrentUser().getEmail();
         _currentUser = new User(email, email);
         _username.setText(_currentUser.getUsername());
         _email.setText(_currentUser.getEmail());
+        FacebookSdk.sdkInitialize(getApplicationContext());
     }
 
 
@@ -205,6 +229,12 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     @Override
     public void onClick(View view) {
 
+        if (view == _logOut) {
+            _auth.signOut();
+            LoginManager.getInstance().logOut();
+            AccessToken.setCurrentAccessToken(null);
+            finish();
+        }
     }
 
     @Override

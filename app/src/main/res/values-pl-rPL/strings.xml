@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">WhereTo</string>
+    <string name="google_map_api_key">AIzaSyAbLTNN-0q3NqDYwBRf9MIbqC_uUFlwMVc</string>
+    <string name="facebook_app_id">2341358939256022</string>
+    <string name="fb_login_protocol_scheme">fb2341358939256022</string>
+    <string name="login_text">Logowanie si\u0119</string>
+    <string name="sidebarButtonDescription">Przycisk do otwierania sidebara z menu</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="app">Aplikacja</string>
+    <string name="database">Baza danych</string>
+    <string name="about">o \u0142odzi</string>
+    <string name="settings">Ustawienia</string>
+    <string name="signout">Wyloguj</string>
+    <string name="profile">Profil</string>
+    <string name="food">Jedzenie</string>
+    <string name="stay">Pobyt</string>
+    <string name="events">Wydarzenia</string>
+    <string name="facilities">Udogodnienia</string>
+    <string name="credits">Autorzy</string>
+</resources>
