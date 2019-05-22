@@ -15,20 +15,16 @@
       },
       "oauth_client": [
         {
-          "client_id": "856883367856-usdrnufqnd8icsjntnup0bl7a00b7s7c.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fireinsidethemountain.whereto",
-            "certificate_hash": "5106fd44a7b29eb13f1244a77d91b0f0737910fe"
-          }
-        },
-        {
           "client_id": "856883367856-tdm5k3mmtovqdbcg89godioih13j9g6j.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.fireinsidethemountain.whereto",
             "certificate_hash": "e72343c5102bda89252737541fb2306fd2e791b6"
           }
+        },
+        {
+          "client_id": "856883367856-4c2vcjpuffk7k94vgv8qu4brff1vgdi4.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
