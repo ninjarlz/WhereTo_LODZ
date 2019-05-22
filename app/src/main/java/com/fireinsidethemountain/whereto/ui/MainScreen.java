@@ -84,6 +84,9 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             public void onComplete(@NonNull Task<Location> task) {
                 if (task.isSuccessful()) {
                     Location location = task.getResult();
+                    if (location == null) {
+                        return;
+                    }
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     Log.d("tag", "onComplete: latitude: " + latLng.latitude);
                     Log.d("tag", "onComplete: longtitude: " + latLng.longitude);
@@ -164,12 +167,13 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private void buildAlertMessageNoGps()
     {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("This application requires GPS to work properly, do you want to enable it?");
+        builder.setMessage("This application requires GPS to work properly, you have to enable it.");
         builder.setCancelable(false);
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                 Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivityForResult(enableGpsIntent, Constants.PERMISSIONS_REQUEST_ENABLE_GPS);
+                //startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
         });
         final AlertDialog alert = builder.create();
