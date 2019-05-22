@@ -24,12 +24,8 @@
         android:id="@+id/profile"
         android:layout_width="279dp"
         android:layout_height="96dp"
-        android:layout_marginLeft="0dp"
-        android:adjustViewBounds="true"
-        android:maxWidth="40dp"
-        android:maxHeight="40dp"
-        android:scaleType="fitCenter"
-        tools:srcCompat="@drawable/profile" />
+        android:layout_gravity="start"
+        tools:src="@drawable/profile" />
 
     <Space
         android:layout_width="match_parent"
@@ -40,11 +36,12 @@
         android:layout_width="119dp"
         android:layout_height="37dp"
         android:layout_marginLeft="80dp"
+        android:layout_marginStart="80dp"
         android:background="@drawable/profilebutton1"
         android:text="@string/profile"
         android:textAllCaps="false"
         android:textColor="@color/browser_actions_bg_grey"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <Space
@@ -56,12 +53,16 @@
         android:layout_width="169dp"
         android:layout_height="56dp"
         android:layout_marginLeft="55dp"
+        android:layout_marginStart="55dp"
         android:background="@drawable/food_module"
         android:text="@string/food"
         android:paddingLeft="42dp"
+        android:paddingStart="42dp"
+        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:textAllCaps="false"
         android:textColor="@color/browser_actions_bg_grey"
-        android:textSize="23sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <Space
@@ -78,7 +79,7 @@
         android:paddingLeft="42dp"
         android:textAllCaps="false"
         android:textColor="@color/browser_actions_bg_grey"
-        android:textSize="23sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <Space
@@ -95,7 +96,7 @@
         android:paddingLeft="43dp"
         android:textAllCaps="false"
         android:textColor="@color/browser_actions_bg_grey"
-        android:textSize="23sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <Space
@@ -112,7 +113,7 @@
         android:paddingLeft="48sp"
         android:textAllCaps="false"
         android:textColor="@color/browser_actions_bg_grey"
-        android:textSize="23sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <Space
@@ -128,12 +129,12 @@
         android:text="@string/credits"
         android:textAllCaps="false"
         android:textColor="@color/browser_actions_bg_grey"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="45dp" />
+        android:layout_height="50dp" />
 
 
 </LinearLayout>
