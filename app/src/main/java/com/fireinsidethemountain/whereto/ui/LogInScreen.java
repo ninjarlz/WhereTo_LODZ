@@ -135,6 +135,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 _progressDialog.dismiss();
+                e.printStackTrace();
                 Toast.makeText(LogInScreen.this, "Sing in error!", Toast.LENGTH_SHORT).show();
 
             }
