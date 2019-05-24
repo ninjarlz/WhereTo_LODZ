@@ -17,38 +17,55 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/darkyellow">
-        <TableRow
-            android:id="@+id/table"
+        <RelativeLayout
+            android:id="@+id/first"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginTop="5dp" >
-        <RelativeLayout
-            android:id="@+id/username_container"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_weight="25">
 
-            <TextView
-                android:id="@+id/username"
-                android:layout_width="match_parent"
-                android:layout_height="45dp" />
+            <RelativeLayout
+                android:id="@+id/username_container"
+                android:layout_width="350dp"
+                android:layout_height="28dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp">
 
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="0dp"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/email_container"
+                android:layout_width="350dp"
+                android:layout_height="28dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="25dp"
+                android:layout_weight="25">
+
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="0dp"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+
+            </RelativeLayout>
         </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/email_container"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_weight="25">
-
-
-            <TextView
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="45dp" />
-
-        </RelativeLayout>
-        </TableRow>
 
 
         <!--<android.support.v7.widget.RecyclerView
@@ -58,102 +75,134 @@
             android:id="@+id/recycler_view">
 
         </android.support.v7.widget.RecyclerView>-->
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
 
-        <ImageView
-            android:id="@+id/profile"
-            android:layout_width="match_parent"
-            android:layout_height="83dp"
-            android:layout_gravity="center"
-            tools:src="@drawable/applogo1" />
-
-        <TableRow
-            android:id="@+id/tableRow1"
+        <RelativeLayout
+            android:id="@+id/relative1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" >
-        <Button
-            android:id="@+id/this_app"
-            android:layout_width="150dp"
-            android:layout_height="45dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginStart="30dp"
-            android:textAllCaps="false"
-            android:textColor="@color/browser_actions_bg_grey"
-            android:background="@drawable/profilebutton1"
-            android:contentDescription="@string/sidebarButtonDescription"
-            android:text="@string/app"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:layout_height="150dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:id="@+id/this_app"
+                android:layout_width="125dp"
+                android:layout_height="39dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/profilebutton1"
+                android:contentDescription="@string/sidebarButtonDescription"
+                android:text="@string/app"
+                android:textAllCaps="false"
+                android:textColor="@color/browser_actions_bg_grey"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="80dp"
+                android:layout_height="79dp"
+                android:layout_alignBottom="@+id/about"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="135dp"
+                android:layout_marginLeft="135dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="134dp"
+                android:layout_marginRight="134dp"
+                android:layout_marginBottom="6dp"
+                android:src="@drawable/applogo"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp" />
 
             <Button
                 android:id="@+id/database"
-                android:layout_width="150dp"
-                android:layout_height="45dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginStart="15dp"
-                android:textAllCaps="false"
-                android:textColor="@color/browser_actions_bg_grey"
+                android:layout_width="125dp"
+                android:layout_height="39dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="185dp"
+                android:layout_marginLeft="185dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/profilebutton1"
                 android:contentDescription="@string/sidebarButtonDescription"
                 android:text="@string/database"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
-        </TableRow>
-        <TableRow
-            android:id="@+id/tableRow2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" >
-            <Button
-                android:id="@+id/about"
-                android:layout_width="150dp"
-                android:layout_height="45dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginStart="30dp"
                 android:textAllCaps="false"
                 android:textColor="@color/browser_actions_bg_grey"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/about"
+                android:layout_width="125dp"
+                android:layout_height="39dp"
+                android:layout_below="@+id/this_app"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="11dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginTop="13dp"
                 android:background="@drawable/profilebutton1"
                 android:contentDescription="@string/sidebarButtonDescription"
                 android:text="@string/about"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
-            <Button
-                android:id="@+id/settings"
-                android:layout_width="150dp"
-                android:layout_height="45dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginStart="15dp"
                 android:textAllCaps="false"
                 android:textColor="@color/browser_actions_bg_grey"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/settings"
+                android:layout_width="125dp"
+                android:layout_height="39dp"
+                android:layout_below="@+id/database"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="185dp"
+                android:layout_marginLeft="185dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="11dp"
+                android:layout_marginRight="11dp"
                 android:background="@drawable/profilebutton1"
                 android:contentDescription="@string/sidebarButtonDescription"
                 android:text="@string/settings"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
-        </TableRow>
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
-        <Button
-            android:id="@+id/sign_out"
-            android:layout_width="130dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="120dp"
-            android:layout_marginStart="120dp"
-            android:textAllCaps="false"
-            android:textColor="@color/browser_actions_bg_grey"
-            android:background="@drawable/profilebutton1"
-            android:contentDescription="@string/sidebarButtonDescription"
-            android:text="@string/signout"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+                android:textAllCaps="false"
+                android:textColor="@color/browser_actions_bg_grey"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="5dp" />
+            <Button
+                android:id="@+id/sign_out"
+                android:layout_width="130dp"
+                android:layout_height="39dp"
+                android:layout_below="@+id/logo"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="115dp"
+                android:layout_marginLeft="115dp"
+                android:layout_marginTop="17dp"
+                android:layout_marginEnd="115dp"
+                android:layout_marginRight="115dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/profilebutton1"
+                android:contentDescription="@string/sidebarButtonDescription"
+                android:text="@string/signout"
+                android:textAllCaps="false"
+                android:textColor="@color/browser_actions_bg_grey"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/map_container"
@@ -177,7 +226,7 @@
         android:layout_gravity="start"
         android:background="@color/white"
         app:headerLayout="@layout/header"
-        app:menu="@menu/drawermenu"></android.support.design.widget.NavigationView>
+        ></android.support.design.widget.NavigationView>
 
 
 </android.support.v4.widget.DrawerLayout>

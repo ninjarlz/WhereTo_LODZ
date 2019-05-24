@@ -9,7 +9,7 @@
     <string name="close">Close</string>
     <string name="app">Aplikacja</string>
     <string name="database">Baza danych</string>
-    <string name="about">o \u0142odzi</string>
+    <string name="about">o Łodzi</string>
     <string name="settings">Ustawienia</string>
     <string name="signout">Wyloguj</string>
     <string name="profile">Profil</string>
@@ -18,4 +18,9 @@
     <string name="events">Wydarzenia</string>
     <string name="facilities">Udogodnienia</string>
     <string name="credits">Autorzy</string>
+    <string name="random">?</string>
+    <string name="all">all</string>
+    <string name="top">top</string>
+    <string name="search">Szukaj</string>
+    <string name="filter">filtry</string>
 </resources>
