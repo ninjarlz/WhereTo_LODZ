@@ -221,12 +221,162 @@
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
+        android:id = "@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/white"
-        app:headerLayout="@layout/header"
-        ></android.support.design.widget.NavigationView>
+        android:background="@color/yellow">
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/yellow"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/home"
+                android:layout_width="40dp"
+                android:layout_height="43dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/home"
+                app:layout_constraintBottom_toTopOf="@+id/profile"
+                app:layout_constraintEnd_toEndOf="@+id/profile"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/profile"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
 
 
+            <ImageView
+                android:id="@+id/profile"
+                android:layout_width="226dp"
+                android:layout_height="80dp"
+                android:layout_gravity="start"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="60dp"
+                android:src="@drawable/profile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/profileButton"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/profilebutton1"
+                android:onClick="onClick"
+                android:text="@string/profile"
+                android:textAllCaps="false"
+                android:textColor="@color/browser_actions_bg_grey"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/profile"
+                app:layout_constraintStart_toStartOf="@+id/profile"
+                app:layout_constraintTop_toBottomOf="@+id/profile"
+                app:layout_constraintVertical_bias="0.009" />
+
+            <Button
+                android:id="@+id/foodButton"
+                android:layout_width="210dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/food_module"
+                android:paddingStart="42dp"
+                android:paddingLeft="42dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/food"
+                android:textAllCaps="false"
+                android:textColor="@color/browser_actions_bg_grey"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/profileButton"
+                app:layout_constraintStart_toStartOf="@+id/profileButton"
+                app:layout_constraintTop_toBottomOf="@+id/profileButton" />
+
+            <Button
+                android:id="@+id/stayButton"
+                android:layout_width="210dp"
+                android:layout_height="70dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/stay_module"
+                android:paddingLeft="42dp"
+                android:text="@string/stay"
+                android:textAllCaps="false"
+                android:textColor="@color/browser_actions_bg_grey"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/foodButton"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/foodButton"
+                app:layout_constraintTop_toBottomOf="@+id/foodButton"
+                app:layout_constraintVertical_bias="0.034" />
+
+            <Button
+                android:id="@+id/eventsButton"
+                android:layout_width="210dp"
+                android:layout_height="70dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/events_module"
+                android:paddingLeft="43dp"
+                android:text="@string/events"
+                android:textAllCaps="false"
+                android:textColor="@color/browser_actions_bg_grey"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/stayButton"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/stayButton"
+                app:layout_constraintTop_toBottomOf="@+id/stayButton"
+                app:layout_constraintVertical_bias="0.05" />
+
+            <Button
+                android:id="@+id/facilitiesButton"
+                android:layout_width="210dp"
+                android:layout_height="70dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/facilities_module"
+                android:paddingStart="50sp"
+                android:paddingLeft="50sp"
+                android:paddingEnd="0sp"
+                android:paddingRight="0sp"
+                android:text="@string/facilities"
+                android:textAllCaps="false"
+                android:textColor="@color/browser_actions_bg_grey"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/eventsButton"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/eventsButton"
+                app:layout_constraintTop_toBottomOf="@+id/eventsButton"
+                app:layout_constraintVertical_bias="0.108" />
+
+            <Button
+                android:id="@+id/creditsButton"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/profilebutton1"
+                android:text="@string/credits"
+                android:textAllCaps="false"
+                android:textColor="@color/browser_actions_bg_grey"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/facilitiesButton"
+                app:layout_constraintStart_toStartOf="@+id/facilitiesButton"
+                app:layout_constraintTop_toBottomOf="@+id/facilitiesButton"
+                app:layout_constraintVertical_bias="0.44" />
+
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

@@ -1,6 +1,6 @@
 package com.fireinsidethemountain.whereto.ui;
-
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -10,9 +10,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,45 +21,61 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.fireinsidethemountain.whereto.R;
+import com.fireinsidethemountain.whereto.model.ProgramClient;
 import com.fireinsidethemountain.whereto.util.Constants;
 import com.fireinsidethemountain.whereto.model.User;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import org.w3c.dom.Text;
-import java.util.ArrayList;
+
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
 
     private boolean _locationPermissionGranted = false;
     private MapView _mapView;
+    private GoogleMap _map;
     private FirebaseAuth _auth = FirebaseAuth.getInstance();
     private User _currentUser;
     private TextView _username;
     private TextView _email;
     private FusedLocationProviderClient _fusedLocationClient;
+
     private Button _logOut;
+    private Button _database;
+    private Button _food;
+    private Button _accommodation;
+    private Button _facilities;
+    private Button _events;
+    private Button _credits;
+    private Button _profile;
+    private Button _app;
+    private Button _aboutLodz;
+    private Button _settings;
+    private AlphaAnimation _buttonClick = new AlphaAnimation(1f, 0.8f);
+    private boolean _mapIsReady;
+
     private ActionBarDrawerToggle _toggle;
     private DrawerLayout _drawerLayout;
-    private View _header;
+
+    private ProgramClient _programClient = ProgramClient.getInstance();
+
 
     private void initGoogleMaps(Bundle savedInstanceState) {
         // *** IMPORTANT ***
@@ -74,6 +91,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         _fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
+
     private void getLastKnownLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -87,17 +105,18 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                     if (location == null) {
                         return;
                     }
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    Log.d("tag", "onComplete: latitude: " + latLng.latitude);
-                    Log.d("tag", "onComplete: longtitude: " + latLng.longitude);
-
+                    moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), Constants.DEFAULT_ZOOM);
                 }
             }
         });
     }
 
+    private void moveCamera(LatLng latLng, float zoom) {
+        _map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    }
+
     @Override
-    public boolean onOptionsItemSelected (MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (_toggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -108,23 +127,49 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-
+        _buttonClick.setDuration(300);
         _drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         _toggle = new ActionBarDrawerToggle(this, _drawerLayout, R.string.open, R.string.close);
         _drawerLayout.addDrawerListener(_toggle);
         _toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        _header = getLayoutInflater().inflate(R.layout.header, null);
         initGoogleMaps(savedInstanceState);
         _username = (TextView) findViewById(R.id.username);
         _email = (TextView) findViewById(R.id.email);
+
+
         _logOut = (Button) findViewById(R.id.sign_out);
         _logOut.setOnClickListener(this);
+        _database = (Button) findViewById(R.id.database);
+        _database.setOnClickListener(this);
+        _app = (Button) findViewById(R.id.this_app);
+        _app.setOnClickListener(this);
+        _aboutLodz = (Button) findViewById(R.id.about);
+        _aboutLodz.setOnClickListener(this);
+        _settings = (Button) findViewById(R.id.settings);
+        _settings.setOnClickListener(this);
+        _food = (Button) findViewById(R.id.foodButton);
+        _food.setOnClickListener(this);
+
+        _accommodation = (Button) findViewById(R.id.stayButton);
+        _accommodation.setOnClickListener(this);
+        _events = (Button) findViewById(R.id.eventsButton);
+        _events.setOnClickListener(this);
+        _facilities = (Button) findViewById(R.id.facilitiesButton);
+        _facilities.setOnClickListener(this);
+        _credits = (Button) findViewById(R.id.creditsButton);
+        _credits.setOnClickListener(this);
+        _profile = (Button) findViewById(R.id.profileButton);
+        _profile.setOnClickListener(this);
+
         String email = _auth.getCurrentUser().getEmail();
-        _currentUser = new User(email, email);
+        String id = _auth.getCurrentUser().getUid();
+        _currentUser = new User(id, email, email);
+        _programClient.logInUser(_currentUser);
         _username.setText(_currentUser.getUsername());
         _email.setText(_currentUser.getEmail());
         FacebookSdk.sdkInitialize(getApplicationContext());
+
     }
 
 
@@ -134,16 +179,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         return false;
     }
 
-    public boolean isServicesOk()
-    {
+    public boolean isServicesOk() {
         GoogleApiAvailability gaa = GoogleApiAvailability.getInstance();
         int available = gaa.isGooglePlayServicesAvailable(MainScreen.this);
 
         if (available == ConnectionResult.SUCCESS) {
             // everything is fine and the user can make map requests
             return true;
-        }
-        else if (gaa.isUserResolvableError(available)) {
+        } else if (gaa.isUserResolvableError(available)) {
             // an error occured but it could be resolved
             Dialog dialog = gaa.getErrorDialog(MainScreen.this, available, Constants.ERROR_DIALOG_REQUEST);
             dialog.show();
@@ -153,19 +196,17 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         return false;
     }
 
-    public boolean isGPSEnabled()
-    {
+    public boolean isGPSEnabled() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
             return false;
         }
         return true;
     }
 
-    private void buildAlertMessageNoGps()
-    {
+    private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("This application requires GPS to work properly, you have to enable it.");
         builder.setCancelable(false);
@@ -173,21 +214,21 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                 Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivityForResult(enableGpsIntent, Constants.PERMISSIONS_REQUEST_ENABLE_GPS);
-                //startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
         });
         final AlertDialog alert = builder.create();
         alert.show();
     }
 
+    @SuppressLint("MissingPermission")
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case Constants.PERMISSIONS_REQUEST_ENABLE_GPS: {
                 if (!_locationPermissionGranted) {
                     getLocationPermission();
-                } else{
+                } else {
                     getLastKnownLocation();
                 }
                 // else DO STH
@@ -211,8 +252,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-    private void getLocationPermission()
-    {
+    private void getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
          * device. The result of the permission request is handled by a callback,
@@ -225,7 +265,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             getLastKnownLocation();
         } else {
             ActivityCompat.requestPermissions(this,
-                    new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
@@ -237,7 +277,32 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             _auth.signOut();
             LoginManager.getInstance().logOut();
             AccessToken.setCurrentAccessToken(null);
+            view.startAnimation(_buttonClick);
             finish();
+        } else if (view == _database) {
+            Log.d("tag", "onComplete: kurwa1");
+            _programClient.writeNewPost();
+            view.startAnimation(_buttonClick);
+        }  else if (view == _food) {
+            view.startAnimation(_buttonClick);
+            Log.d("tag", "onComplete: kurwa3");
+        } else if (view == _profile) {
+            view.startAnimation(_buttonClick);
+        } else if (view == _credits) {
+            view.startAnimation(_buttonClick);
+        } else if (view == _app) {
+            Log.d("tag", "onComplete: kurwa2");
+            view.startAnimation(_buttonClick);
+        } else if (view == _aboutLodz) {
+            view.startAnimation(_buttonClick);
+        } else if (view == _settings) {
+            view.startAnimation(_buttonClick);
+        } else if (view == _accommodation) {
+            view.startAnimation(_buttonClick);
+        } else if (view == _events) {
+            view.startAnimation(_buttonClick);
+        } else if (view == _facilities) {
+            view.startAnimation(_buttonClick);
         }
     }
 
@@ -245,11 +310,13 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     protected void onResume() {
         super.onResume();
         _mapView.onResume();
-        if (checkMapServices() && _locationPermissionGranted) {
-            // Do STH
-            getLastKnownLocation();
-        } else {
-            getLocationPermission();
+        if (_mapIsReady) {
+            if (checkMapServices() && _locationPermissionGranted) {
+                // Do STH
+                getLastKnownLocation();
+            } else {
+                getLocationPermission();
+            }
         }
     }
 
@@ -265,9 +332,19 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         _mapView.onStop();
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap map) {
-        map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        //map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        _map = map;
+        if (checkMapServices() && _locationPermissionGranted) {
+            // Do STH
+            getLastKnownLocation();
+        } else {
+            getLocationPermission();
+        }
+        _map.setMyLocationEnabled(true);
+        _mapIsReady = true;
     }
 
     @Override
@@ -287,4 +364,6 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         super.onLowMemory();
         _mapView.onLowMemory();
     }
+
+
 }
