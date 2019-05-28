@@ -24,6 +24,7 @@ public class ProgramClient {
     private User _currentUser;
     private DatabaseReference _databaseReference = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth _firebaseAuth = FirebaseAuth.getInstance();
+    public static boolean _loggedViaFb = false;
 
     private ProgramClient() {
 

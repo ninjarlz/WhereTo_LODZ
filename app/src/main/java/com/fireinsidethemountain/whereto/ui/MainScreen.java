@@ -14,15 +14,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.fireinsidethemountain.whereto.R;
 import com.fireinsidethemountain.whereto.model.ProgramClient;
-
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
 
-
+    private ImageView _profileImage;
     private Button _food;
     private Button _accommodation;
     private Button _facilities;
@@ -36,10 +40,11 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private DrawerLayout _drawerLayout;
 
     private ProgramClient _programClient = ProgramClient.getInstance();
+    private FirebaseAuth _auth = FirebaseAuth.getInstance();
+
     private Fragment _mapScreenFragment = new MapScreen();
     private Fragment _foodModuleFragment = new FoodModule();
     private Fragment _currentFragment;
-
     private FragmentManager _fragmentManager = getSupportFragmentManager();
     private FragmentTransaction _fragmentTransaction;
 
@@ -54,6 +59,12 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         _drawerLayout.addDrawerListener(_toggle);
         _toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        _profileImage = findViewById(R.id.profile);
+
+        String imgUrl = _auth.getCurrentUser().getPhotoUrl().toString();
+        Glide.with(this).load(imgUrl).apply(RequestOptions.circleCropTransform()).into(_profileImage);
 
         _food = (Button) findViewById(R.id.foodButton);
         _food.setOnClickListener(this);

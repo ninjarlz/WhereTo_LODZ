@@ -47,7 +47,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
     private ProgressDialog _progressDialog;
     private CallbackManager _callbackManager;
     private AlertDialog _error;
-    private ProgramClient programClient = ProgramClient.getInstance();
+    private ProgramClient _programClient = ProgramClient.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
