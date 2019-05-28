@@ -29,6 +29,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private Button _events;
     private Button _credits;
     private Button _profile;
+    private Button _home;
     private AlphaAnimation _buttonClick = new AlphaAnimation(1f, 0.8f);
 
     private ActionBarDrawerToggle _toggle;
@@ -56,7 +57,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
         _food = (Button) findViewById(R.id.foodButton);
         _food.setOnClickListener(this);
-
+        _home = (Button) findViewById(R.id.home);
+        _home.setOnClickListener(this);
         _accommodation = (Button) findViewById(R.id.stayButton);
         _accommodation.setOnClickListener(this);
         _events = (Button) findViewById(R.id.eventsButton);
@@ -91,7 +93,6 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             fragment = _foodModuleFragment;
             Log.d("tag", "onComplete: kurwa3");
         } else if (view == _profile) {
-            fragment = _mapScreenFragment;
             view.startAnimation(_buttonClick);
         } else if (view == _credits) {
             view.startAnimation(_buttonClick);
@@ -101,14 +102,19 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             view.startAnimation(_buttonClick);
         } else if (view == _facilities) {
             view.startAnimation(_buttonClick);
+        } else if (view == _home) {
+            fragment = _mapScreenFragment;
+            view.startAnimation(_buttonClick);
         }
 
         if (fragment != null) {
-            _fragmentTransaction = _fragmentManager.beginTransaction();
-            _fragmentTransaction.hide(_currentFragment);
-            _currentFragment = fragment;
-            _fragmentTransaction.show(_currentFragment);
-            _fragmentTransaction.commit();
+            if (fragment != _currentFragment) {
+                _fragmentTransaction = _fragmentManager.beginTransaction();
+                _fragmentTransaction.hide(_currentFragment);
+                _currentFragment = fragment;
+                _fragmentTransaction.show(_currentFragment);
+                _fragmentTransaction.commit();
+            }
             _drawerLayout.closeDrawer(GravityCompat.START);
         }
     }
@@ -121,6 +127,9 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(_toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

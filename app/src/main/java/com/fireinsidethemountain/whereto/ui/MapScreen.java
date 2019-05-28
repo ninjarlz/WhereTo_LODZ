@@ -334,4 +334,18 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
         _mapView.onLowMemory();
     }
 
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            if (checkMapServices() && _locationPermissionGranted) {
+                // Do STH
+                getLastKnownLocation();
+            } else {
+                getLocationPermission();
+            }
+        }
+    }
+
 }
