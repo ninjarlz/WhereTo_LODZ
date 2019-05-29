@@ -178,12 +178,6 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                     getLocationPermission();
                 } else {
                     getLastKnownLocation();
-                    /*Log.d("tag", "onComplete: kurwaaaaa3");
-                     _map.addMarker(new MarkerOptions()
-                    .position(_yourPos)
-                    .title("Sydney")
-                    .snippet("Population: 4,627,300")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.logo)));*/
                 }
                 // else DO STH
             }
@@ -319,8 +313,8 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap map) {
-        //map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         _map = map;
+        AddMarkerAt(new LatLng(51.756269, 19.460543), Enquire.EnquireType.Food);
         getLocationPermission();
         _map.setMyLocationEnabled(true);
         _mapIsReady = true;
@@ -384,8 +378,8 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
 
         _map.addMarker(new MarkerOptions()
                 .position(pos)
-                .title("Sydney")
-                .snippet("Population: 4,627,300")
+                .title("Revelo - restaurant")
+                .snippet("Where can I eat affordable Italian food in the center?")
                 .icon(BitmapDescriptorFactory.defaultMarker(colour)));
     }
 
