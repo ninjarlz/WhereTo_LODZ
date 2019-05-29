@@ -29,6 +29,7 @@ import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.fireinsidethemountain.whereto.R;
+import com.fireinsidethemountain.whereto.model.Enquire;
 import com.fireinsidethemountain.whereto.model.ProgramClient;
 import com.fireinsidethemountain.whereto.model.User;
 import com.fireinsidethemountain.whereto.util.Constants;
@@ -40,12 +41,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MapScreen extends Fragment implements View.OnClickListener, OnMapReadyCallback {
+
+
 
 
     private FirebaseAuth _auth = FirebaseAuth.getInstance();
@@ -63,7 +69,7 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     private Button _settings;
     private ProgramClient _programClient = ProgramClient.getInstance();
     private AlphaAnimation _buttonClick = new AlphaAnimation(1f, 0.8f);
-
+    private LatLng _yourPos;
 
     private User _currentUser;
     private TextView _username;
@@ -100,7 +106,10 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                     if (location == null) {
                         return;
                     }
-                    moveCamera(new LatLng(location.getLatitude(), location.getLongitude()), Constants.DEFAULT_ZOOM);
+                    _yourPos = new LatLng(location.getLatitude(), location.getLongitude());
+
+
+                    moveCamera(_yourPos, Constants.DEFAULT_ZOOM);
                 }
             }
         });
@@ -169,6 +178,12 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                     getLocationPermission();
                 } else {
                     getLastKnownLocation();
+                    /*Log.d("tag", "onComplete: kurwaaaaa3");
+                     _map.addMarker(new MarkerOptions()
+                    .position(_yourPos)
+                    .title("Sydney")
+                    .snippet("Population: 4,627,300")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.logo)));*/
                 }
                 // else DO STH
             }
@@ -242,8 +257,8 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
         String id = _auth.getCurrentUser().getUid();
         _currentUser = new User(id, email, email);
         _programClient.logInUser(_currentUser);
-        _username.setText(_currentUser.getUsername());
-        _email.setText(_currentUser.getEmail());
+        _username.setText("Username: " + _currentUser.getUsername());
+        _email.setText("Email: " + _currentUser.getEmail());
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
 
         initGoogleMaps(savedInstanceState, view);
@@ -306,14 +321,13 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     public void onMapReady(GoogleMap map) {
         //map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         _map = map;
-        if (checkMapServices() && _locationPermissionGranted) {
-            // Do STH
-            getLastKnownLocation();
-        } else {
-            getLocationPermission();
-        }
+        getLocationPermission();
         _map.setMyLocationEnabled(true);
         _mapIsReady = true;
+        //Location currentLocation = _fusedLocationClient.getLastLocation();
+
+
+
     }
 
     @Override
@@ -346,6 +360,33 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                 getLocationPermission();
             }
         }
+    }
+
+    private void AddMarkerAt(LatLng pos, Enquire.EnquireType type) {
+
+        float colour = 0f;
+
+        switch (type)
+        {
+            case Events:
+                colour = Constants.EVENTS_RED;
+                break;
+            case Facilities:
+                colour = Constants.FACILITIES_BROWN;
+                break;
+            case Food:
+                colour = Constants.FOOD_GREEN;
+                break;
+            case Accomodation:
+                colour = Constants.STAY_BLUE;
+                break;
+        }
+
+        _map.addMarker(new MarkerOptions()
+                .position(pos)
+                .title("Sydney")
+                .snippet("Population: 4,627,300")
+                .icon(BitmapDescriptorFactory.defaultMarker(colour)));
     }
 
 }

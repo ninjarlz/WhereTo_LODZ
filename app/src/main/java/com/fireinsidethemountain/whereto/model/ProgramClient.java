@@ -57,7 +57,7 @@ public class ProgramClient {
 
     public void writeNewPost() {
         if (_currentUser != null) {
-            Enquire enquire = new Enquire(_currentUser.getUserID(), _currentUser.getUsername(), Enquire.EnquireType.Events ,  "Where can I find a wild party tonight?", Calendar.getInstance().getTime(), new ArrayList<Integer>() , 0);
+            Enquire enquire = new Enquire(_currentUser.getUserID(), _currentUser.getUsername(), Enquire.EnquireType.Food ,  "Where can I eat affordable Italian food in the center?", Calendar.getInstance().getTime(), new ArrayList<Integer>() , 0);
             String key = _databaseReference.child("Enquires").push().getKey();
             Map<String, Object> enquireValues = enquire.toMap();
             Map<String, Object> childUpdates = new HashMap<>();
@@ -65,6 +65,23 @@ public class ProgramClient {
             //childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
             _databaseReference.updateChildren(childUpdates);
             Log.d("tag","onComplete: DATABSE 1");
+        }
     }
+
+    public void readPosts(List<String> dataset, Enquire.EnquireType type) {
+        switch (type) {
+            case Food:
+
+                break;
+            case Facilities:
+
+                break;
+            case Accomodation:
+
+                break;
+            case Events:
+
+                break;
+        }
     }
 }

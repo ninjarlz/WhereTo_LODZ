@@ -19,11 +19,11 @@ public class User {
     }
 
     public final String getUsername () {
-        return "Username: " + username;
+        return username;
     }
 
     public final String getEmail() {
-        return "Email: " + email;
+        return email;
     }
 
     public String getUserID() {

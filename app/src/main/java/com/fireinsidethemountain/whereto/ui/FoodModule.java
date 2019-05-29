@@ -6,11 +6,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.fireinsidethemountain.whereto.R;
+import com.fireinsidethemountain.whereto.model.Enquire;
 import com.fireinsidethemountain.whereto.model.RecyclerViewAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -20,6 +27,7 @@ public class FoodModule extends Fragment implements View.OnClickListener {
     private RecyclerView _recyclerView;
     private RecyclerView.Adapter _adapter;
     private RecyclerView.LayoutManager _layoutManager;
+    private DatabaseReference _foodEnquiresReference = FirebaseDatabase.getInstance().getReference("Enquires");
 
 
     @Override
@@ -42,18 +50,46 @@ public class FoodModule extends Fragment implements View.OnClickListener {
         _layoutManager = new LinearLayoutManager(getActivity());
         _recyclerView.setLayoutManager(_layoutManager);
 
-        ArrayList<String> dataset = new ArrayList<>();
-        dataset.add("Burger");
-        dataset.add("Gowno");
-        dataset.add("Spaghetti");
 
-        // specify an adapter
-        _adapter = new RecyclerViewAdapter(getActivity(), dataset);
-        _recyclerView.setAdapter(_adapter);
+        _foodEnquiresReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                ArrayList<String> dataset = new ArrayList<>();
+
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    Enquire e = childSnapshot.getValue(Enquire.class);
+                    if (e == null) Log.d("tag", "onComplete: kurwjajaja2");
+                    dataset.add(e.toString());
+                    //dataset.add(childSnapshot.getValue().toString());
+                }
+                _adapter = new RecyclerViewAdapter(getActivity(), dataset);
+                _recyclerView.setAdapter(_adapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                databaseError.toException().printStackTrace();
+            }
+
+        });
     }
 
     @Override
     public void onClick(View view) {
 
+    }
+
+
+    void updateRecycleContent() {
+
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+
+        }
     }
 }

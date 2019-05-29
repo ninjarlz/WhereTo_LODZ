@@ -2,9 +2,8 @@ package com.fireinsidethemountain.whereto.model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +20,61 @@ public class Enquire {
     private List<Integer> _answersIDs;
     private int _howUseful;
 
+    public String getAuthorID() {
+        return _authorID;
+    }
+
+    public void setAuthorID(String authorID) {
+        _authorID = authorID;
+    }
+
+    public String getAuthorNickname() {
+        return _authorNickname;
+    }
+
+    public void setAuthorNickname(String authorNickname) {
+        _authorNickname = authorNickname;
+    }
+
+    public EnquireType getType() {
+        return _type;
+    }
+
+    public void setType(EnquireType type) {
+        _type = type;
+    }
+
+    public String getContent() {
+        return _content;
+    }
+
+    public void setContent(String content) {
+        _content = content;
+    }
+
+    public Date getCreationDate() {
+        return _creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        _creationDate = creationDate;
+    }
+
+    public List<Integer> getAnswersIDs() {
+        return _answersIDs;
+    }
+
+    public void setAnswersIDs(List<Integer> answersIDs) {
+        _answersIDs = answersIDs;
+    }
+
+    public int getHowUseful() {
+        return _howUseful;
+    }
+
+    public void setHowUseful(int howUseful) {
+        _howUseful = howUseful;
+    }
 
     public Enquire() {
 
@@ -47,6 +101,17 @@ public class Enquire {
         result.put("answersIDs", _answersIDs);
         result.put("howUseful", _howUseful);
         return result;
+    }
+
+    @Override
+    public String toString() {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String date = sdf.format(_creationDate);
+
+        return "Author: " + _authorNickname + "\n" +
+                "Posted: " + date + "\n" +
+                "Content: " + _content;
     }
 
 
