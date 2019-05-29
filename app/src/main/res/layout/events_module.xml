@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white">
 
     <RelativeLayout
-        android:id="@+id/stayfirst"
+        android:id="@+id/firstEvents"
         android:layout_width="fill_parent"
         android:layout_height="220dp"
         android:layout_marginTop="5dp">
 
         <ImageView
-            android:id="@+id/stay"
-            android:layout_width="193dp"
-            android:layout_height="47dp"
+            android:id="@+id/events"
+            android:layout_width="216dp"
+            android:layout_height="49dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_gravity="center"
-            android:layout_marginStart="83dp"
-            android:layout_marginLeft="83dp"
+            android:layout_marginStart="72dp"
+            android:layout_marginLeft="72dp"
             android:layout_marginTop="6dp"
-            android:layout_marginEnd="84dp"
-            android:layout_marginRight="84dp"
-            android:src="@drawable/stay"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp" />
+            android:layout_marginEnd="72dp"
+            android:layout_marginRight="72dp"
+            android:src="@drawable/events" />
 
         <RelativeLayout
-            android:id="@+id/staysearch"
+            android:id="@+id/eventssearch"
             android:layout_width="278dp"
             android:layout_height="41dp"
             android:layout_alignParentStart="true"
@@ -44,10 +41,10 @@
             android:layout_marginTop="60dp"
             android:layout_marginEnd="55dp"
             android:layout_marginRight="55dp"
-            android:background="@drawable/staysearch">
+            android:background="@drawable/eventssearch">
 
             <EditText
-                android:id="@+id/editTextStay"
+                android:id="@+id/editTextEvents"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
@@ -69,7 +66,7 @@
         </RelativeLayout>
 
         <Button
-            android:id="@+id/nearStay"
+            android:id="@+id/nearEvents"
             android:layout_width="wrap_content"
             android:layout_height="57dp"
             android:layout_alignParentStart="true"
@@ -82,8 +79,8 @@
             android:layout_marginEnd="-62dp"
             android:layout_marginRight="-62dp"
             android:layout_marginBottom="57dp"
-            android:layout_toStartOf="@+id/topStay"
-            android:layout_toLeftOf="@+id/topStay"
+            android:layout_toStartOf="@+id/topEvents"
+            android:layout_toLeftOf="@+id/topEvents"
             android:background="@drawable/empty"
             android:text="@string/near"
             android:textAllCaps="false"
@@ -91,13 +88,13 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/topStay"
+            android:id="@+id/topEvents"
             android:layout_width="wrap_content"
             android:layout_height="57dp"
-            android:layout_alignStart="@+id/staysearch"
-            android:layout_alignLeft="@+id/staysearch"
-            android:layout_alignEnd="@+id/staysearch"
-            android:layout_alignRight="@+id/staysearch"
+            android:layout_alignStart="@+id/eventssearch"
+            android:layout_alignLeft="@+id/eventssearch"
+            android:layout_alignEnd="@+id/eventssearch"
+            android:layout_alignRight="@+id/eventssearch"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="63dp"
@@ -113,13 +110,13 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/allStay"
+            android:id="@+id/all"
             android:layout_width="wrap_content"
             android:layout_height="57dp"
-            android:layout_alignStart="@+id/staysearch"
-            android:layout_alignLeft="@+id/staysearch"
-            android:layout_alignEnd="@+id/staysearch"
-            android:layout_alignRight="@+id/staysearch"
+            android:layout_alignStart="@+id/eventssearch"
+            android:layout_alignLeft="@+id/eventssearch"
+            android:layout_alignEnd="@+id/eventssearch"
+            android:layout_alignRight="@+id/eventssearch"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="125dp"
@@ -135,7 +132,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/cheapStay"
+            android:id="@+id/eventsLatest"
             android:layout_width="wrap_content"
             android:layout_height="57dp"
             android:layout_alignParentTop="true"
@@ -148,17 +145,17 @@
             android:layout_marginEnd="57dp"
             android:layout_marginRight="57dp"
             android:layout_marginBottom="57dp"
-            android:layout_toEndOf="@+id/topStay"
-            android:layout_toRightOf="@+id/topStay"
+            android:layout_toEndOf="@+id/topEvents"
+            android:layout_toRightOf="@+id/topEvents"
             android:background="@drawable/empty"
-            android:text="@string/dolar"
+            android:text="@string/now"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold" />
 
 
         <Spinner
-            android:id="@+id/stayspinner"
+            android:id="@+id/eventsspinner"
             android:layout_width="278dp"
             android:layout_height="41dp"
             android:layout_alignParentStart="true"
@@ -171,11 +168,11 @@
             android:layout_marginTop="168dp"
             android:layout_marginEnd="55dp"
             android:layout_marginRight="55dp"
-            android:background="@drawable/stayfilter"
+            android:background="@drawable/eventsfilters"
             android:spinnerMode="dropdown" />
 
         <TextView
-            android:id="@+id/stayfilter"
+            android:id="@+id/eventsfilter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
@@ -197,7 +194,7 @@
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/stay_recycler_view"
+        android:id="@+id/events_recycler_view"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
