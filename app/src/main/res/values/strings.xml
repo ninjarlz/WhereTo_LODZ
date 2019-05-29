@@ -18,4 +18,9 @@
     <string name="events">Events</string>
     <string name="facilities">Facilities</string>
     <string name="credits">Credits</string>
+    <string name="random">?</string>
+    <string name="all">all</string>
+    <string name="top">top</string>
+    <string name="search">Search</string>
+    <string name="filter">filters</string>
 </resources>

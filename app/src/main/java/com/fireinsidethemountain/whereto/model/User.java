@@ -1,22 +1,32 @@
 package com.fireinsidethemountain.whereto.model;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@IgnoreExtraProperties
 public class User {
 
-    private String _username;
+    private String userID;
+    private String username;
+    private String email;
 
-    private String _email;
-
-    public User (final String username, final String email) {
-        _username = username;
-        _email = email;
+    public User (final String userID, final String username, final String email) {
+        this.userID = userID;
+        this.username = username;
+        this.email = email;
     }
 
     public final String getUsername () {
-        return "Username: " + _username;
+        return "Username: " + username;
     }
 
     public final String getEmail() {
-        return "Email: " + _email;
+        return "Email: " + email;
     }
 
+    public String getUserID() {
+        return userID;
+    }
 }

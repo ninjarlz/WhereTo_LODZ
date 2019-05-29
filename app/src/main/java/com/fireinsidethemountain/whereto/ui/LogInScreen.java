@@ -19,6 +19,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.fireinsidethemountain.whereto.R;
+import com.fireinsidethemountain.whereto.model.ProgramClient;
 import com.fireinsidethemountain.whereto.util.Constants;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -46,6 +47,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
     private ProgressDialog _progressDialog;
     private CallbackManager _callbackManager;
     private AlertDialog _error;
+    private ProgramClient _programClient = ProgramClient.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +137,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 _progressDialog.dismiss();
+                e.printStackTrace();
                 Toast.makeText(LogInScreen.this, "Sing in error!", Toast.LENGTH_SHORT).show();
 
             }
@@ -154,6 +157,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
                             String userId = _auth.getCurrentUser().getUid();
                             DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
                             currentUserDb.setValue(true);
+                            //currentUserDb.
                             _progressDialog.dismiss();
                             startActivity(_mainScreen);
 
