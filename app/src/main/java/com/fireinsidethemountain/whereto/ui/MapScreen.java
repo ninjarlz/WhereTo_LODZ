@@ -1,5 +1,4 @@
 package com.fireinsidethemountain.whereto.ui;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -15,23 +14,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.facebook.AccessToken;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.fireinsidethemountain.whereto.R;
 import com.fireinsidethemountain.whereto.model.Enquire;
-import com.fireinsidethemountain.whereto.model.ProgramClient;
-import com.fireinsidethemountain.whereto.model.User;
 import com.fireinsidethemountain.whereto.util.Constants;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -43,39 +35,63 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
+
 
 public class MapScreen extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
-
-
-
-    private FirebaseAuth _auth = FirebaseAuth.getInstance();
     private boolean _locationPermissionGranted = false;
     private MapView _mapView;
     private GoogleMap _map;
     private FusedLocationProviderClient _fusedLocationClient;
     private boolean _mapIsReady;
-
-
-    private Button _logOut;
-    private Button _database;
-    private Button _app;
-    private Button _aboutLodz;
-    private Button _settings;
-    private ProgramClient _programClient = ProgramClient.getInstance();
-    private AlphaAnimation _buttonClick = new AlphaAnimation(1f, 0.8f);
+    private Fragment _mainMenu = new MainMenu();
+    private Fragment _answerCreator = new AnswerCreator();
+    private Fragment _currentFragment;
     private LatLng _yourPos;
+    private FragmentManager _fragmentManager;
+    private FragmentTransaction _fragmentTransaction;
 
-    private User _currentUser;
-    private TextView _username;
-    private TextView _email;
+    public Fragment getMainMenu() {
+        return _mainMenu;
+    }
 
+    public void setMainMenu(Fragment mainMenu) {
+        _mainMenu = mainMenu;
+    }
 
+    public Fragment getAnswerCreator() {
+        return _answerCreator;
+    }
+
+    public void setAnswerCreator(Fragment answerCreator) {
+        _answerCreator = answerCreator;
+    }
+
+    public Fragment getCurrentFragment() {
+        return _currentFragment;
+    }
+
+    public void setCurrentFragment(Fragment fragment) {
+        if (fragment != null && fragment != _currentFragment) {
+            _fragmentTransaction = _fragmentManager.beginTransaction();
+            _fragmentTransaction.hide(_currentFragment);
+            _currentFragment = fragment;
+            if (_currentFragment == _answerCreator) {
+                AnswerCreator answerCreator = (AnswerCreator) _answerCreator;
+                answerCreator.ShowAutocomplete(true);
+                answerCreator.getAutocompleteFragment().setText("");
+
+            } else {
+                ((AnswerCreator) _answerCreator).ShowAutocomplete(false);
+            }
+            getLastKnownLocation();
+            _fragmentTransaction.show(_currentFragment);
+            _fragmentTransaction.commit();
+        }
+    }
 
     private void initGoogleMaps(Bundle savedInstanceState, View view) {
         // *** IMPORTANT ***
@@ -94,6 +110,7 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
 
 
     private void getLastKnownLocation() {
+
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -107,15 +124,15 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                         return;
                     }
                     _yourPos = new LatLng(location.getLatitude(), location.getLongitude());
-
-
                     moveCamera(_yourPos, Constants.DEFAULT_ZOOM);
+
                 }
             }
         });
+
     }
 
-    private void moveCamera(LatLng latLng, float zoom) {
+    public void moveCamera(LatLng latLng, float zoom) {
         _map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
@@ -210,7 +227,9 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                 == PackageManager.PERMISSION_GRANTED) {
             _locationPermissionGranted = true;
             // DO STH;
-            getLastKnownLocation();
+            if (_currentFragment != _answerCreator) {
+                getLastKnownLocation();
+            }
         } else {
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -229,58 +248,20 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        _logOut = view.findViewById(R.id.sign_out);
-        _logOut.setOnClickListener(this);
-        _logOut = view.findViewById(R.id.sign_out);
-        _logOut.setOnClickListener(this);
-        _database = view.findViewById(R.id.database);
-        _database.setOnClickListener(this);
-        _app = view.findViewById(R.id.this_app);
-        _app.setOnClickListener(this);
-        _aboutLodz = view.findViewById(R.id.about);
-        _aboutLodz.setOnClickListener(this);
-        _settings = view.findViewById(R.id.settings);
-        _settings.setOnClickListener(this);
-        _buttonClick.setDuration(300);
-
-
-        _username = (TextView) view.findViewById(R.id.username);
-        _email = (TextView) view.findViewById(R.id.email);
-
-        String email = _auth.getCurrentUser().getEmail();
-        String id = _auth.getCurrentUser().getUid();
-        _currentUser = new User(id, email, email);
-        _programClient.logInUser(_currentUser);
-        _username.setText("Username: " + _currentUser.getUsername());
-        _email.setText("Email: " + _currentUser.getEmail());
-        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
-
         initGoogleMaps(savedInstanceState, view);
-
+        _fragmentManager = getChildFragmentManager();
+        _fragmentTransaction = _fragmentManager.beginTransaction();
+        _fragmentTransaction.add(R.id.map_screen_fragment_container, _mainMenu);
+        _fragmentTransaction.add(R.id.map_screen_fragment_container, _answerCreator);
+        _currentFragment = _mainMenu;
+        _fragmentTransaction.show(_mainMenu);
+        _fragmentTransaction.commit();
+        //Log.d("CurrentState: ", _currentFragment == _answerCreator ? "ANSWER" : "MAIN");
     }
-
-
 
     @Override
     public void onClick(View view) {
-        if (view == _logOut) {
-            _auth.signOut();
-            LoginManager.getInstance().logOut();
-            AccessToken.setCurrentAccessToken(null);
-            view.startAnimation(_buttonClick);
-            getActivity().finish();
-        } else if (view == _database) {
-            Log.d("tag", "onComplete: kurwa1");
-            _programClient.writeNewPost();
-            view.startAnimation(_buttonClick);
-        }  else if (view == _app) {
-            Log.d("tag", "onComplete: kurwa2");
-            view.startAnimation(_buttonClick);
-        } else if (view == _aboutLodz) {
-            view.startAnimation(_buttonClick);
-        } else if (view == _settings) {
-            view.startAnimation(_buttonClick);
-        }
+
     }
 
 
@@ -289,7 +270,8 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
         super.onResume();
         _mapView.onResume();
         if (_mapIsReady) {
-            if (checkMapServices() && _locationPermissionGranted) {
+            if (checkMapServices() && _locationPermissionGranted &&
+            _currentFragment != _answerCreator) {
                 // Do STH
                 getLastKnownLocation();
             } else {
@@ -318,10 +300,6 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
         getLocationPermission();
         _map.setMyLocationEnabled(true);
         _mapIsReady = true;
-        //Location currentLocation = _fusedLocationClient.getLastLocation();
-
-
-
     }
 
     @Override
@@ -347,7 +325,8 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            if (checkMapServices() && _locationPermissionGranted) {
+            if (checkMapServices() && _locationPermissionGranted &&
+                _currentFragment != _answerCreator) {
                 // Do STH
                 getLastKnownLocation();
             } else {
@@ -382,5 +361,4 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                 .snippet("Where can I eat affordable Italian food in the center?")
                 .icon(BitmapDescriptorFactory.defaultMarker(colour)));
     }
-
 }

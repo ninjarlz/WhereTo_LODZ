@@ -25,10 +25,12 @@ import java.util.ArrayList;
 public class FoodModule extends Fragment implements View.OnClickListener {
 
     private RecyclerView _recyclerView;
-    private RecyclerView.Adapter _adapter;
+    private RecyclerViewAdapter _adapter;
     private RecyclerView.LayoutManager _layoutManager;
     private DatabaseReference _foodEnquiresReference = FirebaseDatabase.getInstance().getReference("Enquires");
-
+    private MapScreen _mapScreen;
+    private Fragment _answerCreator;
+    private MainScreen _mainScreen;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -40,16 +42,16 @@ public class FoodModule extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        _mainScreen = (MainScreen) getActivity();
+        _mapScreen = (MapScreen) _mainScreen.getMapScreenFragment();
+        _answerCreator = _mapScreen.getAnswerCreator();
         _recyclerView = (RecyclerView) view.findViewById(R.id.food_recycler_view);
-
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         _recyclerView.setHasFixedSize(true);
-
         // use a linear layout manager
         _layoutManager = new LinearLayoutManager(getActivity());
         _recyclerView.setLayoutManager(_layoutManager);
-
 
         _foodEnquiresReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -65,6 +67,13 @@ public class FoodModule extends Fragment implements View.OnClickListener {
                 }
                 _adapter = new RecyclerViewAdapter(getActivity(), dataset);
                 _recyclerView.setAdapter(_adapter);
+                _adapter.setClickListener(new RecyclerViewAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClick(View v,int pos) {
+                        _mapScreen.setCurrentFragment(_answerCreator);
+                        _mainScreen.setCurrentFragment(_mapScreen);
+                    }
+                });
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

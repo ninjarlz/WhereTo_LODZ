@@ -3,3 +3,4 @@ https://www.youtube.com/watch?v=McCbYGF-osE&list=PLgCYzUzKIBE-SZUrVOsbYMzH7tPigT
 https://firebase.google.com/docs/database/android/structure-data#avoid_nesting_data - baza danych
 https://github.com/codepath/android_guides/wiki/Fragment-Navigation-Drawer - fragments 1
 https://www.simplifiedcoding.net/android-navigation-drawer-example-using-fragments/ - fragments 2
+https://developers.google.com/android/reference/com/google/android/gms/location/places/Place - types of places

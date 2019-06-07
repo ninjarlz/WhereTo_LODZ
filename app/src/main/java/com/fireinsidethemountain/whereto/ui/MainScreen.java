@@ -42,12 +42,39 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private ProgramClient _programClient = ProgramClient.getInstance();
     private FirebaseAuth _auth = FirebaseAuth.getInstance();
 
-    private Fragment _mapScreenFragment = new MapScreen();
+    private MapScreen _mapScreenFragment = new MapScreen();
+    private Fragment _mainMenuFragment;
     private Fragment _foodModuleFragment = new FoodModule();
+    private Fragment _answerCreator = new AnswerCreator();
     private Fragment _currentFragment;
     private FragmentManager _fragmentManager = getSupportFragmentManager();
     private FragmentTransaction _fragmentTransaction;
 
+
+    public Fragment getMapScreenFragment () {
+        return _mapScreenFragment;
+    }
+
+    public Fragment getAnswerCreatorFragment () {
+        return _answerCreator;
+    }
+
+    public Fragment getCurrentFragment() {
+        return _currentFragment;
+    }
+
+    public void setCurrentFragment(Fragment fragment) {
+        if (fragment != null) {
+            if(fragment != _currentFragment) {
+                _fragmentTransaction = _fragmentManager.beginTransaction();
+                _fragmentTransaction.hide(_currentFragment);
+                _currentFragment = fragment;
+                _fragmentTransaction.show(_currentFragment);
+                _fragmentTransaction.commit();
+            }
+            _drawerLayout.closeDrawer(GravityCompat.START);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +108,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         _profile = (Button) findViewById(R.id.profileButton);
         _profile.setOnClickListener(this);
 
+        _mainMenuFragment = _mapScreenFragment.getMainMenu();
+
         _fragmentTransaction = _fragmentManager.beginTransaction();
         _fragmentTransaction.add(R.id.screen_area, _foodModuleFragment);
         _fragmentTransaction.add(R.id.screen_area, _mapScreenFragment);
@@ -97,10 +126,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
         Fragment fragment = null;
 
-
         if (view == _food) {
             view.startAnimation(_buttonClick);
-            //fragment = new FoodModule();
             fragment = _foodModuleFragment;
             Log.d("tag", "onComplete: kurwa3");
         } else if (view == _profile) {
@@ -114,20 +141,11 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         } else if (view == _facilities) {
             view.startAnimation(_buttonClick);
         } else if (view == _home) {
+            _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
             fragment = _mapScreenFragment;
             view.startAnimation(_buttonClick);
         }
-
-        if (fragment != null) {
-            if (fragment != _currentFragment) {
-                _fragmentTransaction = _fragmentManager.beginTransaction();
-                _fragmentTransaction.hide(_currentFragment);
-                _currentFragment = fragment;
-                _fragmentTransaction.show(_currentFragment);
-                _fragmentTransaction.commit();
-            }
-            _drawerLayout.closeDrawer(GravityCompat.START);
-        }
+        setCurrentFragment(fragment);
     }
 
 
