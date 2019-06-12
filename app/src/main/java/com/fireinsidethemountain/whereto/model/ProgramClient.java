@@ -57,7 +57,9 @@ public class ProgramClient {
 
     public void writeNewPost() {
         if (_currentUser != null) {
-            Enquire enquire = new Enquire(_currentUser.getUserID(), _currentUser.getUsername(), Enquire.EnquireType.Food ,  "Where can I eat affordable Italian food in the center?", Calendar.getInstance().getTime(), new ArrayList<Integer>() , 0);
+            Enquire enquire = new Enquire(_currentUser.getUserID(), _currentUser.getUsername(), Enquire.EnquireType.Food ,
+                    "Where can I eat affordable Italian food in the center?", true,
+                    Calendar.getInstance().getTime());
             String key = _databaseReference.child("Enquires").push().getKey();
             Map<String, Object> enquireValues = enquire.toMap();
             Map<String, Object> childUpdates = new HashMap<>();

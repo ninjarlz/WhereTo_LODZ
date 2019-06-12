@@ -17,8 +17,9 @@ public class Enquire {
     private EnquireType _type;
     private String _content;
     private Date _creationDate;
-    private List<Integer> _answersIDs;
-    private int _howUseful;
+    private boolean _answersIDsNode;
+    //private List<Integer> _answersIDs;
+    //private int _howUseful;
 
     public String getAuthorID() {
         return _authorID;
@@ -60,7 +61,7 @@ public class Enquire {
         _creationDate = creationDate;
     }
 
-    public List<Integer> getAnswersIDs() {
+    /*public List<Integer> getAnswersIDs() {
         return _answersIDs;
     }
 
@@ -74,21 +75,23 @@ public class Enquire {
 
     public void setHowUseful(int howUseful) {
         _howUseful = howUseful;
-    }
+    }*/
 
     public Enquire() {
 
     }
 
-    public Enquire(String authorID, String authorNickname,  EnquireType type,  String content, Date creationDate, List<Integer> answersIDs, int howUseful) {
+    public Enquire(String authorID, String authorNickname,  EnquireType type,  String content, boolean answersIDsNode,Date creationDate) {
         _authorID = authorID;
         _authorNickname = authorNickname;
         _type = type;
         _content = content;
         _creationDate = creationDate;
-        _answersIDs = answersIDs;
-        _howUseful = howUseful;
+        _answersIDsNode = answersIDsNode;
+        //_answersIDs = answersIDs;
     }
+
+
 
 
     public Map<String, Object> toMap() {
@@ -98,8 +101,9 @@ public class Enquire {
         result.put("type", _type);
         result.put("content", _content);
         result.put("creationDate", _creationDate);
-        result.put("answersIDs", _answersIDs);
-        result.put("howUseful", _howUseful);
+        //result.put("answersIDs", _answersIDs);
+        result.put("answersIDs", _answersIDsNode);
+        //result.put("howUseful", _howUseful);
         return result;
     }
 

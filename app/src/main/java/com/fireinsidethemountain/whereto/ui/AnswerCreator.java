@@ -20,9 +20,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
 import java.util.Arrays;
 
-public class AnswerCreator extends Fragment {
+public class AnswerCreator extends Fragment implements View.OnClickListener {
 
     FragmentManager _fragmentManager;
     FragmentTransaction _fragmentTransaction;
@@ -30,6 +33,9 @@ public class AnswerCreator extends Fragment {
     private final LatLng LODZ_REGION_LEFT_CORNER = new LatLng(51.846180, 19.260541);
     private final LatLng LODZ_REGION_RIGHT_CORNER = new LatLng(51.846180, 19.260541);
     private MapScreen _mapScreen;
+    private Button _postAnswer;
+    private boolean _isButtonVisible;
+    private Place _currentPlace;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -41,6 +47,9 @@ public class AnswerCreator extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        _postAnswer = view.findViewById(R.id.postAnswer);
+        _postAnswer.setOnClickListener(this);
+        _postAnswer.setVisibility(View.GONE);
         // Initialize Places.
         Places.initialize(getActivity(), BuildConfig.GoogleSecAPIKEY);
         // Create a new Places client instance.
@@ -60,6 +69,7 @@ public class AnswerCreator extends Fragment {
             @Override
             public void onPlaceSelected(Place place) {
                 _mapScreen.moveCamera(place.getLatLng(), Constants.PLACE_PICKER_ZOOM);
+                _currentPlace = place;
             }
 
             @Override
@@ -72,6 +82,11 @@ public class AnswerCreator extends Fragment {
 
     public void ShowAutocomplete(boolean isVisible) {
         if (isVisible) {
+            if (!_isButtonVisible) {
+                _postAnswer.setVisibility(View.VISIBLE);
+                _isButtonVisible = true;
+            }
+            _currentPlace = null;
             _fragmentTransaction = _fragmentManager.beginTransaction();
             _fragmentTransaction.show(_autocompleteFragment);
             _fragmentTransaction.commit();
@@ -86,4 +101,14 @@ public class AnswerCreator extends Fragment {
         return _autocompleteFragment;
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view == _postAnswer) {
+            if (_currentPlace == null) {
+                Toast.makeText(getContext(), "You have to choose a place to answer", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getContext(), "You have choosen " + _currentPlace.getName(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }
