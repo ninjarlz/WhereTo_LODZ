@@ -5,7 +5,6 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @IgnoreExtraProperties
@@ -17,9 +16,9 @@ public class Enquire {
     private EnquireType _type;
     private String _content;
     private Date _creationDate;
-    private boolean _answersIDsNode;
-    //private List<Integer> _answersIDs;
-    //private int _howUseful;
+    //private boolean _answersIDs;
+    private Map<String, String> _answersIDs = new HashMap<>(); // consists of AnswerID : AnswerID
+    private int _answerCount;
 
     public String getAuthorID() {
         return _authorID;
@@ -61,34 +60,31 @@ public class Enquire {
         _creationDate = creationDate;
     }
 
-    /*public List<Integer> getAnswersIDs() {
+    public Map<String, String> getAnswersIDs() {
         return _answersIDs;
     }
 
-    public void setAnswersIDs(List<Integer> answersIDs) {
+    public void setAnswersIDs(Map<String, String> answersIDs) {
         _answersIDs = answersIDs;
     }
 
-    public int getHowUseful() {
-        return _howUseful;
+    public int getAnswerCount() {
+        return _answerCount;
     }
 
-    public void setHowUseful(int howUseful) {
-        _howUseful = howUseful;
-    }*/
-
+    public void setAnswerCount(int answerCount) {
+        _answerCount = answerCount;
+    }
     public Enquire() {
 
     }
 
-    public Enquire(String authorID, String authorNickname,  EnquireType type,  String content, boolean answersIDsNode,Date creationDate) {
+    public Enquire(String authorID, String authorNickname,  EnquireType type,  String content, Date creationDate) {
         _authorID = authorID;
         _authorNickname = authorNickname;
         _type = type;
         _content = content;
         _creationDate = creationDate;
-        _answersIDsNode = answersIDsNode;
-        //_answersIDs = answersIDs;
     }
 
 
@@ -101,9 +97,8 @@ public class Enquire {
         result.put("type", _type);
         result.put("content", _content);
         result.put("creationDate", _creationDate);
-        //result.put("answersIDs", _answersIDs);
-        result.put("answersIDs", _answersIDsNode);
-        //result.put("howUseful", _howUseful);
+        result.put("answersIDs", _answersIDs);
+        result.put("answersCount", _answerCount);
         return result;
     }
 

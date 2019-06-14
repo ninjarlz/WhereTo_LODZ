@@ -22,11 +22,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.fireinsidethemountain.whereto.BuildConfig;
 import com.fireinsidethemountain.whereto.R;
+import com.fireinsidethemountain.whereto.model.AnsweredPlace;
 import com.fireinsidethemountain.whereto.model.Enquire;
 import com.fireinsidethemountain.whereto.util.Constants;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,9 +39,26 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class MapScreen extends Fragment implements View.OnClickListener, OnMapReadyCallback {
@@ -53,6 +74,10 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     private LatLng _yourPos;
     private FragmentManager _fragmentManager;
     private FragmentTransaction _fragmentTransaction;
+    private List<Marker> _markers;
+    private DatabaseReference _answeredPlacesReference = FirebaseDatabase.getInstance().getReference("AnsweredPlaces");
+    private PlacesClient _placesClient;
+    private Place _place;
 
     public Fragment getMainMenu() {
         return _mainMenu;
@@ -80,12 +105,14 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
             _fragmentTransaction.hide(_currentFragment);
             _currentFragment = fragment;
             if (_currentFragment == _answerCreator) {
+                getLastKnownLocation();
                 AnswerCreator answerCreator = (AnswerCreator) _answerCreator;
                 answerCreator.ShowAutocomplete(true);
                 answerCreator.getAutocompleteFragment().setText("");
-
+                setMarkersVisible(false);
             } else {
                 ((AnswerCreator) _answerCreator).ShowAutocomplete(false);
+                setMarkersVisible(true);
             }
             getLastKnownLocation();
             _fragmentTransaction.show(_currentFragment);
@@ -109,7 +136,7 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
 
 
 
-    private void getLastKnownLocation() {
+    public void getLastKnownLocation() {
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -248,6 +275,9 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Initialize Places.
+        Places.initialize(getActivity(), BuildConfig.GoogleSecAPIKEY);
+        _placesClient = Places.createClient(getActivity());
         initGoogleMaps(savedInstanceState, view);
         _fragmentManager = getChildFragmentManager();
         _fragmentTransaction = _fragmentManager.beginTransaction();
@@ -296,7 +326,26 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     @Override
     public void onMapReady(GoogleMap map) {
         _map = map;
-        AddMarkerAt(new LatLng(51.756269, 19.460543), Enquire.EnquireType.Food);
+        _answeredPlacesReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                _map.clear();
+                _markers = new ArrayList<>();
+
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    AnsweredPlace p = childSnapshot.getValue(AnsweredPlace.class);
+                    String placeID = childSnapshot.getKey();
+                    addMarkerAt(new LatLng(p.getLatPos(), p.getLngPos()), p.getMostPopularEnquireType(), p.getPlaceName(), p.getMostPopularEnquireContent());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //AddMarkerAt(new LatLng(51.756269, 19.460543), Enquire.EnquireType.Food);
         getLocationPermission();
         _map.setMyLocationEnabled(true);
         _mapIsReady = true;
@@ -335,7 +384,7 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
         }
     }
 
-    private void AddMarkerAt(LatLng pos, Enquire.EnquireType type) {
+    private void addMarkerAt(LatLng pos, Enquire.EnquireType type, String placeName,String enquireContent) {
 
         float colour = 0f;
 
@@ -354,11 +403,46 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                 colour = Constants.STAY_BLUE;
                 break;
         }
-
-        _map.addMarker(new MarkerOptions()
+        Marker marker = _map.addMarker(new MarkerOptions()
                 .position(pos)
-                .title("Revelo - restaurant")
-                .snippet("Where can I eat affordable Italian food in the center?")
+                .title(placeName)
+                .snippet(enquireContent)
                 .icon(BitmapDescriptorFactory.defaultMarker(colour)));
+        if (_currentFragment == _answerCreator) {
+            marker.setVisible(false);
+        }
+        _markers.add(marker);
     }
+
+
+    public void setMarkersVisible(boolean isVisible) {
+        for (Marker marker : _markers) {
+            marker.setVisible(isVisible);
+        }
+    }
+
+    /*Place getPlace(String placeID) {
+
+        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+
+        FetchPlaceRequest request = FetchPlaceRequest.builder(placeID, placeFields).build();
+        _placesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+            @Override
+            public void onSuccess(FetchPlaceResponse response) {
+                _place = response.getPlace();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                if (exception instanceof ApiException) {
+                    ApiException apiException = (ApiException) exception;
+                    int statusCode = apiException.getStatusCode();
+                    _place = null;
+                }
+            }
+        });
+        return _place;
+    }*/
+
+
 }

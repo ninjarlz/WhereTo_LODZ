@@ -1,6 +1,7 @@
 package com.fireinsidethemountain.whereto.ui;
 import com.fireinsidethemountain.whereto.BuildConfig;
 import com.fireinsidethemountain.whereto.R;
+import com.fireinsidethemountain.whereto.model.ProgramClient;
 import com.fireinsidethemountain.whereto.util.Constants;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
@@ -36,6 +37,29 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
     private Button _postAnswer;
     private boolean _isButtonVisible;
     private Place _currentPlace;
+    private ProgramClient _programClient = ProgramClient.getInstance();
+
+    private String _currentEnquireID;
+
+    public String getCurrentEnquireID() {
+        return _currentEnquireID;
+    }
+
+    public void setCurrentEnquireID(String currentEnquireID) {
+        _currentEnquireID = currentEnquireID;
+    }
+
+
+    public Place getCurrentPlace() {
+        return _currentPlace;
+    }
+
+    public void setCurrentPlace(Place place) {
+        _currentPlace = place;
+    }
+
+
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -50,10 +74,6 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
         _postAnswer = view.findViewById(R.id.postAnswer);
         _postAnswer.setOnClickListener(this);
         _postAnswer.setVisibility(View.GONE);
-        // Initialize Places.
-        Places.initialize(getActivity(), BuildConfig.GoogleSecAPIKEY);
-        // Create a new Places client instance.
-        PlacesClient placesClient = Places.createClient(getActivity());
         _fragmentManager = getChildFragmentManager();
         _mapScreen = (MapScreen) getParentFragment();
         _autocompleteFragment = (AutocompleteSupportFragment) _fragmentManager.findFragmentById(R.id.autocomplete_fragment);
@@ -86,7 +106,6 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
                 _postAnswer.setVisibility(View.VISIBLE);
                 _isButtonVisible = true;
             }
-            _currentPlace = null;
             _fragmentTransaction = _fragmentManager.beginTransaction();
             _fragmentTransaction.show(_autocompleteFragment);
             _fragmentTransaction.commit();
@@ -94,6 +113,8 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
             _fragmentTransaction = _fragmentManager.beginTransaction();
             _fragmentTransaction.hide(_autocompleteFragment);
             _fragmentTransaction.commit();
+            _currentPlace = null;
+            _currentEnquireID = null;
         }
     }
 
@@ -105,9 +126,10 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         if (view == _postAnswer) {
             if (_currentPlace == null) {
-                Toast.makeText(getContext(), "You have to choose a place to answer", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "You have to choose a place to answer!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getContext(), "You have choosen " + _currentPlace.getName(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "You have choosen " + _currentPlace.getName() + " as an answer", Toast.LENGTH_SHORT).show();
+                _programClient.addNewAnswer(_currentEnquireID, _currentPlace.getId(), _currentPlace.getName(), _currentPlace.getLatLng());
             }
         }
     }

@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class FoodModule extends Fragment implements View.OnClickListener {
@@ -31,6 +32,7 @@ public class FoodModule extends Fragment implements View.OnClickListener {
     private MapScreen _mapScreen;
     private Fragment _answerCreator;
     private MainScreen _mainScreen;
+    private List<String> _enquiresIDs;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -58,18 +60,22 @@ public class FoodModule extends Fragment implements View.OnClickListener {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 ArrayList<String> dataset = new ArrayList<>();
-
+                _enquiresIDs = new ArrayList<>();
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     Enquire e = childSnapshot.getValue(Enquire.class);
-                    if (e == null) Log.d("tag", "onComplete: kurwjajaja2");
                     dataset.add(e.toString());
-                    //dataset.add(childSnapshot.getValue().toString());
+                    _enquiresIDs.add(childSnapshot.getKey());
                 }
                 _adapter = new RecyclerViewAdapter(getActivity(), dataset);
                 _recyclerView.setAdapter(_adapter);
                 _adapter.setClickListener(new RecyclerViewAdapter.ItemClickListener() {
                     @Override
                     public void onItemClick(View v,int pos) {
+                        AnswerCreator answerCreator = (AnswerCreator)_answerCreator;
+                        answerCreator.setCurrentEnquireID(_enquiresIDs.get(pos));
+                        answerCreator.setCurrentPlace(null);
+                        answerCreator.getAutocompleteFragment().setText("");
+                        _mapScreen.getLastKnownLocation();
                         _mapScreen.setCurrentFragment(_answerCreator);
                         _mainScreen.setCurrentFragment(_mapScreen);
                     }

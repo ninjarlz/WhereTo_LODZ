@@ -14,6 +14,47 @@ public class Answer {
     private String _authorID;
     private String _authorNickname;
 
+    public String getEnquireID() {
+        return _enquireID;
+    }
+
+    public void setEnquireID(String enquireID) {
+        _enquireID = enquireID;
+    }
+
+    public String getEnquireContent() {
+        return _enquireContent;
+    }
+
+    public void setEnquireContent(String enquireContent) {
+        _enquireContent = enquireContent;
+    }
+
+    public String getPlaceID() {
+        return _placeID;
+    }
+
+    public void setPlaceID(String placeID) {
+        _placeID = placeID;
+    }
+
+    public String getAuthorID() {
+        return _authorID;
+    }
+
+    public void setAuthorID(String authorID) {
+        _authorID = authorID;
+    }
+
+    public String getAuthorNickname() {
+        return _authorNickname;
+    }
+
+    public void setAuthorNickname(String authorNickname) {
+        _authorNickname = authorNickname;
+    }
+
+
     public Answer() {
 
     }

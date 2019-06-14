@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.fireinsidethemountain.whereto.R;
+import com.fireinsidethemountain.whereto.model.Answer;
 import com.fireinsidethemountain.whereto.model.ProgramClient;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -45,7 +46,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private MapScreen _mapScreenFragment = new MapScreen();
     private Fragment _mainMenuFragment;
     private Fragment _foodModuleFragment = new FoodModule();
-    private Fragment _answerCreator = new AnswerCreator();
+    private Fragment _answerCreator;
     private Fragment _currentFragment;
     private FragmentManager _fragmentManager = getSupportFragmentManager();
     private FragmentTransaction _fragmentTransaction;
@@ -109,6 +110,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         _profile.setOnClickListener(this);
 
         _mainMenuFragment = _mapScreenFragment.getMainMenu();
+        _answerCreator = _mapScreenFragment.getAnswerCreator();
 
         _fragmentTransaction = _fragmentManager.beginTransaction();
         _fragmentTransaction.add(R.id.screen_area, _foodModuleFragment);
@@ -141,12 +143,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         } else if (view == _facilities) {
             view.startAnimation(_buttonClick);
         } else if (view == _home) {
+            _mapScreenFragment.getLastKnownLocation();
             _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
             fragment = _mapScreenFragment;
             view.startAnimation(_buttonClick);
         }
         setCurrentFragment(fragment);
     }
+
 
 
     @Override
