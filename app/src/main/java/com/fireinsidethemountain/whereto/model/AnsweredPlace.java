@@ -1,7 +1,4 @@
 package com.fireinsidethemountain.whereto.model;
-
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.HashMap;
 import java.util.Map;
 

@@ -68,8 +68,8 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     private GoogleMap _map;
     private FusedLocationProviderClient _fusedLocationClient;
     private boolean _mapIsReady;
-    private Fragment _mainMenu = new MainMenu();
-    private Fragment _answerCreator = new AnswerCreator();
+    private MainMenu _mainMenu = new MainMenu();
+    private AnswerCreator _answerCreator = new AnswerCreator();
     private Fragment _currentFragment;
     private LatLng _yourPos;
     private FragmentManager _fragmentManager;
@@ -78,20 +78,21 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     private DatabaseReference _answeredPlacesReference = FirebaseDatabase.getInstance().getReference("AnsweredPlaces");
     private PlacesClient _placesClient;
     private Place _place;
+    private int _invokeCounter = 0;
 
-    public Fragment getMainMenu() {
+    public MainMenu getMainMenu() {
         return _mainMenu;
     }
 
-    public void setMainMenu(Fragment mainMenu) {
+    public void setMainMenu(MainMenu mainMenu) {
         _mainMenu = mainMenu;
     }
 
-    public Fragment getAnswerCreator() {
+    public AnswerCreator getAnswerCreator() {
         return _answerCreator;
     }
 
-    public void setAnswerCreator(Fragment answerCreator) {
+    public void setAnswerCreator(AnswerCreator answerCreator) {
         _answerCreator = answerCreator;
     }
 
@@ -100,23 +101,31 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     }
 
     public void setCurrentFragment(Fragment fragment) {
-        if (fragment != null && fragment != _currentFragment) {
-            _fragmentTransaction = _fragmentManager.beginTransaction();
-            _fragmentTransaction.hide(_currentFragment);
-            _currentFragment = fragment;
-            if (_currentFragment == _answerCreator) {
-                getLastKnownLocation();
-                AnswerCreator answerCreator = (AnswerCreator) _answerCreator;
-                answerCreator.ShowAutocomplete(true);
-                answerCreator.getAutocompleteFragment().setText("");
-                setMarkersVisible(false);
-            } else {
-                ((AnswerCreator) _answerCreator).ShowAutocomplete(false);
-                setMarkersVisible(true);
+        if (fragment != null) {
+            if (fragment != _currentFragment) {
+                _fragmentTransaction = _fragmentManager.beginTransaction();
+                _fragmentTransaction.hide(_currentFragment);
+                _currentFragment = fragment;
+                if (_currentFragment == _answerCreator) {
+                    _answerCreator.ShowAutocomplete(true);
+                    _answerCreator.getAutocompleteFragment().setText("");
+                    setMarkersVisible(false);
+                } else {
+                    _answerCreator.ShowAutocomplete(false);
+                    setMarkersVisible(true);
+                }
+                _fragmentTransaction.show(_currentFragment);
+                _fragmentTransaction.commit();
             }
+            getLastKnownLocationWithPermissionCheck();
+        }
+    }
+
+    public void getLastKnownLocationWithPermissionCheck() {
+        if (checkMapServices() && _locationPermissionGranted) {
             getLastKnownLocation();
-            _fragmentTransaction.show(_currentFragment);
-            _fragmentTransaction.commit();
+        } else {
+            getLocationPermission();
         }
     }
 
@@ -136,6 +145,39 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
 
 
 
+    public void getLastKnownLocationWithOnNullInvoking() {
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        _fusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                if (task.isSuccessful()) {
+                    Location location = task.getResult();
+                    if (location == null) {
+                        if (_invokeCounter < 5) {
+                            try {
+                                //Toast.makeText(getContext(), "KURWA", Toast.LENGTH_SHORT).show();
+                                Thread.sleep(400);
+                                _invokeCounter++;
+                                getLastKnownLocationWithOnNullInvoking();
+                            } catch (InterruptedException iex) {
+                                iex.printStackTrace();
+                            }
+                        }
+                    } else {
+                        _invokeCounter = 0;
+                        _yourPos = new LatLng(location.getLatitude(), location.getLongitude());
+                        moveCamera(_yourPos, Constants.DEFAULT_ZOOM);
+                    }
+                }
+            }
+        });
+
+    }
+
     public void getLastKnownLocation() {
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -152,18 +194,14 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                     }
                     _yourPos = new LatLng(location.getLatitude(), location.getLongitude());
                     moveCamera(_yourPos, Constants.DEFAULT_ZOOM);
-
                 }
             }
         });
-
     }
 
     public void moveCamera(LatLng latLng, float zoom) {
         _map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
-
-
 
     private boolean checkMapServices() {
         if (isServicesOk() && isGPSEnabled())
@@ -239,6 +277,7 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     _locationPermissionGranted = true;
+                    getLastKnownLocation();
                 }
             }
         }
@@ -255,6 +294,7 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
             _locationPermissionGranted = true;
             // DO STH;
             if (_currentFragment != _answerCreator) {
+                Log.d("tag", "onComplete: kurwa34");
                 getLastKnownLocation();
             }
         } else {
@@ -286,7 +326,6 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
         _currentFragment = _mainMenu;
         _fragmentTransaction.show(_mainMenu);
         _fragmentTransaction.commit();
-        //Log.d("CurrentState: ", _currentFragment == _answerCreator ? "ANSWER" : "MAIN");
     }
 
     @Override
@@ -298,16 +337,17 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("tag", "onComplete: ONRESUME");
         _mapView.onResume();
-        if (_mapIsReady) {
-            if (checkMapServices() && _locationPermissionGranted &&
-            _currentFragment != _answerCreator) {
-                // Do STH
-                getLastKnownLocation();
-            } else {
-                getLocationPermission();
-            }
+        if (checkMapServices() && _locationPermissionGranted &&
+                (_currentFragment != _answerCreator || _answerCreator.getCurrentPlace() == null)) {
+            getLastKnownLocationWithOnNullInvoking();
+            Log.d("tag", "onComplete: kurwa32");
+        } else {
+            getLocationPermission();
+            Log.d("tag", "onComplete: kurwa33");
         }
+
     }
 
     @Override
@@ -334,7 +374,6 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
 
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     AnsweredPlace p = childSnapshot.getValue(AnsweredPlace.class);
-                    String placeID = childSnapshot.getKey();
                     addMarkerAt(new LatLng(p.getLatPos(), p.getLngPos()), p.getMostPopularEnquireType(), p.getPlaceName(), p.getMostPopularEnquireContent());
                 }
             }
@@ -344,9 +383,6 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
 
             }
         });
-
-        //AddMarkerAt(new LatLng(51.756269, 19.460543), Enquire.EnquireType.Food);
-        getLocationPermission();
         _map.setMyLocationEnabled(true);
         _mapIsReady = true;
     }
@@ -370,7 +406,7 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     }
 
 
-    @Override
+    /*@Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
@@ -382,7 +418,7 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                 getLocationPermission();
             }
         }
-    }
+    }*/
 
     private void addMarkerAt(LatLng pos, Enquire.EnquireType type, String placeName,String enquireContent) {
 

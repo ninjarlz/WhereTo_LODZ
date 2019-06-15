@@ -143,7 +143,6 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         } else if (view == _facilities) {
             view.startAnimation(_buttonClick);
         } else if (view == _home) {
-            _mapScreenFragment.getLastKnownLocation();
             _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
             fragment = _mapScreenFragment;
             view.startAnimation(_buttonClick);
