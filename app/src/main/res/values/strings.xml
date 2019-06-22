@@ -7,10 +7,10 @@
     <string name="sidebarButtonDescription">Button to open sidebar menu</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="app">this app</string>
-    <string name="database">database</string>
-    <string name="about">about Lodz</string>
-    <string name="settings">settings</string>
+    <string name="app">This app</string>
+    <string name="database">Add inquiry</string>
+    <string name="about">About Lodz</string>
+    <string name="settings">Settings</string>
     <string name="signout">Sign out</string>
     <string name="profile">Profile</string>
     <string name="food">Food</string>
@@ -18,16 +18,35 @@
     <string name="events">Events</string>
     <string name="facilities">Facilities</string>
     <string name="credits">Credits</string>
-    <string name="random">?</string>
+    <string name="random">+</string>
     <string name="all">all</string>
     <string name="top">top</string>
     <string name="search">Search</string>
     <string name="filter">filters</string>
+    <string name="this_day">Up to day ago</string>
+    <string name="this_week">Up to week ago</string>
+    <string name="this_month">Up to month ago</string>
+    <string name="top_spinner">Most popular</string>
+    <string name="All">All</string>
     <string name="near">near</string>
     <string name="dolar">$</string>
     <string name="now">now</string>
+    <string name="wiki">http://en.wikipedia.org/wiki/%C5%81%C3%B3d%C5%BA</string>
     <string name="description">We are a group of IFE students from IT department who, through this PBL project, created this application.</string>
     <string name="fire"> Fire inside the mountain - something unexpected, yet something vivid and strong.
 Hidden initials in the logo mean that together, we stand strong and tall like mountains
 and there’s a passionate fire inside us.</string>
+    <string name="postEnquire">Post inquiry</string>
+    <string name="postAnswer">Post answer</string>
+    <string name="username">Username</string>
+    <string name="logging">Logging user…</string>
+    <string name="signInError">Sign in error!</string>
+    <string name="signInErrorMsg">Your account is probably already assigned with Google account, try this service!</string>
+    <string name="enquireContent">Inquiry content</string>
+    <string name="enquireType">Inquiry type:</string>
+    <string name="answerChoose">You have to choose a place to answer!</string>
+    <string name="youHaveChosen">You have chosen </string>
+    <string name="asAnAnswer"> as an answer</string>
+    <string name="yourInquiry">Your inquiry have to consist from at least 8 characters!</string>
+    <string name="yourInquiryPosted">Your inquiry has been posted</string>
 </resources>

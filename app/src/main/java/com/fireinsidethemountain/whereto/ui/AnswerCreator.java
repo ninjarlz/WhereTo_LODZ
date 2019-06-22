@@ -73,13 +73,9 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         _postAnswer = view.findViewById(R.id.postAnswer);
         _postAnswer.setOnClickListener(this);
-        _postAnswer.setVisibility(View.GONE);
         _fragmentManager = getChildFragmentManager();
         _mapScreen = (MapScreen) getParentFragment();
         _autocompleteFragment = (AutocompleteSupportFragment) _fragmentManager.findFragmentById(R.id.autocomplete_fragment);
-        _fragmentTransaction = _fragmentManager.beginTransaction();
-        _fragmentTransaction.hide(_autocompleteFragment);
-        _fragmentTransaction.commit();
         _autocompleteFragment.setLocationBias(RectangularBounds.newInstance(
                 LODZ_REGION_LEFT_CORNER,
                 LODZ_REGION_RIGHT_CORNER));
@@ -100,22 +96,9 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
     }
 
 
-    public void ShowAutocomplete(boolean isVisible) {
-        if (isVisible) {
-            if (!_isButtonVisible) {
-                _postAnswer.setVisibility(View.VISIBLE);
-                _isButtonVisible = true;
-            }
-            _fragmentTransaction = _fragmentManager.beginTransaction();
-            _fragmentTransaction.show(_autocompleteFragment);
-            _fragmentTransaction.commit();
-        } else {
-            _fragmentTransaction = _fragmentManager.beginTransaction();
-            _fragmentTransaction.hide(_autocompleteFragment);
-            _fragmentTransaction.commit();
-            _currentPlace = null;
-            _currentEnquireID = null;
-        }
+    public void resetAnswerCreator() {
+        _currentPlace = null;
+        _currentEnquireID = null;
     }
 
     public AutocompleteSupportFragment getAutocompleteFragment() {
@@ -126,9 +109,9 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         if (view == _postAnswer) {
             if (_currentPlace == null) {
-                Toast.makeText(getContext(), "You have to choose a place to answer!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.answerChoose), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getContext(), "You have choosen " + _currentPlace.getName() + " as an answer", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.youHaveChosen) + _currentPlace.getName() + getResources().getString(R.string.asAnAnswer), Toast.LENGTH_SHORT).show();
                 _programClient.addNewAnswer(_currentEnquireID, _currentPlace.getId(), _currentPlace.getName(), _currentPlace.getLatLng());
             }
         }

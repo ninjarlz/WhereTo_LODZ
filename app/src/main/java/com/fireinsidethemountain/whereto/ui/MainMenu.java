@@ -1,5 +1,7 @@
 package com.fireinsidethemountain.whereto.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,6 +35,7 @@ public class MainMenu extends Fragment implements View.OnClickListener {
     private TextView _email;
     private TextView _username;
     private User _currentUser;
+    private MainScreen _mainScreen;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -62,12 +65,15 @@ public class MainMenu extends Fragment implements View.OnClickListener {
         _email = (TextView) view.findViewById(R.id.email);
 
         String email = _auth.getCurrentUser().getEmail();
+        String username = _auth.getCurrentUser().getDisplayName();
         String id = _auth.getCurrentUser().getUid();
         _currentUser = new User(id, email, email);
         _programClient.logInUser(_currentUser);
-        _username.setText("Username: " + _currentUser.getUsername());
+        _username.setText(getResources().getString(R.string.username) + ": " + _currentUser.getUsername());
         _email.setText("Email: " + _currentUser.getEmail());
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+
+        _mainScreen = (MainScreen) getActivity();
     }
 
     @Override
@@ -79,14 +85,20 @@ public class MainMenu extends Fragment implements View.OnClickListener {
             view.startAnimation(_buttonClick);
             getActivity().finish();
         } else if (view == _database) {
-            Log.d("tag", "onComplete: kurwa1");
-            _programClient.writeNewPost();
             view.startAnimation(_buttonClick);
+            Log.d("tag", "onComplete: kurwa1");
+            EnquireCreator enquireCreator = _mainScreen.getEnquireCreatorFragment();
+            enquireCreator.setPreviousFragment(this);
+            enquireCreator.resetEnquireContent();
+            _mainScreen.setCurrentFragment(enquireCreator);
+            //_programClient.writeNewPost();
         }  else if (view == _app) {
             Log.d("tag", "onComplete: kurwa2");
             view.startAnimation(_buttonClick);
         } else if (view == _aboutLodz) {
             view.startAnimation(_buttonClick);
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.wiki)));
+            startActivity(browserIntent);
         } else if (view == _settings) {
             view.startAnimation(_buttonClick);
         }

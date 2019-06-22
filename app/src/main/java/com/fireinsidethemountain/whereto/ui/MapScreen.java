@@ -107,11 +107,10 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                 _fragmentTransaction.hide(_currentFragment);
                 _currentFragment = fragment;
                 if (_currentFragment == _answerCreator) {
-                    _answerCreator.ShowAutocomplete(true);
                     _answerCreator.getAutocompleteFragment().setText("");
                     setMarkersVisible(false);
                 } else {
-                    _answerCreator.ShowAutocomplete(false);
+                    _answerCreator.resetAnswerCreator();
                     setMarkersVisible(true);
                 }
                 _fragmentTransaction.show(_currentFragment);
@@ -323,8 +322,8 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
         _fragmentTransaction = _fragmentManager.beginTransaction();
         _fragmentTransaction.add(R.id.map_screen_fragment_container, _mainMenu);
         _fragmentTransaction.add(R.id.map_screen_fragment_container, _answerCreator);
+        _fragmentTransaction.hide(_answerCreator);
         _currentFragment = _mainMenu;
-        _fragmentTransaction.show(_mainMenu);
         _fragmentTransaction.commit();
     }
 

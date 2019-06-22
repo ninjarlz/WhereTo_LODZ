@@ -8,7 +8,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class Enquire {
+public class Enquire implements Comparable<Enquire> {
+
+    @Override
+    public int compareTo(Enquire o) {
+        if (o._answerCount > _answerCount) {
+            return -1;
+        } else if (o._answerCount == _answerCount) {
+            return _creationDate.compareTo(o._creationDate);
+        } else {
+            return 1;
+        }
+    }
 
     public enum EnquireType {Food, Accomodation, Events, Facilities};
     private String _authorID;
@@ -110,7 +121,8 @@ public class Enquire {
 
         return "Author: " + _authorNickname + "\n" +
                 "Posted: " + date + "\n" +
-                "Content: " + _content;
+                "Content: " + _content + "\n" +
+                "Number of answers: " + _answerCount;
     }
 
 

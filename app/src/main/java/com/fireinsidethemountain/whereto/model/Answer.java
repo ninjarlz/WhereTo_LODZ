@@ -72,7 +72,7 @@ public class Answer {
         HashMap<String, Object> result = new HashMap<>();
         result.put("enquireID", _enquireID);
         result.put("enquireContent", _enquireContent);
-        result.put("place", _placeID);
+        result.put("placeID", _placeID);
         result.put("authorID", _authorID);
         result.put("authorNickname", _authorNickname);
         return result;
