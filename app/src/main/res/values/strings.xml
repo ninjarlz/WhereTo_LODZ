@@ -52,6 +52,7 @@ and there’s a passionate fire inside us.</string>
     <string name="yourInquiryPosted">Your inquiry has been posted</string>
     <string name="language">Language:</string>
     <string name="placeName">Place name</string>
+    <string name="placeType">Most commonly chosen category</string>
     <string name="chosenAsAnswer">Chosen as answer </string>
     <string name="times"> time(s)</string>
     <string name="author">Author</string>

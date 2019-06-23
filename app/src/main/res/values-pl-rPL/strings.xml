@@ -51,6 +51,7 @@
     <string name="yourInquiryPosted">Twoje pytanie zostało zamieszczone</string>
     <string name="language">Język:</string>
     <string name="placeName">Nazwa miejsca</string>
+    <string name="placeType">Najczęściej wybierana kategoria</string>
     <string name="chosenAsAnswer">Wybrane jako odpowiedź </string>
     <string name="times"> raz(y)</string>
     <string name="author">Autor</string>

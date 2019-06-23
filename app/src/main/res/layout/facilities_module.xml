@@ -66,7 +66,7 @@
         </RelativeLayout>
 
         <Button
-            android:id="@+id/add_enquire"
+            android:id="@+id/add_enquire_facilites"
             android:layout_width="wrap_content"
             android:layout_height="57dp"
             android:layout_alignParentStart="true"

@@ -53,10 +53,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private Credits _creditsFragment = new Credits();
     private EnquireCreator _enquireCreatorFragment = new EnquireCreator();
     private FoodModule _foodModuleFragment = new FoodModule();
+    private EventsModule _eventsModuleFragment = new EventsModule();
+    private FacilitiesModule _facilitiesModuleFragment = new FacilitiesModule();
+    private StayModule _stayModuleFragment = new StayModule();
     private MainMenu _mainMenuFragment;
     private Settings _settingsFragment = new Settings();
     private EnquireView _enquireViewFragment = new EnquireView();
     private AnswerCreator _answerCreator;
+    private PlaceView _placeViewFragment = new PlaceView();
     private Fragment _currentFragment;
     private FragmentManager _fragmentManager = getSupportFragmentManager();
     private FragmentTransaction _fragmentTransaction;
@@ -64,6 +68,10 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private SharedPreferences _pref;
     private Resources _resources;
     private Configuration _conf;
+
+    public PlaceView getPlaceViewFragment () {
+        return _placeViewFragment;
+    }
 
     public EnquireView getEnquireViewFragment() {
         return _enquireViewFragment;
@@ -167,6 +175,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         _fragmentTransaction.hide(_settingsFragment);
         _fragmentTransaction.add(R.id.screen_area,_enquireViewFragment);
         _fragmentTransaction.hide(_enquireViewFragment);
+        _fragmentTransaction.add(R.id.screen_area, _placeViewFragment);
+        _fragmentTransaction.hide(_placeViewFragment);
+        _fragmentTransaction.add(R.id.screen_area, _eventsModuleFragment);
+        _fragmentTransaction.hide(_eventsModuleFragment);
+        _fragmentTransaction.add(R.id.screen_area, _facilitiesModuleFragment);
+        _fragmentTransaction.hide(_facilitiesModuleFragment);
+        _fragmentTransaction.add(R.id.screen_area, _stayModuleFragment);
+        _fragmentTransaction.hide(_stayModuleFragment);
         _fragmentTransaction.add(R.id.screen_area, _mapScreenFragment);
         _currentFragment = _mapScreenFragment;
         _fragmentTransaction.commit();
@@ -191,10 +207,13 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             fragment = _creditsFragment;
         } else if (view == _accommodation) {
             view.startAnimation(_buttonClick);
+            fragment = _stayModuleFragment;
         } else if (view == _events) {
             view.startAnimation(_buttonClick);
+            fragment = _eventsModuleFragment;
         } else if (view == _facilities) {
             view.startAnimation(_buttonClick);
+            fragment = _facilitiesModuleFragment;
         } else if (view == _home) {
             view.startAnimation(_buttonClick);
             _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
@@ -238,6 +257,18 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             setCurrentFragment(_mapScreenFragment);
         } else if (_currentFragment == _enquireViewFragment) {
             setCurrentFragment(_enquireViewFragment.getPreviousFragment());
+        } else if (_currentFragment == _placeViewFragment) {
+            _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
+            setCurrentFragment(_mapScreenFragment);
+        } else if (_currentFragment == _eventsModuleFragment) {
+            _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
+            setCurrentFragment(_mapScreenFragment);
+        } else if (_currentFragment == _facilitiesModuleFragment) {
+            _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
+            setCurrentFragment(_mapScreenFragment);
+        } else if (_currentFragment == _stayModuleFragment) {
+            _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
+            setCurrentFragment(_mapScreenFragment);
         }
     }
 

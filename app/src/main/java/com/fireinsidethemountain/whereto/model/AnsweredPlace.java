@@ -131,11 +131,15 @@ public class AnsweredPlace {
             return Integer.compare(_enquireCount, o._enquireCount);
         }
 
-        @Override
-        public String toString() {
+
+        public String toString(boolean withName) {
             Resources resources = _context.getResources();
-            return resources.getString(R.string.placeName) + ": " + _placeName + "\n" +
-                    resources.getString(R.string.chosenAsAnswer) +" " + new Integer(_enquireCount).toString() + " " +
+            if (withName) {
+                return resources.getString(R.string.placeName) + ": " + _placeName + "\n" +
+                        resources.getString(R.string.chosenAsAnswer) + " " + new Integer(_enquireCount).toString() + " " +
+                        resources.getString(R.string.times);
+            }
+            return resources.getString(R.string.chosenAsAnswer) + " " + new Integer(_enquireCount).toString() + " " +
                     resources.getString(R.string.times);
         }
 
@@ -148,5 +152,28 @@ public class AnsweredPlace {
         } else {
             return null;
         }
+    }
+
+    public String toString(Context contex) {
+        Resources resources = contex.getResources();
+
+        String type = "";
+        switch (_mostPopularEnquireType) {
+            case Events:
+                type = resources.getString(R.string.events);
+                break;
+            case Food:
+                type = resources.getString(R.string.food);
+                break;
+            case Facilities:
+                type = resources.getString(R.string.facilities);
+                break;
+            case Accomodation:
+                type = resources.getString(R.string.stay);
+                break;
+        }
+
+        return resources.getString(R.string.placeName) + ": " + _placeName + "\n" +
+                resources.getString(R.string.placeType) + ": " + type;
     }
 }

@@ -15,8 +15,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.fireinsidethemountain.whereto.R;
+import com.fireinsidethemountain.whereto.model.AnsweredPlace;
 import com.fireinsidethemountain.whereto.model.Enquire;
 import com.fireinsidethemountain.whereto.model.RecyclerViewAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -25,29 +27,27 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 
 public class PlaceView extends Fragment  {
-    /*private RecyclerView _recyclerView;
+    private RecyclerView _recyclerView;
     private RecyclerViewAdapter _adapter;
     private RecyclerView.LayoutManager _layoutManager;
-    private DatabaseReference _answeredPlacesReference = FirebaseDatabase.getInstance().getReference("AnsweredPlaces");
+    private DatabaseReference _databaseReference = FirebaseDatabase.getInstance().getReference();
     private MapScreen _mapScreen;
-    private PlaceView _foodModuleFragment = this;
+    private PlaceView _placeViewModuleFragment = this;
     private MainScreen _mainScreen;
-    private List<String> _enquiresIDs;
-    private Spinner _spinner;
-    private String[] _spinnerPaths;
+    private List<String> _enquiresIDs = new ArrayList<>();
     private LayoutInflater _inflater;
-    private Button _allButton;
-    private Button _topButton;
-    private Button _addEnquireButton;
-    private AlphaAnimation _buttonClick = new AlphaAnimation(1f, 0.8f);
     private EnquireView _enquireViewFragment;
-    private List<String> _dataset;
+    private List<String> _dataset = new ArrayList<>();
     private ValueEventListener _currentListener;
+    private String _placeID;
+    private TextView _placeStats;
 
 
 
@@ -56,105 +56,81 @@ public class PlaceView extends Fragment  {
         @Override
         public void onItemClick(View v,int pos) {
             _enquireViewFragment.setEnquire(_enquiresIDs.get(pos), _dataset.get(pos));
-            _enquireViewFragment.setPreviousFragment(_foodModuleFragment);
+            _enquireViewFragment.setPreviousFragment(_placeViewModuleFragment);
             _mainScreen.setCurrentFragment(_enquireViewFragment);
         }
     }
 
-    private class PlaceViewAllAssingedEnquiresEventListener implements ValueEventListener {
 
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-
-            _dataset = new ArrayList<>();
-            _enquiresIDs = new ArrayList<>();
-            for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                Enquire e = childSnapshot.getValue(Enquire.class);
-                if (e.getType() == Enquire.EnquireType.Food) {
-                    _dataset.add(e.toString(getActivity()));
-                    _enquiresIDs.add(childSnapshot.getKey());
-                }
-            }
-            Collections.reverse(_enquiresIDs);
-            Collections.reverse(_dataset);
-            _adapter = new RecyclerViewAdapter(_inflater, _dataset);
-            _recyclerView.setAdapter(_adapter);
-            _adapter.setClickListener(_foodModuleItemClickListener);
-        }
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-            databaseError.toException().printStackTrace();
-        }
-    }
-
-
-    private PlaceViewItemClickListener _foodModuleItemClickListener = new PlaceViewItemClickListener();
-    private PlaceViewAllAssingedEnquiresEventListener _foodModuleAllEnquiresEventListener = new PlaceViewAllAssingedEnquiresEventListener();
+    private PlaceViewItemClickListener _placeViewItemClickListener = new PlaceViewItemClickListener();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         _inflater = inflater;
-        return inflater.inflate(R.layout.food_module, container, false);
+        return inflater.inflate(R.layout.place_view, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        _spinnerPaths = new String[]{
-                getResources().getString(R.string.All),
-                getResources().getString(R.string.this_day),
-                getResources().getString(R.string.this_week),
-                getResources().getString(R.string.this_month),
-                getResources().getString(R.string.top_spinner)};
         _mainScreen = (MainScreen) getActivity();
         _mapScreen = _mainScreen.getMapScreenFragment();
         _enquireViewFragment = _mainScreen.getEnquireViewFragment();
-        _recyclerView = view.findViewById(R.id.food_recycler_view);
+        _recyclerView = view.findViewById(R.id.place_recycler_view);
         _recyclerView.setHasFixedSize(true);
         _layoutManager = new LinearLayoutManager(getActivity());
         _recyclerView.setLayoutManager(_layoutManager);
-        _currentListener = _foodEnquiresReference.addValueEventListener(_foodModuleAllEnquiresEventListener);
-        _spinner = view.findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_item, _spinnerPaths);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        _spinner.setAdapter(adapter);
-        _spinner.setOnItemSelectedListener(this);
-        _topButton = view.findViewById(R.id.top);
-        _topButton.setOnClickListener(this);
-        _allButton = view.findViewById(R.id.all);
-        _allButton.setOnClickListener(this);
-        _addEnquireButton = view.findViewById(R.id.add_enquire);
-        _addEnquireButton.setOnClickListener(this);
-        _buttonClick.setDuration(300);
+        _placeStats = view.findViewById(R.id.placeStats);
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view == _topButton) {
-            view.startAnimation(_buttonClick);
-            _spinner.setSelection(4);
-        } else if (view == _allButton) {
-            view.startAnimation(_buttonClick);
-            _spinner.setSelection(0);
-        } else if (view == _addEnquireButton) {
-            EnquireCreator enquireCreator = _mainScreen.getEnquireCreatorFragment();
-            enquireCreator.setPreviousFragment(this);
-            enquireCreator.getSpinner().setSelection(0);
-            enquireCreator.resetEnquireContent();
-            _mainScreen.setCurrentFragment(enquireCreator);
-            view.startAnimation(_buttonClick);
+    public void setPlace(final String placeID) {
+        if (placeID != null) {
+            _placeID = placeID;
+            if (_currentListener != null) {
+                _databaseReference.removeEventListener(_currentListener);
+            }
+            _currentListener = _databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    _enquiresIDs.clear();
+                    _dataset.clear();
+                    AnsweredPlace answeredPlace = dataSnapshot.child("AnsweredPlaces").child(placeID).getValue(AnsweredPlace.class);
+                    _placeStats.setText(answeredPlace.toString(getActivity()));
+                    Set<String> enquiresIDs = answeredPlace.getEnquireIDsCount().keySet();
+                    List<Enquire> enquires = new ArrayList<>();
+                    for (String enquireID : enquiresIDs) {
+                        enquires.add(dataSnapshot.child("Enquires").child(enquireID).getValue(Enquire.class));
+                    }
+                    Collections.sort(enquires);
+                    Collections.reverse(enquires);
+                    for (Enquire e : enquires) {
+                        _enquiresIDs.add(e.getEnquireID());
+                        AnsweredPlace.PlaceNameWithCount pnwc = answeredPlace.getObjectContatiningNumberOfAnswersForEnquire(e.getEnquireID(), getActivity());
+                        _dataset.add(e.toString(getActivity()) + "\n" + pnwc.toString(false));
+                    }
+                    _adapter = new RecyclerViewAdapter(_inflater, _dataset);
+                    _recyclerView.setAdapter(_adapter);
+                    _adapter.setClickListener(_placeViewItemClickListener);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
     }
+
 
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden) {
-
+        if (hidden) {
+            _placeID = null;
         }
-    }*/
+    }
 }

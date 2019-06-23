@@ -107,7 +107,7 @@ public class EnquireView extends Fragment implements View.OnClickListener {
                     Collections.sort(pnwcs);
                     Collections.reverse(pnwcs);
                     for (AnsweredPlace.PlaceNameWithCount pnwc1 : pnwcs) {
-                        _dataset.add(pnwc1.toString());
+                        _dataset.add(pnwc1.toString(true));
                     }
                     _adapter = new RecyclerViewAdapter(_inflater, _dataset);
                     _recyclerView.setAdapter(_adapter);

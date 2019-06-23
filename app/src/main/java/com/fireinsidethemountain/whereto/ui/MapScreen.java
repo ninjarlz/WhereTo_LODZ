@@ -58,10 +58,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
-public class MapScreen extends Fragment implements View.OnClickListener, OnMapReadyCallback {
+public class MapScreen extends Fragment implements View.OnClickListener, OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private boolean _locationPermissionGranted = false;
     private MapView _mapView;
@@ -79,6 +81,14 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     private PlacesClient _placesClient;
     private Place _place;
     private int _invokeCounter = 0;
+    private Map<String, String> _placesOnMap = new HashMap<>();
+    private PlaceView _placeViewFragment;
+    private MainScreen _mainScreen;
+
+
+    public Map<String, String> getPlacesOnMap () {
+        return _placesOnMap;
+    }
 
     public MainMenu getMainMenu() {
         return _mainMenu;
@@ -314,7 +324,8 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Initialize Places.
+        _mainScreen = (MainScreen) getActivity();
+        _placeViewFragment = _mainScreen.getPlaceViewFragment();
         Places.initialize(getActivity(), BuildConfig.GoogleSecAPIKEY);
         _placesClient = Places.createClient(getActivity());
         initGoogleMaps(savedInstanceState, view);
@@ -365,14 +376,17 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     @Override
     public void onMapReady(GoogleMap map) {
         _map = map;
+        _map.setOnInfoWindowClickListener(this);
         _answeredPlacesReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 _map.clear();
                 _markers = new ArrayList<>();
-
+                _placesOnMap.clear();
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     AnsweredPlace p = childSnapshot.getValue(AnsweredPlace.class);
+                    _placesOnMap.put((new Double(p.getLatPos())).toString() + "_" + (new Double(p.getLngPos())).toString(),
+                            childSnapshot.getKey());
                     addMarkerAt(new LatLng(p.getLatPos(), p.getLngPos()), p.getMostPopularEnquireType(), p.getPlaceName(), p.getMostPopularEnquireContent());
                 }
             }
@@ -404,20 +418,6 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
         _mapView.onLowMemory();
     }
 
-
-    /*@Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (!hidden) {
-            if (checkMapServices() && _locationPermissionGranted &&
-                _currentFragment != _answerCreator) {
-                // Do STH
-                getLastKnownLocation();
-            } else {
-                getLocationPermission();
-            }
-        }
-    }*/
 
     private void addMarkerAt(LatLng pos, Enquire.EnquireType type, String placeName,String enquireContent) {
 
@@ -456,28 +456,14 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
         }
     }
 
-    /*Place getPlace(String placeID) {
-
-        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
-
-        FetchPlaceRequest request = FetchPlaceRequest.builder(placeID, placeFields).build();
-        _placesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
-            @Override
-            public void onSuccess(FetchPlaceResponse response) {
-                _place = response.getPlace();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                if (exception instanceof ApiException) {
-                    ApiException apiException = (ApiException) exception;
-                    int statusCode = apiException.getStatusCode();
-                    _place = null;
-                }
-            }
-        });
-        return _place;
-    }*/
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        LatLng latLng = marker.getPosition();
+        String placeID = _placesOnMap.get(latLng.latitude + "_" + latLng.longitude);
+        _placeViewFragment.setPlace(placeID);
+        _mainScreen.setCurrentFragment(_placeViewFragment);
+        Log.d("tag", "onComplete: kurwAAAA");
+    }
 
 
 }
