@@ -11,6 +11,8 @@ import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -38,11 +41,19 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
     private boolean _isButtonVisible;
     private Place _currentPlace;
     private ProgramClient _programClient = ProgramClient.getInstance();
-
+    private Fragment _previousFragment;
     private String _currentEnquireID;
 
     public String getCurrentEnquireID() {
         return _currentEnquireID;
+    }
+
+    public void setPreviousFragment(Fragment previousFragment) {
+        _previousFragment = previousFragment;
+    }
+
+    public Fragment getPreviousFragment() {
+        return _previousFragment;
     }
 
     public void setCurrentEnquireID(String currentEnquireID) {
@@ -86,6 +97,7 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
             public void onPlaceSelected(Place place) {
                 _mapScreen.moveCamera(place.getLatLng(), Constants.PLACE_PICKER_ZOOM);
                 _currentPlace = place;
+
             }
 
             @Override

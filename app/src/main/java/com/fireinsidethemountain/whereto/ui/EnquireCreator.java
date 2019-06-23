@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,10 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
+import android.content.Context;
 import com.fireinsidethemountain.whereto.R;
 import com.fireinsidethemountain.whereto.model.Enquire;
-
+import com.fireinsidethemountain.whereto.model.ProgramClient;
 
 
 public class EnquireCreator extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -33,10 +32,15 @@ public class EnquireCreator extends Fragment implements View.OnClickListener, Ad
     private MainScreen _mainScreen;
     private InputMethodManager _imm;
     private View _view;
+    private ProgramClient _programClient = ProgramClient.getInstance();
 
 
     public void setPreviousFragment (Fragment previousFragment) {
         _previousFragment = previousFragment;
+    }
+
+    public Fragment getPreviousFragment() {
+        return _previousFragment;
     }
 
     public void setCurrentType(Enquire.EnquireType currentType) {
@@ -78,8 +82,7 @@ public class EnquireCreator extends Fragment implements View.OnClickListener, Ad
         _postEnquireButton.setOnClickListener(this);
         _mainScreen = (MainScreen) getActivity();
         _view = view;
-
-        //imm = (InputMethodManager) getActivity().getSystemService(Activity);
+        _imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Override
@@ -87,9 +90,10 @@ public class EnquireCreator extends Fragment implements View.OnClickListener, Ad
         if (view == _postEnquireButton) {
             String enquireContent = _enquireContent.getText().toString().trim();
             if (enquireContent.length() >= 8) {
-                //_mainScreen.setCurrentFragment(_previousFragment);
-                //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                _imm.hideSoftInputFromWindow(_view.getWindowToken(), 0);
+                _programClient.writeNewPost(enquireContent, _currentType);
                 Toast.makeText(getContext(), getResources().getString(R.string.yourInquiryPosted), Toast.LENGTH_SHORT).show();
+                _mainScreen.setCurrentFragment(_previousFragment);
             } else {
                 Toast.makeText(getContext(), getResources().getString(R.string.yourInquiry), Toast.LENGTH_SHORT).show();
             }
@@ -105,4 +109,6 @@ public class EnquireCreator extends Fragment implements View.OnClickListener, Ad
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
 }

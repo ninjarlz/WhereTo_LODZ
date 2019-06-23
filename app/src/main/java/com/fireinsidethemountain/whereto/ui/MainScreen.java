@@ -1,4 +1,8 @@
 package com.fireinsidethemountain.whereto.ui;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -9,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +24,10 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.fireinsidethemountain.whereto.R;
-import com.fireinsidethemountain.whereto.model.Answer;
 import com.fireinsidethemountain.whereto.model.ProgramClient;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Locale;
 
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
@@ -46,16 +52,31 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private MapScreen _mapScreenFragment = new MapScreen();
     private Credits _creditsFragment = new Credits();
     private EnquireCreator _enquireCreatorFragment = new EnquireCreator();
-    private Fragment _foodModuleFragment = new FoodModule();
-    private Fragment _mainMenuFragment;
-
-    private Fragment _answerCreator;
+    private FoodModule _foodModuleFragment = new FoodModule();
+    private MainMenu _mainMenuFragment;
+    private Settings _settingsFragment = new Settings();
+    private AnswerCreator _answerCreator;
     private Fragment _currentFragment;
     private FragmentManager _fragmentManager = getSupportFragmentManager();
     private FragmentTransaction _fragmentTransaction;
 
+    private SharedPreferences _pref;
+    private Resources _resources;
+    private Configuration _conf;
 
-    public Fragment getMapScreenFragment () {
+    public SharedPreferences getPref() {
+        return _pref;
+    }
+
+    public Configuration getConf() {
+        return _conf;
+    }
+
+    public Settings getSettingsFragment () {
+        return _settingsFragment;
+    }
+
+    public MapScreen getMapScreenFragment () {
         return _mapScreenFragment;
     }
 
@@ -87,9 +108,19 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        _pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        _resources = getResources();
+        _conf = _resources.getConfiguration();
+        if (_pref.contains("lang_code")) {
+            String lang = _pref.getString("lang_code", "en");
+            String currentLang = _conf.locale.getLanguage();
+            if (!currentLang.equals(lang)) {
+                setLocale(lang);
+            }
+        }
         setContentView(R.layout.activity_main_screen);
         _buttonClick.setDuration(300);
-        _drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        _drawerLayout = findViewById(R.id.drawer_layout);
         _toggle = new ActionBarDrawerToggle(this, _drawerLayout, R.string.open, R.string.close);
         _drawerLayout.addDrawerListener(_toggle);
         _toggle.syncState();
@@ -101,23 +132,24 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         String imgUrl = _auth.getCurrentUser().getPhotoUrl().toString();
         Glide.with(this).load(imgUrl).apply(RequestOptions.circleCropTransform()).into(_profileImage);
 
-        _food = (Button) findViewById(R.id.foodButton);
+        _food = findViewById(R.id.foodButton);
         _food.setOnClickListener(this);
-        _home = (Button) findViewById(R.id.home);
+        _home = findViewById(R.id.home);
         _home.setOnClickListener(this);
-        _accommodation = (Button) findViewById(R.id.stayButton);
+        _accommodation = findViewById(R.id.stayButton);
         _accommodation.setOnClickListener(this);
-        _events = (Button) findViewById(R.id.eventsButton);
+        _events = findViewById(R.id.eventsButton);
         _events.setOnClickListener(this);
-        _facilities = (Button) findViewById(R.id.facilitiesButton);
+        _facilities = findViewById(R.id.facilitiesButton);
         _facilities.setOnClickListener(this);
-        _credits = (Button) findViewById(R.id.creditsButton);
+        _credits = findViewById(R.id.creditsButton);
         _credits.setOnClickListener(this);
-        _profile = (Button) findViewById(R.id.profileButton);
+        _profile = findViewById(R.id.profileButton);
         _profile.setOnClickListener(this);
 
         _mainMenuFragment = _mapScreenFragment.getMainMenu();
         _answerCreator = _mapScreenFragment.getAnswerCreator();
+
 
         _fragmentTransaction = _fragmentManager.beginTransaction();
         _fragmentTransaction.add(R.id.screen_area, _creditsFragment);
@@ -126,6 +158,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         _fragmentTransaction.hide(_enquireCreatorFragment);
         _fragmentTransaction.add(R.id.screen_area, _foodModuleFragment);
         _fragmentTransaction.hide(_foodModuleFragment);
+        _fragmentTransaction.add(R.id.screen_area, _settingsFragment);
+        _fragmentTransaction.hide(_settingsFragment);
         _fragmentTransaction.add(R.id.screen_area, _mapScreenFragment);
         _currentFragment = _mapScreenFragment;
         _fragmentTransaction.commit();
@@ -175,6 +209,38 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (_currentFragment == _mapScreenFragment) {
+            if (_mapScreenFragment.getCurrentFragment() == _answerCreator) {
+                setCurrentFragment(_answerCreator.getPreviousFragment());
+            } else {
+                super.onBackPressed();
+            }
+        } else if (_currentFragment == _foodModuleFragment) {
+            _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
+            setCurrentFragment(_mapScreenFragment);
+        } else if (_currentFragment == _creditsFragment) {
+            _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
+            setCurrentFragment(_mapScreenFragment);
+        } else if (_currentFragment == _enquireCreatorFragment) {
+            setCurrentFragment(_enquireCreatorFragment.getPreviousFragment());
+        } else if (_currentFragment == _settingsFragment) {
+            setCurrentFragment(_mapScreenFragment);
+        }
+    }
+
+    public void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        DisplayMetrics dm = _resources.getDisplayMetrics();
+        Configuration conf = _resources.getConfiguration();
+        conf.locale = locale;
+        _resources.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, MainScreen.class);
+        startActivity(refresh);
+        finish();
     }
 
 }

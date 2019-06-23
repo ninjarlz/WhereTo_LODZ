@@ -42,7 +42,8 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
     private RecyclerView.LayoutManager _layoutManager;
     private DatabaseReference _foodEnquiresReference = FirebaseDatabase.getInstance().getReference("Enquires");
     private MapScreen _mapScreen;
-    private Fragment _answerCreator;
+    private AnswerCreator _answerCreator;
+    private FoodModule _foodModuleFragment = this;
     private MainScreen _mainScreen;
     private List<String> _enquiresIDs;
     private Spinner _spinner;
@@ -152,12 +153,12 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
     private class FoodModuleItemClickListener implements  RecyclerViewAdapter.ItemClickListener {
         @Override
         public void onItemClick(View v,int pos) {
-            AnswerCreator answerCreator = (AnswerCreator)_answerCreator;
-            answerCreator.setCurrentEnquireID(_enquiresIDs.get(pos));
-            answerCreator.setCurrentPlace(null);
-            answerCreator.getAutocompleteFragment().setText("");
+            _answerCreator.setCurrentEnquireID(_enquiresIDs.get(pos));
+            _answerCreator.setCurrentPlace(null);
+            _answerCreator.getAutocompleteFragment().setText("");
             _mapScreen.getLastKnownLocation();
             _mapScreen.setCurrentFragment(_answerCreator);
+            _answerCreator.setPreviousFragment(_foodModuleFragment);
             _mainScreen.setCurrentFragment(_mapScreen);
         }
     }
@@ -210,9 +211,9 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
                 getResources().getString(R.string.this_month),
                 getResources().getString(R.string.top_spinner)};
         _mainScreen = (MainScreen) getActivity();
-        _mapScreen = (MapScreen) _mainScreen.getMapScreenFragment();
+        _mapScreen = _mainScreen.getMapScreenFragment();
         _answerCreator = _mapScreen.getAnswerCreator();
-        _recyclerView = (RecyclerView) view.findViewById(R.id.food_recycler_view);
+        _recyclerView = view.findViewById(R.id.food_recycler_view);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         _recyclerView.setHasFixedSize(true);
@@ -246,6 +247,7 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
         } else if (view == _addEnquireButton) {
             EnquireCreator enquireCreator = _mainScreen.getEnquireCreatorFragment();
             enquireCreator.setPreviousFragment(this);
+            enquireCreator.getSpinner().setSelection(0);
             enquireCreator.resetEnquireContent();
             _mainScreen.setCurrentFragment(enquireCreator);
             view.startAnimation(_buttonClick);

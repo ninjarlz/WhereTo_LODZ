@@ -9,7 +9,7 @@
     <string name="close">Close</string>
     <string name="app">Aplikacja</string>
     <string name="database">Dodaj pytanie</string>
-    <string name="about">o Łodzi</string>
+    <string name="about">O Łodzi</string>
     <string name="settings">Ustawienia</string>
     <string name="signout">Wyloguj</string>
     <string name="profile">Profil</string>
@@ -41,11 +41,12 @@
     <string name="logging">Logowanie użytkownika…</string>
     <string name="signInError">Błąd logowania!</string>
     <string name="signInErrorMsg">Twoje konto jest już prawdopodobnie powiązane z kontem Google, wypróbuj tej metody logowania!</string>
-    <string name="enquireContent">Zwartość pytania</string>
+    <string name="enquireContent">Treść pytania</string>
     <string name="enquireType">Typ pytania:</string>
     <string name="answerChoose">Musisz wybrać jakieś miejsce, żeby zamieścić odpowiedź!</string>
     <string name="youHaveChosen">Wybrałeś </string>
     <string name="asAnAnswer"> jako odpowiedź</string>
     <string name="yourInquiry">Twoje pytanie musi składać się z conajmniej 8 znaków!</string>
     <string name="yourInquiryPosted">Twoje pytanie zostało zamieszczone</string>
+    <string name="language">Język:</string>
 </resources>

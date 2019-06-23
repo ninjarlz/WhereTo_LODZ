@@ -36,6 +36,7 @@ public class MainMenu extends Fragment implements View.OnClickListener {
     private TextView _username;
     private User _currentUser;
     private MainScreen _mainScreen;
+    private MapScreen _mapScreen;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -61,19 +62,20 @@ public class MainMenu extends Fragment implements View.OnClickListener {
         _settings.setOnClickListener(this);
         _buttonClick.setDuration(300);
 
-        _username = (TextView) view.findViewById(R.id.username);
-        _email = (TextView) view.findViewById(R.id.email);
+        _username = view.findViewById(R.id.username);
+        _email = view.findViewById(R.id.email);
 
         String email = _auth.getCurrentUser().getEmail();
         String username = _auth.getCurrentUser().getDisplayName();
         String id = _auth.getCurrentUser().getUid();
-        _currentUser = new User(id, email, email);
+        _currentUser = new User(id, username, email);
         _programClient.logInUser(_currentUser);
         _username.setText(getResources().getString(R.string.username) + ": " + _currentUser.getUsername());
         _email.setText("Email: " + _currentUser.getEmail());
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
 
         _mainScreen = (MainScreen) getActivity();
+        _mapScreen = _mainScreen.getMapScreenFragment();
     }
 
     @Override
@@ -86,12 +88,11 @@ public class MainMenu extends Fragment implements View.OnClickListener {
             getActivity().finish();
         } else if (view == _database) {
             view.startAnimation(_buttonClick);
-            Log.d("tag", "onComplete: kurwa1");
             EnquireCreator enquireCreator = _mainScreen.getEnquireCreatorFragment();
-            enquireCreator.setPreviousFragment(this);
+            enquireCreator.setPreviousFragment(_mapScreen);
+            enquireCreator.getSpinner().setSelection(0);
             enquireCreator.resetEnquireContent();
             _mainScreen.setCurrentFragment(enquireCreator);
-            //_programClient.writeNewPost();
         }  else if (view == _app) {
             Log.d("tag", "onComplete: kurwa2");
             view.startAnimation(_buttonClick);
@@ -101,6 +102,7 @@ public class MainMenu extends Fragment implements View.OnClickListener {
             startActivity(browserIntent);
         } else if (view == _settings) {
             view.startAnimation(_buttonClick);
+            _mainScreen.setCurrentFragment(_mainScreen.getSettingsFragment());
         }
     }
 }

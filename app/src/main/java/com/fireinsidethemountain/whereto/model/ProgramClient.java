@@ -67,13 +67,11 @@ public class ProgramClient {
         _currentUser = user;
     }
 
-    public void writeNewPost() {
+    public void writeNewPost(String content, Enquire.EnquireType type) {
         if (_currentUser != null) {
-
-            Enquire enquire = new Enquire(_currentUser.getUserID(), _currentUser.getUsername(), Enquire.EnquireType.Food ,
-                    "Where can I eat affordable Mexican food in the center?",
+            Enquire enquire = new Enquire(_currentUser.getUserID(), _currentUser.getUsername(), type ,
+                    content,
                     Calendar.getInstance().getTime());
-                    //new Date(2019 - 1900, 6 - 1, 14));
             String key = _databaseReference.child("Enquires").push().getKey();
             Map<String, Object> enquireValues = enquire.toMap();
             Map<String, Object> childUpdates = new HashMap<>();

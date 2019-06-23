@@ -394,7 +394,7 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
 
     @Override
     public void onDestroy() {
-        _mapView.onDestroy();
+        if (_mapView != null) _mapView.onDestroy();
         super.onDestroy();
     }
 
