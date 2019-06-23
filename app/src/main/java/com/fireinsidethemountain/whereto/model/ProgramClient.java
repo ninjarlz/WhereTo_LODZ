@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -68,9 +69,11 @@ public class ProgramClient {
 
     public void writeNewPost() {
         if (_currentUser != null) {
+
             Enquire enquire = new Enquire(_currentUser.getUserID(), _currentUser.getUsername(), Enquire.EnquireType.Food ,
-                    "Where can I eat affordable Italian food in the center?",
+                    "Where can I eat affordable Mexican food in the center?",
                     Calendar.getInstance().getTime());
+                    //new Date(2019 - 1900, 6 - 1, 14));
             String key = _databaseReference.child("Enquires").push().getKey();
             Map<String, Object> enquireValues = enquire.toMap();
             Map<String, Object> childUpdates = new HashMap<>();
@@ -142,6 +145,7 @@ public class ProgramClient {
                             answeredPlace.setPlaceName(placeName);
                             answeredPlace.setLatPos(placePosition.latitude);
                             answeredPlace.setLngPos(placePosition.longitude);
+                            answeredPlace.setMostPopularEnquireType(mostPopularEnquire.getType());
                             answeredPlaceValues = answeredPlace.toMap();
                             childUpdates1.put("/AnsweredPlaces/" + placeID, answeredPlaceValues);
                             _databaseReference.updateChildren(childUpdates1);
@@ -162,60 +166,6 @@ public class ProgramClient {
 
                     }
                 });
-
-
-                /*final DatabaseReference place = _databaseReference.child("AnsweredPlaces").child(placeID);
-                place.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                        AnsweredPlace answeredPlace;
-                        Map<String, String> answersIDs;
-                        Map<String, Integer> enquiresIDsCount;
-                        Map<String, Object> answeredPlaceValues;
-                        Map<String, Object> childUpdates1 = new HashMap<>();
-
-                        if (dataSnapshot.exists()) {
-                            answeredPlace = dataSnapshot.getValue(AnsweredPlace.class);
-                            answersIDs = answeredPlace.getAnswersIDs();
-                            answersIDs.put(answerID, enquireID);
-                            enquiresIDsCount = answeredPlace.getEnquireIDsCount();
-                            if (enquiresIDsCount.containsKey(enquireID)) {
-                                enquiresIDsCount.put(enquireID, enquiresIDsCount.get(enquireID) + 1);
-                            } else {
-                                enquiresIDsCount.put(enquireID, 1);
-                            }
-                            Set<String> enquiresIDs = enquiresIDsCount.keySet();
-                            Pair<String, Integer> max = new Pair<>(null, 0);
-                            for (String enquireID1 : enquiresIDs) {
-                                Integer current = enquiresIDsCount.get(enquireID1);
-                                if (current > max.second) {
-                                    max = new Pair<>(enquireID1, current);
-                                }
-                            }
-                            String mostPopularEnquireID = max.first;
-                            answeredPlace.setMostPopularEnquireID(mostPopularEnquireID);
-                            answeredPlaceValues = answeredPlace.toMap();
-                            childUpdates1.put("/AnsweredPlaces/" + placeID, answeredPlaceValues);
-                            _databaseReference.updateChildren(childUpdates1);
-                        } else {
-                            answeredPlace = new AnsweredPlace(enquireID, e.getType(), e.getContent(), placePosition);
-                            answersIDs = answeredPlace.getAnswersIDs();
-                            answersIDs.put(answerID, enquireID);
-                            enquiresIDsCount = answeredPlace.getEnquireIDsCount();
-                            enquiresIDsCount.put(enquireID, 1);
-                            answeredPlaceValues = answeredPlace.toMap();
-                            childUpdates1.put("/AnsweredPlaces/" + placeID, answeredPlaceValues);
-                            _databaseReference.updateChildren(childUpdates1);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });*/
-
                 return Transaction.success(mutableData);
             }
 

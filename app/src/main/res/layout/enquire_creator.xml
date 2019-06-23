@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/yellow">
+
+   <!-- <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enquireContent"
+        android:textSize="12sp"
+        android:textStyle="bold"/>-->
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id = "@+id/enquire_content"
+        android:hint="@string/enquireContent"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enquireType"
+        android:textSize="12sp"
+        android:textStyle="bold"/>
+
+    <!--<Spinner
+        android:layout_width=""
+        android:layout_height=""></Spinner>-->
+    <Spinner
+        android:id="@+id/spinner_enquire_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        android:textAlignment="center"/>
+
+    <Button android:id="@+id/postEnquire"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/postEnquire"
+        />
+
+</LinearLayout>

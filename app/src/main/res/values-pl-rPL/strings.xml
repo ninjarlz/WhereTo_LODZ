@@ -8,7 +8,7 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="app">Aplikacja</string>
-    <string name="database">Baza danych</string>
+    <string name="database">Dodaj pytanie</string>
     <string name="about">o Łodzi</string>
     <string name="settings">Ustawienia</string>
     <string name="signout">Wyloguj</string>
@@ -18,17 +18,35 @@
     <string name="events">Wydarzenia</string>
     <string name="facilities">Udogodnienia</string>
     <string name="credits">Autorzy</string>
-    <string name="random">?</string>
+    <string name="random">+</string>
     <string name="all">all</string>
     <string name="top">top</string>
     <string name="search">Szukaj</string>
     <string name="filter">filtry</string>
+    <string name="this_day">Maks. dzień temu</string>
+    <string name="this_week">Maks. tydzień temu</string>
+    <string name="this_month">Maks. miesiąc temu</string>
+    <string name="top_spinner">Najpopularniejsze</string>
+    <string name="All">Wszystkie</string>
     <string name="near">near</string>
     <string name="dolar">$</string>
     <string name="now">now</string>
-    <string name="description">Jesteśmy grupą studentów IFE z kierunku IT, którzy dzięki projektowi PBL, stworzyli tą aplikację.</string>
-    <string name="fire"> Fire inside the mountain - something unexpected, yet something vivid and strong.
-Hidden initials in the logo mean that together, we stand strong and tall like mountains
-and there’s a passionate fire inside us.</string>
     <string name="answer">Odpowiedz na post</string>
+    <string name="wiki">http://pl.wikipedia.org/wiki/%C5%81%C3%B3d%C5%BA</string>
+    <string name="description">Jesteśmy grupą studentów IFE z kierunku IT, którzy w ramach projektu PBL (ang. Problem Based Learning) stworzyli tę aplikację.</string>
+    <string name="fire"> Fire inside the mountain - coś niespodziewanego, uzewnętrznienie siły i witalnej mocy.
+        Inicjały ukryte w logo zespołu są symbolem naszego nieokiełznanego zapału i niezłomnego podążania w kierunku wyznaczonego celu.</string>
+    <string name="postEnquire">Dodaj pytanie</string>
+    <string name="postAnswer">Dodaj odpowiedź</string>
+    <string name="username">Nazwa użytkownika</string>
+    <string name="logging">Logowanie użytkownika…</string>
+    <string name="signInError">Błąd logowania!</string>
+    <string name="signInErrorMsg">Twoje konto jest już prawdopodobnie powiązane z kontem Google, wypróbuj tej metody logowania!</string>
+    <string name="enquireContent">Zwartość pytania</string>
+    <string name="enquireType">Typ pytania:</string>
+    <string name="answerChoose">Musisz wybrać jakieś miejsce, żeby zamieścić odpowiedź!</string>
+    <string name="youHaveChosen">Wybrałeś </string>
+    <string name="asAnAnswer"> jako odpowiedź</string>
+    <string name="yourInquiry">Twoje pytanie musi składać się z conajmniej 8 znaków!</string>
+    <string name="yourInquiryPosted">Twoje pytanie zostało zamieszczone</string>
 </resources>

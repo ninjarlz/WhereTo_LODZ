@@ -44,8 +44,11 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private FirebaseAuth _auth = FirebaseAuth.getInstance();
 
     private MapScreen _mapScreenFragment = new MapScreen();
-    private Fragment _mainMenuFragment;
+    private Credits _creditsFragment = new Credits();
+    private EnquireCreator _enquireCreatorFragment = new EnquireCreator();
     private Fragment _foodModuleFragment = new FoodModule();
+    private Fragment _mainMenuFragment;
+
     private Fragment _answerCreator;
     private Fragment _currentFragment;
     private FragmentManager _fragmentManager = getSupportFragmentManager();
@@ -54,6 +57,10 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
     public Fragment getMapScreenFragment () {
         return _mapScreenFragment;
+    }
+
+    public EnquireCreator getEnquireCreatorFragment () {
+        return _enquireCreatorFragment;
     }
 
     public Fragment getAnswerCreatorFragment () {
@@ -113,10 +120,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         _answerCreator = _mapScreenFragment.getAnswerCreator();
 
         _fragmentTransaction = _fragmentManager.beginTransaction();
+        _fragmentTransaction.add(R.id.screen_area, _creditsFragment);
+        _fragmentTransaction.hide(_creditsFragment);
+        _fragmentTransaction.add(R.id.screen_area, _enquireCreatorFragment);
+        _fragmentTransaction.hide(_enquireCreatorFragment);
         _fragmentTransaction.add(R.id.screen_area, _foodModuleFragment);
+        _fragmentTransaction.hide(_foodModuleFragment);
         _fragmentTransaction.add(R.id.screen_area, _mapScreenFragment);
         _currentFragment = _mapScreenFragment;
-        _fragmentTransaction.show(_mapScreenFragment);
         _fragmentTransaction.commit();
 
     }
@@ -136,6 +147,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             view.startAnimation(_buttonClick);
         } else if (view == _credits) {
             view.startAnimation(_buttonClick);
+            fragment = _creditsFragment;
         } else if (view == _accommodation) {
             view.startAnimation(_buttonClick);
         } else if (view == _events) {
@@ -143,9 +155,9 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         } else if (view == _facilities) {
             view.startAnimation(_buttonClick);
         } else if (view == _home) {
+            view.startAnimation(_buttonClick);
             _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
             fragment = _mapScreenFragment;
-            view.startAnimation(_buttonClick);
         }
         setCurrentFragment(fragment);
     }

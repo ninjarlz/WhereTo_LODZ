@@ -1,5 +1,6 @@
 package com.fireinsidethemountain.whereto.model;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.fireinsidethemountain.whereto.R;
 
 import java.util.List;
+import java.util.zip.Inflater;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
@@ -20,9 +22,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ItemClickListener _clickListener;
 
     // data is passed into the constructor
-    public RecyclerViewAdapter(Context context, List<String> data) {
-        _inflater = LayoutInflater.from(context);
+    public RecyclerViewAdapter(LayoutInflater inflater, List<String> data) {
         _data = data;
+        _inflater = inflater;
     }
 
     // inflates the row layout from xml when needed

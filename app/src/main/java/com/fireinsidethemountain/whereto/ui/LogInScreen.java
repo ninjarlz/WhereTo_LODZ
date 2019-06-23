@@ -56,8 +56,8 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Sign in error");
-        builder.setMessage("You have probably already assigned your account to Google, try it!");
+        builder.setTitle(getResources().getString(R.string.signInError));
+        builder.setMessage(getResources().getString(R.string.signInErrorMsg));
         builder.setCancelable(true);
         builder.setNeutralButton(android.R.string.ok,
                 new DialogInterface.OnClickListener() {
@@ -116,7 +116,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
     private void logInGoogle() {
 
         Intent signInIntent = _googleSignInClient.getSignInIntent();
-        _progressDialog.setMessage("Logging user...");
+        _progressDialog.setMessage(getResources().getString(R.string.logging));
         _progressDialog.show();
         startActivityForResult(signInIntent, Constants.RC_SIGN_IN);
     }
@@ -138,7 +138,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
                 // Google Sign In failed, update UI appropriately
                 _progressDialog.dismiss();
                 e.printStackTrace();
-                Toast.makeText(LogInScreen.this, "Sing in error!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LogInScreen.this, getResources().getString(R.string.signInError), Toast.LENGTH_SHORT).show();
 
             }
         }
@@ -164,7 +164,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
                         } else {
                             // If sign in fails, display a message to the user.
                             _progressDialog.dismiss();
-                            Toast.makeText(LogInScreen.this, "Sing in error!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LogInScreen.this, getResources().getString(R.string.signInError), Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -175,7 +175,7 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
 
 
     private void logInFacebook() {
-        _progressDialog.setMessage("Logging user...");
+        _progressDialog.setMessage(getResources().getString(R.string.logging));
         _progressDialog.show();
     }
 
