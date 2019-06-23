@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/enquireType"
-        android:textSize="25sp"
+        android:textSize="19sp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"/>
 
@@ -56,7 +56,7 @@
         android:textAlignment="center"/>
     <Space
         android:layout_width="match_parent"
-        android:layout_height="140dp" />
+        android:layout_height="40dp" />
     <View
         android:id="@+id/divider1"
         android:layout_width="match_parent"
