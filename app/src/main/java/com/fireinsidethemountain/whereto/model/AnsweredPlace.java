@@ -1,4 +1,9 @@
 package com.fireinsidethemountain.whereto.model;
+import android.content.Context;
+import android.content.res.Resources;
+
+import com.fireinsidethemountain.whereto.R;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,7 +90,7 @@ public class AnsweredPlace {
 
     }
 
-    public AnsweredPlace(String mostPopularEnquireID, Enquire.EnquireType mostPopularEnquireType, String mostPopularEnquireContent, String placeName, double latPos, double lngPos) {
+    public AnsweredPlace(String mostPopularEnquireID, Enquire.EnquireType mostPopularEnquireType, String mostPopularEnquireContent, String placeName,double latPos, double lngPos) {
         _mostPopularEnquireID = mostPopularEnquireID;
         _mostPopularEnquireType = mostPopularEnquireType;
         _mostPopularEnquireContent = mostPopularEnquireContent;
@@ -105,5 +110,43 @@ public class AnsweredPlace {
         result.put("answersIDs", _answersIDs);
         result.put("enquireIDsCount", _enquireIDsCount);
         return result;
+    }
+
+    public class PlaceNameWithCount implements Comparable<PlaceNameWithCount> {
+
+        private Context _context;
+
+        private String _placeName;
+
+        private int _enquireCount;
+
+        public PlaceNameWithCount(String placeName, int enquireCount, Context context) {
+            _placeName = placeName;
+            _enquireCount = enquireCount;
+            _context = context;
+        }
+
+        @Override
+        public int compareTo(PlaceNameWithCount o) {
+            return Integer.compare(_enquireCount, o._enquireCount);
+        }
+
+        @Override
+        public String toString() {
+            Resources resources = _context.getResources();
+            return resources.getString(R.string.placeName) + ": " + _placeName + "\n" +
+                    resources.getString(R.string.chosenAsAnswer) +" " + new Integer(_enquireCount).toString() + " " +
+                    resources.getString(R.string.times);
+        }
+
+
+    }
+
+    public PlaceNameWithCount getObjectContatiningNumberOfAnswersForEnquire(String enquireID, Context context) {
+        if (_enquireIDsCount.containsKey(enquireID)) {
+            return new PlaceNameWithCount(_placeName, _enquireIDsCount.get(enquireID), context);
+        } else {
+            return null;
+        }
     }
 }

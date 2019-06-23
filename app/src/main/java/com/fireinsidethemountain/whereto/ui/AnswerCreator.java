@@ -23,8 +23,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
@@ -38,11 +40,14 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
     private final LatLng LODZ_REGION_RIGHT_CORNER = new LatLng(51.846180, 19.260541);
     private MapScreen _mapScreen;
     private Button _postAnswer;
-    private boolean _isButtonVisible;
+    private MainScreen _mainScreen;
     private Place _currentPlace;
     private ProgramClient _programClient = ProgramClient.getInstance();
     private Fragment _previousFragment;
     private String _currentEnquireID;
+    private AlphaAnimation _buttonClick = new AlphaAnimation(1f, 0.8f);
+    private TextView _selectedPlace;
+
 
     public String getCurrentEnquireID() {
         return _currentEnquireID;
@@ -82,6 +87,10 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        _mainScreen = (MainScreen) getActivity();
+        _selectedPlace = view.findViewById(R.id.selectedPlace);
+        _selectedPlace.setText(getResources().getString(R.string.selectedPlace) + ": " + getResources().getString(R.string.nothing));
+        _buttonClick.setDuration(300);
         _postAnswer = view.findViewById(R.id.postAnswer);
         _postAnswer.setOnClickListener(this);
         _fragmentManager = getChildFragmentManager();
@@ -95,9 +104,9 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
         _autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
+                _selectedPlace.setText(getResources().getString(R.string.selectedPlace) + ": " + place.getName());
                 _mapScreen.moveCamera(place.getLatLng(), Constants.PLACE_PICKER_ZOOM);
                 _currentPlace = place;
-
             }
 
             @Override
@@ -109,6 +118,7 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
 
 
     public void resetAnswerCreator() {
+        _selectedPlace.setText(getResources().getString(R.string.selectedPlace) + ": " + getResources().getString(R.string.nothing));
         _currentPlace = null;
         _currentEnquireID = null;
     }
@@ -120,11 +130,13 @@ public class AnswerCreator extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if (view == _postAnswer) {
+            view.startAnimation(_buttonClick);
             if (_currentPlace == null) {
                 Toast.makeText(getContext(), getResources().getString(R.string.answerChoose), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getContext(), getResources().getString(R.string.youHaveChosen) + _currentPlace.getName() + getResources().getString(R.string.asAnAnswer), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.youHaveChosen) + " "+ _currentPlace.getName() + " "+ getResources().getString(R.string.asAnAnswer), Toast.LENGTH_SHORT).show();
                 _programClient.addNewAnswer(_currentEnquireID, _currentPlace.getId(), _currentPlace.getName(), _currentPlace.getLatLng());
+                _mainScreen.setCurrentFragment(_mainScreen.getEnquireViewFragment().getPreviousFragment());
             }
         }
     }

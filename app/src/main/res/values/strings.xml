@@ -46,9 +46,17 @@ and there’s a passionate fire inside us.</string>
     <string name="enquireContent">Inquiry content</string>
     <string name="enquireType">Inquiry type:</string>
     <string name="answerChoose">You have to choose a place to answer!</string>
-    <string name="youHaveChosen">You have chosen </string>
-    <string name="asAnAnswer"> as an answer</string>
+    <string name="youHaveChosen">You have chosen</string>
+    <string name="asAnAnswer">as an answer</string>
     <string name="yourInquiry">Your inquiry have to consist from at least 8 characters!</string>
     <string name="yourInquiryPosted">Your inquiry has been posted</string>
     <string name="language">Language:</string>
+    <string name="placeName">Place name</string>
+    <string name="chosenAsAnswer">Chosen as answer </string>
+    <string name="times"> time(s)</string>
+    <string name="author">Author</string>
+    <string name="posted">Posted</string>
+    <string name="numberOfAnswers">Number of answers</string>
+    <string name="selectedPlace">Selected place</string>
+    <string name="nothing">&#60;empty&#62;</string>
 </resources>
