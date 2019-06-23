@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.EventListener;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.Inflater;
@@ -42,7 +43,6 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
     private RecyclerView.LayoutManager _layoutManager;
     private DatabaseReference _foodEnquiresReference = FirebaseDatabase.getInstance().getReference("Enquires");
     private MapScreen _mapScreen;
-    private AnswerCreator _answerCreator;
     private FoodModule _foodModuleFragment = this;
     private MainScreen _mainScreen;
     private List<String> _enquiresIDs;
@@ -53,6 +53,9 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
     private Button _topButton;
     private Button _addEnquireButton;
     private AlphaAnimation _buttonClick = new AlphaAnimation(1f, 0.8f);
+    private EnquireView _enquireViewFragment;
+    private List<String> _dataset;
+    private ValueEventListener _currentListener;
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view,
@@ -60,11 +63,12 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
 
         DatabaseReference foodEnquiresReference = FirebaseDatabase.getInstance().getReference("Enquires");
         Log.d("tag", "onComplete: kurwaaaaaa");
+        foodEnquiresReference.removeEventListener(_currentListener);
         if (position != 4) {
-            foodEnquiresReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            _currentListener = foodEnquiresReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    ArrayList<String> dataset = new ArrayList<>();
+                    _dataset = new ArrayList<>();
                     _enquiresIDs = new ArrayList<>();
 
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
@@ -76,32 +80,30 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
                             long diffHours = TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS);
                             switch (position) {
                                 case 1:
-                                    Log.d("tag", "onComplete: " + new Long(diffHours).toString());
                                     if (diffHours <= 24) {
-                                        //Log.d("tag", "onComplete: " + new Long(diffHours).toString());
-                                        dataset.add(e.toString());
+                                        _dataset.add(e.toString(getActivity()));
                                     }
                                     break;
                                 case 2:
                                     if (diffHours <= 7 * 24) {
-                                        dataset.add(e.toString());
+                                        _dataset.add(e.toString(getActivity()));
                                     }
                                     break;
                                 case 3:
                                     if (diffHours <= 30 * 24) {
-                                        dataset.add(e.toString());
+                                        _dataset.add(e.toString(getActivity()));
                                     }
                                     break;
                                 case 0:
-                                    dataset.add(e.toString());
+                                    _dataset.add(e.toString(getActivity()));
                                     break;
                             }
                             _enquiresIDs.add(childSnapshot.getKey());
                         }
                     }
                     Collections.reverse(_enquiresIDs);
-                    Collections.reverse(dataset);
-                    _adapter = new RecyclerViewAdapter(_inflater, dataset);
+                    Collections.reverse(_dataset);
+                    _adapter = new RecyclerViewAdapter(_inflater, _dataset);
                     _recyclerView.setAdapter(_adapter);
                     _adapter.setClickListener(_foodModuleItemClickListener);
                 }
@@ -113,27 +115,27 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
             });
         } else {
             Log.d("tag", "onComplete: KURRR");
-            foodEnquiresReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            _currentListener = foodEnquiresReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    ArrayList<String> dataset = new ArrayList<>();
+                    _dataset = new ArrayList<>();
                     ArrayList<Enquire> enquires = new ArrayList<>();
                     _enquiresIDs = new ArrayList<>();
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         Enquire e = childSnapshot.getValue(Enquire.class);
                         if (e.getType() == Enquire.EnquireType.Food) {
                             enquires.add(e);
-                            _enquiresIDs.add(childSnapshot.getKey());
                         }
                     }
                     Collections.sort(enquires);
                     for (Enquire e : enquires) {
-                        dataset.add(e.toString());
+                        _dataset.add(e.toString(getActivity()));
+                        _enquiresIDs.add(e.getEnquireID());
                     }
                     Collections.reverse(_enquiresIDs);
-                    Collections.reverse(dataset);
-                    _adapter = new RecyclerViewAdapter(_inflater, dataset);
+                    Collections.reverse(_dataset);
+                    _adapter = new RecyclerViewAdapter(_inflater, _dataset);
                     _recyclerView.setAdapter(_adapter);
                     _adapter.setClickListener(_foodModuleItemClickListener);
                 }
@@ -153,13 +155,9 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
     private class FoodModuleItemClickListener implements  RecyclerViewAdapter.ItemClickListener {
         @Override
         public void onItemClick(View v,int pos) {
-            _answerCreator.setCurrentEnquireID(_enquiresIDs.get(pos));
-            _answerCreator.setCurrentPlace(null);
-            _answerCreator.getAutocompleteFragment().setText("");
-            _mapScreen.getLastKnownLocation();
-            _mapScreen.setCurrentFragment(_answerCreator);
-            _answerCreator.setPreviousFragment(_foodModuleFragment);
-            _mainScreen.setCurrentFragment(_mapScreen);
+            _enquireViewFragment.setEnquire(_enquiresIDs.get(pos), _dataset.get(pos));
+            _enquireViewFragment.setPreviousFragment(_foodModuleFragment);
+            _mainScreen.setCurrentFragment(_enquireViewFragment);
         }
     }
 
@@ -168,18 +166,18 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
 
-            ArrayList<String> dataset = new ArrayList<>();
+            _dataset = new ArrayList<>();
             _enquiresIDs = new ArrayList<>();
             for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                 Enquire e = childSnapshot.getValue(Enquire.class);
                 if (e.getType() == Enquire.EnquireType.Food) {
-                    dataset.add(e.toString());
+                    _dataset.add(e.toString(getActivity()));
                     _enquiresIDs.add(childSnapshot.getKey());
                 }
             }
             Collections.reverse(_enquiresIDs);
-            Collections.reverse(dataset);
-            _adapter = new RecyclerViewAdapter(_inflater, dataset);
+            Collections.reverse(_dataset);
+            _adapter = new RecyclerViewAdapter(_inflater, _dataset);
             _recyclerView.setAdapter(_adapter);
             _adapter.setClickListener(_foodModuleItemClickListener);
         }
@@ -212,15 +210,12 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
                 getResources().getString(R.string.top_spinner)};
         _mainScreen = (MainScreen) getActivity();
         _mapScreen = _mainScreen.getMapScreenFragment();
-        _answerCreator = _mapScreen.getAnswerCreator();
+        _enquireViewFragment = _mainScreen.getEnquireViewFragment();
         _recyclerView = view.findViewById(R.id.food_recycler_view);
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
         _recyclerView.setHasFixedSize(true);
-        // use a linear layout manager
         _layoutManager = new LinearLayoutManager(getActivity());
         _recyclerView.setLayoutManager(_layoutManager);
-        _foodEnquiresReference.addValueEventListener(_foodModuleAllEnquiresEventListener);
+        _currentListener = _foodEnquiresReference.addValueEventListener(_foodModuleAllEnquiresEventListener);
         _spinner = view.findViewById(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item, _spinnerPaths);

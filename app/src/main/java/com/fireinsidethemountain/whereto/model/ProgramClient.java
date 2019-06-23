@@ -30,13 +30,9 @@ import java.util.Set;
 public class ProgramClient {
 
     private static ProgramClient _instance = null;
-    private List<Enquire> _currentlyLoadedEnquires = new ArrayList<>();
-    private final int ENQUIRES_ON_ONE_PAGE = 10;
     private User _currentUser;
-    private FirebaseDatabase _database = FirebaseDatabase.getInstance();
     private DatabaseReference _databaseReference = FirebaseDatabase.getInstance().getReference();
-    private FirebaseAuth _firebaseAuth = FirebaseAuth.getInstance();
-    public static boolean _loggedViaFb = false;
+
 
     private ProgramClient() {
 
@@ -50,18 +46,6 @@ public class ProgramClient {
     }
 
 
-    public boolean add(Enquire enquire) {
-        // one is not able to put in the same document once again
-        if (_currentlyLoadedEnquires.contains(enquire)) {
-            return false;
-        }
-        return _currentlyLoadedEnquires.add(enquire);
-    }
-
-    public List<Enquire> getAllLoadedEnquires() {
-        return Collections.unmodifiableList(_currentlyLoadedEnquires);
-    }
-
 
     public void logInUser(User user) {
         _currentUser = user;
@@ -69,15 +53,15 @@ public class ProgramClient {
 
     public void writeNewPost(String content, Enquire.EnquireType type) {
         if (_currentUser != null) {
-            Enquire enquire = new Enquire(_currentUser.getUserID(), _currentUser.getUsername(), type ,
+            String key = _databaseReference.child("Enquires").push().getKey();
+            Enquire enquire = new Enquire(key, _currentUser.getUserID(), _currentUser.getUsername(), type ,
                     content,
                     Calendar.getInstance().getTime());
-            String key = _databaseReference.child("Enquires").push().getKey();
+
             Map<String, Object> enquireValues = enquire.toMap();
             Map<String, Object> childUpdates = new HashMap<>();
             childUpdates.put("/Enquires/" + key, enquireValues);
             _databaseReference.updateChildren(childUpdates);
-            Log.d("tag","onComplete: DATABSE 1");
         }
     }
 
@@ -119,14 +103,21 @@ public class ProgramClient {
                         DataSnapshot answeredPlaceData = dataSnapshot.child("AnsweredPlaces").child(placeID);
 
                         if (answeredPlaceData.exists()) {
-                            answeredPlace = dataSnapshot.getValue(AnsweredPlace.class);
+                            answeredPlace = answeredPlaceData.getValue(AnsweredPlace.class);
+                            //Log.d("tag","onComplete: " + answeredPlace.getMostPopularEnquireID());
+                            //Log.d("tag","onComplete: " + answeredPlace.getPlaceName());
+                            //Log.d("tag","onComplete: " + answeredPlace.getAnswersIDs().toString());
                             answersIDs = answeredPlace.getAnswersIDs();
+
                             answersIDs.put(answerID, enquireID);
+
                             enquiresIDsCount = answeredPlace.getEnquireIDsCount();
                             if (enquiresIDsCount.containsKey(enquireID)) {
                                 enquiresIDsCount.put(enquireID, enquiresIDsCount.get(enquireID) + 1);
+                                //Log.d("tag","onComplete: KKKKKKKKKKK");
                             } else {
                                 enquiresIDsCount.put(enquireID, 1);
+                                //Log.d("tag","onComplete: BBBBBBBBBB");
                             }
                             Set<String> enquiresIDs = enquiresIDsCount.keySet();
                             Pair<String, Integer> max = new Pair<>(null, 0);
@@ -148,6 +139,7 @@ public class ProgramClient {
                             childUpdates1.put("/AnsweredPlaces/" + placeID, answeredPlaceValues);
                             _databaseReference.updateChildren(childUpdates1);
                         } else {
+                            //Log.d("tag","onComplete: IIIIIIII");
                             answeredPlace = new AnsweredPlace(enquireID, e.getType(), e.getContent(), placeName, placePosition.latitude, placePosition.longitude);
                             answersIDs = answeredPlace.getAnswersIDs();
                             answersIDs.put(answerID, enquireID);
@@ -174,22 +166,5 @@ public class ProgramClient {
 
             }
         });
-    }
-
-    public void readPosts(List<String> dataset, Enquire.EnquireType type) {
-        switch (type) {
-            case Food:
-
-                break;
-            case Facilities:
-
-                break;
-            case Accomodation:
-
-                break;
-            case Events:
-
-                break;
-        }
     }
 }

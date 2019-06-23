@@ -55,6 +55,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private FoodModule _foodModuleFragment = new FoodModule();
     private MainMenu _mainMenuFragment;
     private Settings _settingsFragment = new Settings();
+    private EnquireView _enquireViewFragment = new EnquireView();
     private AnswerCreator _answerCreator;
     private Fragment _currentFragment;
     private FragmentManager _fragmentManager = getSupportFragmentManager();
@@ -63,6 +64,10 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private SharedPreferences _pref;
     private Resources _resources;
     private Configuration _conf;
+
+    public EnquireView getEnquireViewFragment() {
+        return _enquireViewFragment;
+    }
 
     public SharedPreferences getPref() {
         return _pref;
@@ -84,7 +89,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         return _enquireCreatorFragment;
     }
 
-    public Fragment getAnswerCreatorFragment () {
+    public AnswerCreator getAnswerCreatorFragment () {
         return _answerCreator;
     }
 
@@ -160,6 +165,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         _fragmentTransaction.hide(_foodModuleFragment);
         _fragmentTransaction.add(R.id.screen_area, _settingsFragment);
         _fragmentTransaction.hide(_settingsFragment);
+        _fragmentTransaction.add(R.id.screen_area,_enquireViewFragment);
+        _fragmentTransaction.hide(_enquireViewFragment);
         _fragmentTransaction.add(R.id.screen_area, _mapScreenFragment);
         _currentFragment = _mapScreenFragment;
         _fragmentTransaction.commit();
@@ -215,7 +222,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     public void onBackPressed() {
         if (_currentFragment == _mapScreenFragment) {
             if (_mapScreenFragment.getCurrentFragment() == _answerCreator) {
-                setCurrentFragment(_answerCreator.getPreviousFragment());
+                setCurrentFragment(_enquireViewFragment.getPreviousFragment());
             } else {
                 super.onBackPressed();
             }
@@ -229,6 +236,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             setCurrentFragment(_enquireCreatorFragment.getPreviousFragment());
         } else if (_currentFragment == _settingsFragment) {
             setCurrentFragment(_mapScreenFragment);
+        } else if (_currentFragment == _enquireViewFragment) {
+            setCurrentFragment(_enquireViewFragment.getPreviousFragment());
         }
     }
 

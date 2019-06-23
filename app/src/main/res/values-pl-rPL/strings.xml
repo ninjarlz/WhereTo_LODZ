@@ -45,9 +45,17 @@
     <string name="enquireContent">Treść pytania</string>
     <string name="enquireType">Typ pytania:</string>
     <string name="answerChoose">Musisz wybrać jakieś miejsce, żeby zamieścić odpowiedź!</string>
-    <string name="youHaveChosen">Wybrałeś </string>
-    <string name="asAnAnswer"> jako odpowiedź</string>
+    <string name="youHaveChosen">Wybrałeś</string>
+    <string name="asAnAnswer">jako odpowiedź</string>
     <string name="yourInquiry">Twoje pytanie musi składać się z conajmniej 8 znaków!</string>
     <string name="yourInquiryPosted">Twoje pytanie zostało zamieszczone</string>
     <string name="language">Język:</string>
+    <string name="placeName">Nazwa miejsca</string>
+    <string name="chosenAsAnswer">Wybrane jako odpowiedź </string>
+    <string name="times"> raz(y)</string>
+    <string name="author">Autor</string>
+    <string name="posted">Zamieszczono</string>
+    <string name="numberOfAnswers">Liczba odpowiedzi</string>
+    <string name="selectedPlace">Wybrane miejsce</string>
+    <string name="nothing">&#60;brak&#62;</string>
 </resources>
