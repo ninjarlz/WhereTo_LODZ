@@ -11,6 +11,6 @@ public class Constants {
     public static final float PLACE_PICKER_ZOOM = 18f;
     public static final float FOOD_GREEN = 95f;
     public static final float STAY_BLUE = 219f;
-    public static final float EVENTS_RED = 359f;
-    public static final float FACILITIES_BROWN = 14f;
+    public static final float EVENTS_RED = 350f;
+    public static final float FACILITIES_BROWN = 31f;
 }

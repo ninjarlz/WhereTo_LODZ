@@ -65,6 +65,94 @@ public class ProgramClient {
         }
     }
 
+    // TODO: FUTURE FIX FOR POSSIBLE TRANSACTION FUCKUP, BUT CURRENTLY NOT WORKING AT ALL
+    /*public void addNewAnswer(final String enquireID, final String placeID, final String placeName, final LatLng placePosition) {
+        _databaseReference.runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+
+                MutableData enquireData = mutableData.child("Enquires").child(enquireID);
+                final Enquire e = enquireData.getValue(Enquire.class);
+                if (e == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                e.setAnswerCount(e.getAnswerCount() + 1);
+                Answer answer = new Answer(enquireID, e.getContent(), placeID, e.getAuthorID(), e.getAuthorID());
+                DatabaseReference answers = _databaseReference.child("Answers");
+                final String answerID = answers.push().getKey();
+                Map<String, Object> answerValues = answer.toMap();
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("/Answers/" + answerID, answerValues);
+                _databaseReference.updateChildren(childUpdates);
+                e.getAnswersIDs().put(answerID, answerID);
+
+                // Set value and report transaction success
+                enquireData.setValue(e);
+
+                AnsweredPlace answeredPlace;
+                Map<String, String> answersIDs;
+                Map<String, Integer> enquiresIDsCount;
+                Map<String, Object> answeredPlaceValues;
+
+                MutableData answeredPlacesData = mutableData.child("AnsweredPlaces");
+
+                for (MutableData answeredPlaceData : answeredPlacesData.getChildren()) {
+                    String answeredPlaceID = answeredPlaceData.getKey();
+                    if (answeredPlaceID.equals(placeID)) {
+                        answeredPlace = answeredPlaceData.getValue(AnsweredPlace.class);
+                        answersIDs = answeredPlace.getAnswersIDs();
+                        answersIDs.put(answerID, enquireID);
+                        enquiresIDsCount = answeredPlace.getEnquireIDsCount();
+                        if (enquiresIDsCount.containsKey(enquireID)) {
+                            enquiresIDsCount.put(enquireID, enquiresIDsCount.get(enquireID) + 1);
+                        } else {
+                            enquiresIDsCount.put(enquireID, 1);
+                        }
+                        Set<String> enquiresIDs = enquiresIDsCount.keySet();
+                        Pair<String, Integer> max = new Pair<>(null, 0);
+                        for (String enquireID1 : enquiresIDs) {
+                            Integer current = enquiresIDsCount.get(enquireID1);
+                            if (current > max.second) {
+                                max = new Pair<>(enquireID1, current);
+                            }
+                        }
+                        String mostPopularEnquireID = max.first;
+                        answeredPlace.setMostPopularEnquireID(mostPopularEnquireID);
+                        MutableData mostPopularEnquireData = mutableData.child("Enquires").child(mostPopularEnquireID);
+                        Enquire mostPopularEnquire = mostPopularEnquireData.getValue(Enquire.class);
+                        answeredPlace.setMostPopularEnquireContent(mostPopularEnquire.getContent());
+                        answeredPlace.setPlaceName(placeName);
+                        answeredPlace.setLatPos(placePosition.latitude);
+                        answeredPlace.setLngPos(placePosition.longitude);
+                        answeredPlace.setMostPopularEnquireType(mostPopularEnquire.getType());
+                        answeredPlaceData.setValue(answeredPlace);
+                        return Transaction.success(mutableData);
+                    }
+                }
+                Map<String, Object> childUpdates1 = new HashMap<>();
+                answeredPlace = new AnsweredPlace(enquireID, e.getType(), e.getContent(), placeName, placePosition.latitude, placePosition.longitude);
+                answersIDs = answeredPlace.getAnswersIDs();
+                answersIDs.put(answerID, enquireID);
+                enquiresIDsCount = answeredPlace.getEnquireIDsCount();
+                enquiresIDsCount.put(enquireID, 1);
+                answeredPlaceValues = answeredPlace.toMap();
+                childUpdates1.put("/AnsweredPlaces/" + placeID, answeredPlaceValues);
+                _databaseReference.updateChildren(childUpdates1);
+
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, boolean b,
+                                   @Nullable DataSnapshot dataSnapshot) {
+                // Transaction completed
+
+            }
+        });
+    }*/
+
     public void addNewAnswer(final String enquireID, final String placeID, final String placeName, final LatLng placePosition) {
         final String answerID;
         final DatabaseReference enquire = _databaseReference.child("Enquires").child(enquireID);
