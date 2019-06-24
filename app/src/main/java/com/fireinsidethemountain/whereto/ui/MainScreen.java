@@ -216,6 +216,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             fragment = _facilitiesModuleFragment;
         } else if (view == _home) {
             view.startAnimation(_buttonClick);
+            _mapScreenFragment.setLockedOnPlace(false);
             _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
             fragment = _mapScreenFragment;
         }
@@ -247,9 +248,11 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             }
         } else if (_currentFragment == _foodModuleFragment) {
             _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
+            _mapScreenFragment.setLockedOnPlace(false);
             setCurrentFragment(_mapScreenFragment);
         } else if (_currentFragment == _creditsFragment) {
             _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
+            _mapScreenFragment.setLockedOnPlace(false);
             setCurrentFragment(_mapScreenFragment);
         } else if (_currentFragment == _enquireCreatorFragment) {
             setCurrentFragment(_enquireCreatorFragment.getPreviousFragment());
@@ -262,12 +265,15 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             setCurrentFragment(_mapScreenFragment);
         } else if (_currentFragment == _eventsModuleFragment) {
             _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
+            _mapScreenFragment.setLockedOnPlace(false);
             setCurrentFragment(_mapScreenFragment);
         } else if (_currentFragment == _facilitiesModuleFragment) {
             _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
+            _mapScreenFragment.setLockedOnPlace(false);
             setCurrentFragment(_mapScreenFragment);
         } else if (_currentFragment == _stayModuleFragment) {
             _mapScreenFragment.setCurrentFragment(_mainMenuFragment);
+            _mapScreenFragment.setLockedOnPlace(false);
             setCurrentFragment(_mapScreenFragment);
         }
     }

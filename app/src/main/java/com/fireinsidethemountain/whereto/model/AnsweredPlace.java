@@ -120,6 +120,35 @@ public class AnsweredPlace {
 
         private int _enquireCount;
 
+        public double getLat() {
+            return _lat;
+        }
+
+        public void setLat(double lat) {
+            _lat = lat;
+        }
+
+        public double getLng() {
+            return _lng;
+        }
+
+        public void setLng(double lng) {
+            _lng = lng;
+        }
+
+        private double _lat;
+        private double _lng;
+
+        /*private String _placeID;
+
+        public void setPlaceID (String placeID) {
+            _placeID = placeID;
+        }
+
+        public String getPlaceID () {
+            return _placeID;
+        }*/
+
         public PlaceNameWithCount(String placeName, int enquireCount, Context context) {
             _placeName = placeName;
             _enquireCount = enquireCount;

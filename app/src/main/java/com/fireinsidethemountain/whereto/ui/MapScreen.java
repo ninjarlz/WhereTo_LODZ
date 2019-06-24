@@ -84,7 +84,15 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
     private Map<String, String> _placesOnMap = new HashMap<>();
     private PlaceView _placeViewFragment;
     private MainScreen _mainScreen;
+    private boolean _lockedOnPlace;
 
+    public boolean getLockedOnPlace () {
+        return _lockedOnPlace;
+    }
+
+    public void setLockedOnPlace(boolean lockedOnPlace) {
+        _lockedOnPlace = lockedOnPlace;
+    }
 
     public Map<String, String> getPlacesOnMap () {
         return _placesOnMap;
@@ -127,6 +135,7 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                 _fragmentTransaction.commit();
             }
             getLastKnownLocationWithPermissionCheck();
+
         }
     }
 
@@ -179,10 +188,13 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                     } else {
                         _invokeCounter = 0;
                         _yourPos = new LatLng(location.getLatitude(), location.getLongitude());
-                        moveCamera(_yourPos, Constants.DEFAULT_ZOOM);
+                        if (!_lockedOnPlace) {
+                            moveCamera(_yourPos, Constants.DEFAULT_ZOOM);
+                        }
                     }
                 }
             }
+
         });
 
     }
@@ -202,7 +214,9 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
                         return;
                     }
                     _yourPos = new LatLng(location.getLatitude(), location.getLongitude());
+                    if (!_lockedOnPlace) {
                     moveCamera(_yourPos, Constants.DEFAULT_ZOOM);
+                    }
                 }
             }
         });
@@ -458,6 +472,7 @@ public class MapScreen extends Fragment implements View.OnClickListener, OnMapRe
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+        //_lockedOnPlace = false;
         LatLng latLng = marker.getPosition();
         String placeID = _placesOnMap.get(latLng.latitude + "_" + latLng.longitude);
         _placeViewFragment.setPlace(placeID);

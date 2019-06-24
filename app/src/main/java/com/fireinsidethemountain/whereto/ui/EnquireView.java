@@ -19,6 +19,8 @@ import com.fireinsidethemountain.whereto.model.AnsweredPlace;
 import com.fireinsidethemountain.whereto.model.Enquire;
 import com.fireinsidethemountain.whereto.model.ProgramClient;
 import com.fireinsidethemountain.whereto.model.RecyclerViewAdapter;
+import com.fireinsidethemountain.whereto.util.Constants;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +32,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class EnquireView extends Fragment implements View.OnClickListener {
+public class EnquireView extends Fragment implements View.OnClickListener, RecyclerViewAdapter.ItemClickListener {
 
     private String _enquireID;
     private Enquire _enquire;
@@ -47,7 +49,9 @@ public class EnquireView extends Fragment implements View.OnClickListener {
     private AnswerCreator _answerCreator;
     private MainScreen _mainScreen;
     private MapScreen _mapScreen;
+    private MainMenu _mainMenu;
     private TextView _enquireStats;
+    private List<LatLng> _placesPos;
     private List<String> _dataset;
     private ValueEventListener _currentListener;
 
@@ -83,6 +87,7 @@ public class EnquireView extends Fragment implements View.OnClickListener {
         _mainScreen = (MainScreen) getActivity();
         _answerCreator = _mainScreen.getAnswerCreatorFragment();
         _mapScreen = _mainScreen.getMapScreenFragment();
+        _mainMenu = _mapScreen.getMainMenu();
     }
 
     public void setEnquire(String enquireID, String enquireStats) {
@@ -96,11 +101,16 @@ public class EnquireView extends Fragment implements View.OnClickListener {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (_enquireID != null) {
                     _dataset = new ArrayList<>();
+                    _placesPos = new ArrayList<>();
                     ArrayList<AnsweredPlace.PlaceNameWithCount> pnwcs = new ArrayList<>();
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         AnsweredPlace a = childSnapshot.getValue(AnsweredPlace.class);
+                        double lat = a.getLatPos();
+                        double lng = a.getLngPos();
                         AnsweredPlace.PlaceNameWithCount pnwc = a.getObjectContatiningNumberOfAnswersForEnquire(_enquireID, getActivity());
                         if (pnwc != null) {
+                            pnwc.setLat(lat);
+                            pnwc.setLng(lng);
                             pnwcs.add(pnwc);
                         }
                     }
@@ -108,9 +118,11 @@ public class EnquireView extends Fragment implements View.OnClickListener {
                     Collections.reverse(pnwcs);
                     for (AnsweredPlace.PlaceNameWithCount pnwc1 : pnwcs) {
                         _dataset.add(pnwc1.toString(true));
+                        _placesPos.add(new LatLng(pnwc1.getLat(), pnwc1.getLng()));
                     }
                     _adapter = new RecyclerViewAdapter(_inflater, _dataset);
                     _recyclerView.setAdapter(_adapter);
+                    _adapter.setClickListener(_enquireView);
                 }
             }
 
@@ -143,5 +155,13 @@ public class EnquireView extends Fragment implements View.OnClickListener {
             _enquireID = null;
             _enquire = null;
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        _mapScreen.setCurrentFragment(_mainMenu);
+        _mapScreen.setLockedOnPlace(true);
+        _mapScreen.moveCamera(_placesPos.get(position), Constants.PLACE_PICKER_ZOOM);
+        _mainScreen.setCurrentFragment(_mapScreen);
     }
 }
