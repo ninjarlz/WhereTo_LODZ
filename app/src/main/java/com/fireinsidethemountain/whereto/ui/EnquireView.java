@@ -107,7 +107,7 @@ public class EnquireView extends Fragment implements View.OnClickListener, Recyc
                         AnsweredPlace a = childSnapshot.getValue(AnsweredPlace.class);
                         double lat = a.getLatPos();
                         double lng = a.getLngPos();
-                        AnsweredPlace.PlaceNameWithCount pnwc = a.getObjectContatiningNumberOfAnswersForEnquire(_enquireID, getActivity());
+                        AnsweredPlace.PlaceNameWithCount pnwc = a.getObjectContatiningNumberOfAnswersForEnquire(_enquireID);
                         if (pnwc != null) {
                             pnwc.setLat(lat);
                             pnwc.setLng(lng);

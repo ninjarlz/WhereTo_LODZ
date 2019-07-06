@@ -1,5 +1,6 @@
 package com.fireinsidethemountain.whereto.ui;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -51,6 +52,7 @@ public class StayModule extends Fragment implements View.OnClickListener, Adapte
     private List<String> _dataset;
     private ValueEventListener _currentListener;
 
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view,
                                final int position, long id) {
@@ -75,21 +77,21 @@ public class StayModule extends Fragment implements View.OnClickListener, Adapte
                             switch (position) {
                                 case 1:
                                     if (diffHours <= 24) {
-                                        _dataset.add(e.toString(getActivity()));
+                                        _dataset.add(e.toString());
                                     }
                                     break;
                                 case 2:
                                     if (diffHours <= 7 * 24) {
-                                        _dataset.add(e.toString(getActivity()));
+                                        _dataset.add(e.toString());
                                     }
                                     break;
                                 case 3:
                                     if (diffHours <= 30 * 24) {
-                                        _dataset.add(e.toString(getActivity()));
+                                        _dataset.add(e.toString());
                                     }
                                     break;
                                 case 0:
-                                    _dataset.add(e.toString(getActivity()));
+                                    _dataset.add(e.toString());
                                     break;
                             }
                             _enquiresIDs.add(childSnapshot.getKey());
@@ -124,7 +126,7 @@ public class StayModule extends Fragment implements View.OnClickListener, Adapte
                     }
                     Collections.sort(enquires);
                     for (Enquire e : enquires) {
-                        _dataset.add(e.toString(getActivity()));
+                        _dataset.add(e.toString());
                         _enquiresIDs.add(e.getEnquireID());
                     }
                     Collections.reverse(_enquiresIDs);
@@ -165,7 +167,7 @@ public class StayModule extends Fragment implements View.OnClickListener, Adapte
             for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                 Enquire e = childSnapshot.getValue(Enquire.class);
                 if (e.getType() == Enquire.EnquireType.Accomodation) {
-                    _dataset.add(e.toString(getActivity()));
+                    _dataset.add(e.toString());
                     _enquiresIDs.add(childSnapshot.getKey());
                 }
             }

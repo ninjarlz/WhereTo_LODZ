@@ -98,7 +98,8 @@ public class PlaceView extends Fragment  {
                     _enquiresIDs.clear();
                     _dataset.clear();
                     AnsweredPlace answeredPlace = dataSnapshot.child("AnsweredPlaces").child(placeID).getValue(AnsweredPlace.class);
-                    _placeStats.setText(answeredPlace.toString(getActivity()));
+                    _placeStats.setText(answeredPlace.toString());
+
                     Set<String> enquiresIDs = answeredPlace.getEnquireIDsCount().keySet();
                     List<Enquire> enquires = new ArrayList<>();
                     for (String enquireID : enquiresIDs) {
@@ -108,8 +109,8 @@ public class PlaceView extends Fragment  {
                     Collections.reverse(enquires);
                     for (Enquire e : enquires) {
                         _enquiresIDs.add(e.getEnquireID());
-                        AnsweredPlace.PlaceNameWithCount pnwc = answeredPlace.getObjectContatiningNumberOfAnswersForEnquire(e.getEnquireID(), getActivity());
-                        _dataset.add(e.toString(getActivity()) + "\n" + pnwc.toString(false));
+                        AnsweredPlace.PlaceNameWithCount pnwc = answeredPlace.getObjectContatiningNumberOfAnswersForEnquire(e.getEnquireID());
+                        _dataset.add(e.toString() + "\n" + pnwc.toString(false));
                     }
                     _adapter = new RecyclerViewAdapter(_inflater, _dataset);
                     _recyclerView.setAdapter(_adapter);

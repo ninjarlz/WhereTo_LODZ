@@ -3,6 +3,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.fireinsidethemountain.whereto.R;
+import com.fireinsidethemountain.whereto.ui.MainScreen;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -114,8 +115,6 @@ public class AnsweredPlace {
 
     public class PlaceNameWithCount implements Comparable<PlaceNameWithCount> {
 
-        private Context _context;
-
         private String _placeName;
 
         private int _enquireCount;
@@ -139,20 +138,9 @@ public class AnsweredPlace {
         private double _lat;
         private double _lng;
 
-        /*private String _placeID;
-
-        public void setPlaceID (String placeID) {
-            _placeID = placeID;
-        }
-
-        public String getPlaceID () {
-            return _placeID;
-        }*/
-
-        public PlaceNameWithCount(String placeName, int enquireCount, Context context) {
+        public PlaceNameWithCount(String placeName, int enquireCount) {
             _placeName = placeName;
             _enquireCount = enquireCount;
-            _context = context;
         }
 
         @Override
@@ -162,7 +150,7 @@ public class AnsweredPlace {
 
 
         public String toString(boolean withName) {
-            Resources resources = _context.getResources();
+            Resources resources = MainScreen.getContext().getResources();
             if (withName) {
                 return resources.getString(R.string.placeName) + ": " + _placeName + "\n" +
                         resources.getString(R.string.chosenAsAnswer) + " " + new Integer(_enquireCount).toString() + " " +
@@ -175,17 +163,16 @@ public class AnsweredPlace {
 
     }
 
-    public PlaceNameWithCount getObjectContatiningNumberOfAnswersForEnquire(String enquireID, Context context) {
+    public PlaceNameWithCount getObjectContatiningNumberOfAnswersForEnquire(String enquireID) {
         if (_enquireIDsCount.containsKey(enquireID)) {
-            return new PlaceNameWithCount(_placeName, _enquireIDsCount.get(enquireID), context);
+            return new PlaceNameWithCount(_placeName, _enquireIDsCount.get(enquireID));
         } else {
             return null;
         }
     }
 
-    public String toString(Context contex) {
-        Resources resources = contex.getResources();
-
+    public String toString() {
+        Resources resources = MainScreen.getContext().getResources();
         String type = "";
         switch (_mostPopularEnquireType) {
             case Events:

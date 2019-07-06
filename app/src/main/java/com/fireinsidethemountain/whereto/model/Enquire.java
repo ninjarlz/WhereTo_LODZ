@@ -1,6 +1,7 @@
 package com.fireinsidethemountain.whereto.model;
 
 import com.fireinsidethemountain.whereto.R;
+import com.fireinsidethemountain.whereto.ui.MainScreen;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.text.SimpleDateFormat;
@@ -127,7 +128,7 @@ public class Enquire implements Comparable<Enquire> {
     }
 
 
-    @Override
+    /*@Override
     public String toString() {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -137,10 +138,11 @@ public class Enquire implements Comparable<Enquire> {
                 "Posted: " + date + "\n" +
                 "Content: " + _content + "\n" +
                 "Number of answers: " + _answerCount;
-    }
+    }*/
 
-    public String toString(Context context) {
-        Resources resources = context.getResources();
+    @Override
+    public String toString() {
+        Resources resources = MainScreen.getContext().getResources();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String date = sdf.format(_creationDate);
 

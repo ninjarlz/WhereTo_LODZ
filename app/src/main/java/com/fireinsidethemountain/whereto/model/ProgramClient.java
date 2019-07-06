@@ -65,50 +65,49 @@ public class ProgramClient {
         }
     }
 
-    // TODO: FUTURE FIX FOR POSSIBLE TRANSACTION FUCKUP, BUT CURRENTLY NOT WORKING AT ALL
     /*public void addNewAnswer(final String enquireID, final String placeID, final String placeName, final LatLng placePosition) {
+        Log.d("tag","onComplete: IIIIIIII111");
         _databaseReference.runTransaction(new Transaction.Handler() {
+
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
 
                 MutableData enquireData = mutableData.child("Enquires").child(enquireID);
-                final Enquire e = enquireData.getValue(Enquire.class);
-                if (e == null) {
+                Enquire enquire = enquireData.getValue(Enquire.class);
+                if (enquire == null) {
+                    Log.d("tag","onComplete: KUUURRRRRWAAJJAJAJA");
                     return Transaction.success(mutableData);
                 }
-
-                e.setAnswerCount(e.getAnswerCount() + 1);
-                Answer answer = new Answer(enquireID, e.getContent(), placeID, e.getAuthorID(), e.getAuthorID());
+                Log.d("tag","onComplete: IIIIIIII");
+                enquire.setAnswerCount(enquire.getAnswerCount() + 1);
+                Answer answer = new Answer(enquireID, enquire.getContent(), placeID, enquire.getAuthorID(), enquire.getAuthorID());
                 DatabaseReference answers = _databaseReference.child("Answers");
-                final String answerID = answers.push().getKey();
+                String answerID = answers.push().getKey();
                 Map<String, Object> answerValues = answer.toMap();
                 Map<String, Object> childUpdates = new HashMap<>();
                 childUpdates.put("/Answers/" + answerID, answerValues);
                 _databaseReference.updateChildren(childUpdates);
-                e.getAnswersIDs().put(answerID, answerID);
-
+                enquire.getAnswersIDs().put(answerID, answerID);
                 // Set value and report transaction success
-                enquireData.setValue(e);
-
+                enquireData.setValue(enquire);
                 AnsweredPlace answeredPlace;
                 Map<String, String> answersIDs;
                 Map<String, Integer> enquiresIDsCount;
-                Map<String, Object> answeredPlaceValues;
-
-                MutableData answeredPlacesData = mutableData.child("AnsweredPlaces");
-
-                for (MutableData answeredPlaceData : answeredPlacesData.getChildren()) {
-                    String answeredPlaceID = answeredPlaceData.getKey();
-                    if (answeredPlaceID.equals(placeID)) {
+                for (MutableData answeredPlaceData : mutableData.getChildren()) {
+                    if (answeredPlaceData.getKey().equals(placeID)) {
                         answeredPlace = answeredPlaceData.getValue(AnsweredPlace.class);
                         answersIDs = answeredPlace.getAnswersIDs();
+
                         answersIDs.put(answerID, enquireID);
+
                         enquiresIDsCount = answeredPlace.getEnquireIDsCount();
                         if (enquiresIDsCount.containsKey(enquireID)) {
                             enquiresIDsCount.put(enquireID, enquiresIDsCount.get(enquireID) + 1);
+                            //Log.d("tag","onComplete: KKKKKKKKKKK");
                         } else {
                             enquiresIDsCount.put(enquireID, 1);
+                            //Log.d("tag","onComplete: BBBBBBBBBB");
                         }
                         Set<String> enquiresIDs = enquiresIDsCount.keySet();
                         Pair<String, Integer> max = new Pair<>(null, 0);
@@ -120,8 +119,7 @@ public class ProgramClient {
                         }
                         String mostPopularEnquireID = max.first;
                         answeredPlace.setMostPopularEnquireID(mostPopularEnquireID);
-                        MutableData mostPopularEnquireData = mutableData.child("Enquires").child(mostPopularEnquireID);
-                        Enquire mostPopularEnquire = mostPopularEnquireData.getValue(Enquire.class);
+                        Enquire mostPopularEnquire = mutableData.child("Enquires").child(mostPopularEnquireID).getValue(Enquire.class);
                         answeredPlace.setMostPopularEnquireContent(mostPopularEnquire.getContent());
                         answeredPlace.setPlaceName(placeName);
                         answeredPlace.setLatPos(placePosition.latitude);
@@ -131,29 +129,128 @@ public class ProgramClient {
                         return Transaction.success(mutableData);
                     }
                 }
-                Map<String, Object> childUpdates1 = new HashMap<>();
-                answeredPlace = new AnsweredPlace(enquireID, e.getType(), e.getContent(), placeName, placePosition.latitude, placePosition.longitude);
+                answeredPlace = new AnsweredPlace(enquireID, enquire.getType(), enquire.getContent(), placeName, placePosition.latitude, placePosition.longitude);
                 answersIDs = answeredPlace.getAnswersIDs();
                 answersIDs.put(answerID, enquireID);
                 enquiresIDsCount = answeredPlace.getEnquireIDsCount();
                 enquiresIDsCount.put(enquireID, 1);
-                answeredPlaceValues = answeredPlace.toMap();
-                childUpdates1.put("/AnsweredPlaces/" + placeID, answeredPlaceValues);
-                _databaseReference.updateChildren(childUpdates1);
-
+                mutableData.child(placeID).setValue(answeredPlace);
                 return Transaction.success(mutableData);
             }
 
             @Override
-            public void onComplete(@Nullable DatabaseError databaseError, boolean b,
-                                   @Nullable DataSnapshot dataSnapshot) {
-                // Transaction completed
+            public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
 
             }
         });
     }*/
 
+
+
+    // TODO: NEW CONCURRENT SAFE VERSION OF POSTING ANSWERS
     public void addNewAnswer(final String enquireID, final String placeID, final String placeName, final LatLng placePosition) {
+        Log.d("tag","onComplete: IIIIIIII111");
+        DatabaseReference enquireRef = _databaseReference.child("Enquires");
+        enquireRef.runTransaction(new Transaction.Handler() {
+
+            private String _answerID;
+            private Enquire _enquire;
+            private MutableData _enquiresData;
+
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                _enquiresData = mutableData;
+                MutableData enquireData = mutableData.child(enquireID);
+                _enquire = enquireData.getValue(Enquire.class);
+                if (_enquire == null) {
+                    Log.d("tag","onComplete: KUUURRRRRWAAJJAJAJA");
+                    return Transaction.success(mutableData);
+                }
+                Log.d("tag","onComplete: IIIIIIII");
+                _enquire.setAnswerCount(_enquire.getAnswerCount() + 1);
+                Answer answer = new Answer(enquireID, _enquire.getContent(), placeID, _enquire.getAuthorID(), _enquire.getAuthorID());
+                DatabaseReference answers = _databaseReference.child("Answers");
+                _answerID = answers.push().getKey();
+                Map<String, Object> answerValues = answer.toMap();
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("/Answers/" + _answerID, answerValues);
+                _databaseReference.updateChildren(childUpdates);
+                _enquire.getAnswersIDs().put(_answerID, _answerID);
+
+                // Set value and report transaction success
+                enquireData.setValue(_enquire);
+
+                DatabaseReference answeredPlacesRef = _databaseReference.child("AnsweredPlaces");
+                answeredPlacesRef.runTransaction(new Transaction.Handler() {
+
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                        AnsweredPlace answeredPlace;
+                        Map<String, String> answersIDs;
+                        Map<String, Integer> enquiresIDsCount;
+                        for (MutableData answeredPlaceData : mutableData.getChildren()) {
+                            if (answeredPlaceData.getKey().equals(placeID)) {
+                                answeredPlace = answeredPlaceData.getValue(AnsweredPlace.class);
+                                answersIDs = answeredPlace.getAnswersIDs();
+
+                                answersIDs.put(_answerID, enquireID);
+
+                                enquiresIDsCount = answeredPlace.getEnquireIDsCount();
+                                if (enquiresIDsCount.containsKey(enquireID)) {
+                                    enquiresIDsCount.put(enquireID, enquiresIDsCount.get(enquireID) + 1);
+                                    //Log.d("tag","onComplete: KKKKKKKKKKK");
+                                } else {
+                                    enquiresIDsCount.put(enquireID, 1);
+                                    //Log.d("tag","onComplete: BBBBBBBBBB");
+                                }
+                                Set<String> enquiresIDs = enquiresIDsCount.keySet();
+                                Pair<String, Integer> max = new Pair<>(null, 0);
+                                for (String enquireID1 : enquiresIDs) {
+                                    Integer current = enquiresIDsCount.get(enquireID1);
+                                    if (current > max.second) {
+                                        max = new Pair<>(enquireID1, current);
+                                    }
+                                }
+                                String mostPopularEnquireID = max.first;
+                                answeredPlace.setMostPopularEnquireID(mostPopularEnquireID);
+                                Enquire mostPopularEnquire = _enquiresData.child(mostPopularEnquireID).getValue(Enquire.class);
+                                answeredPlace.setMostPopularEnquireContent(mostPopularEnquire.getContent());
+                                answeredPlace.setPlaceName(placeName);
+                                answeredPlace.setLatPos(placePosition.latitude);
+                                answeredPlace.setLngPos(placePosition.longitude);
+                                answeredPlace.setMostPopularEnquireType(mostPopularEnquire.getType());
+                                answeredPlaceData.setValue(answeredPlace);
+                                return Transaction.success(mutableData);
+                            }
+                        }
+                        answeredPlace = new AnsweredPlace(enquireID, _enquire.getType(), _enquire.getContent(), placeName, placePosition.latitude, placePosition.longitude);
+                        answersIDs = answeredPlace.getAnswersIDs();
+                        answersIDs.put(_answerID, enquireID);
+                        enquiresIDsCount = answeredPlace.getEnquireIDsCount();
+                        enquiresIDsCount.put(enquireID, 1);
+                        mutableData.child(placeID).setValue(answeredPlace);
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
+
+                    }
+                });
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
+
+            }
+        });
+    }
+
+    // TODO: NOT SAFE VERSION OF POSTING ANSWERS
+    /*public void addNewAnswer(final String enquireID, final String placeID, final String placeName, final LatLng placePosition) {
         final String answerID;
         final DatabaseReference enquire = _databaseReference.child("Enquires").child(enquireID);
         enquire.runTransaction(new Transaction.Handler() {
@@ -254,5 +351,5 @@ public class ProgramClient {
 
             }
         });
-    }
+    }*/
 }

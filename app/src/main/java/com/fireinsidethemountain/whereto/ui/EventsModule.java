@@ -1,5 +1,6 @@
 package com.fireinsidethemountain.whereto.ui;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -51,6 +52,7 @@ public class EventsModule extends Fragment implements View.OnClickListener, Adap
     private List<String> _dataset;
     private ValueEventListener _currentListener;
 
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view,
                                final int position, long id) {
@@ -75,21 +77,21 @@ public class EventsModule extends Fragment implements View.OnClickListener, Adap
                             switch (position) {
                                 case 1:
                                     if (diffHours <= 24) {
-                                        _dataset.add(e.toString(getActivity()));
+                                        _dataset.add(e.toString());
                                     }
                                     break;
                                 case 2:
                                     if (diffHours <= 7 * 24) {
-                                        _dataset.add(e.toString(getActivity()));
+                                        _dataset.add(e.toString());
                                     }
                                     break;
                                 case 3:
                                     if (diffHours <= 30 * 24) {
-                                        _dataset.add(e.toString(getActivity()));
+                                        _dataset.add(e.toString());
                                     }
                                     break;
                                 case 0:
-                                    _dataset.add(e.toString(getActivity()));
+                                    _dataset.add(e.toString());
                                     break;
                             }
                             _enquiresIDs.add(childSnapshot.getKey());
@@ -124,7 +126,7 @@ public class EventsModule extends Fragment implements View.OnClickListener, Adap
                     }
                     Collections.sort(enquires);
                     for (Enquire e : enquires) {
-                        _dataset.add(e.toString(getActivity()));
+                        _dataset.add(e.toString());
                         _enquiresIDs.add(e.getEnquireID());
                     }
                     Collections.reverse(_enquiresIDs);
@@ -165,7 +167,7 @@ public class EventsModule extends Fragment implements View.OnClickListener, Adap
             for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                 Enquire e = childSnapshot.getValue(Enquire.class);
                 if (e.getType() == Enquire.EnquireType.Events) {
-                    _dataset.add(e.toString(getActivity()));
+                    _dataset.add(e.toString());
                     _enquiresIDs.add(childSnapshot.getKey());
                 }
             }
@@ -223,6 +225,7 @@ public class EventsModule extends Fragment implements View.OnClickListener, Adap
         _addEnquireButton = view.findViewById(R.id.add_enquire_events);
         _addEnquireButton.setOnClickListener(this);
         _buttonClick.setDuration(300);
+
     }
 
     @Override

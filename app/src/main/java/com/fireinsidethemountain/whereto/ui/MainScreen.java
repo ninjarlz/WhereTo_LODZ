@@ -26,6 +26,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.fireinsidethemountain.whereto.R;
 import com.fireinsidethemountain.whereto.model.ProgramClient;
 import com.google.firebase.auth.FirebaseAuth;
+import android.content.Context;
 
 import java.util.Locale;
 
@@ -33,6 +34,7 @@ import java.util.Locale;
 public class MainScreen extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
 
+    private static Context _context;
     private ImageView _profileImage;
     private Button _food;
     private Button _accommodation;
@@ -118,9 +120,15 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         }
     }
 
+
+    public static Context getContext() {
+        return _context;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        _context = this;
         _pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         _resources = getResources();
         _conf = _resources.getConfiguration();

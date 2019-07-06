@@ -1,5 +1,6 @@
 package com.fireinsidethemountain.whereto.ui;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,14 +37,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.zip.Inflater;
 
 
-public class FoodModule extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class Module extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private RecyclerView _recyclerView;
     private RecyclerViewAdapter _adapter;
     private RecyclerView.LayoutManager _layoutManager;
     private DatabaseReference _foodEnquiresReference = FirebaseDatabase.getInstance().getReference("Enquires");
     private MapScreen _mapScreen;
-    private FoodModule _foodModuleFragment = this;
+    private Module _moduleFragment = this;
+    private Enquire.EnquireType _moduleType;
     private MainScreen _mainScreen;
     private List<String> _enquiresIDs;
     private Spinner _spinner;
@@ -56,6 +58,16 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
     private EnquireView _enquireViewFragment;
     private List<String> _dataset;
     private ValueEventListener _currentListener;
+    private Resources _resources;
+
+
+    public static Module newIstance(int moduleType) {
+        Module module = new Module();
+        Bundle args = new Bundle();
+        args.putInt("moduleType", moduleType);
+        module.setArguments(args);
+        return module;
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view,
@@ -81,21 +93,21 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
                             switch (position) {
                                 case 1:
                                     if (diffHours <= 24) {
-                                        _dataset.add(e.toString(getActivity()));
+                                        _dataset.add(e.toString());
                                     }
                                     break;
                                 case 2:
                                     if (diffHours <= 7 * 24) {
-                                        _dataset.add(e.toString(getActivity()));
+                                        _dataset.add(e.toString());
                                     }
                                     break;
                                 case 3:
                                     if (diffHours <= 30 * 24) {
-                                        _dataset.add(e.toString(getActivity()));
+                                        _dataset.add(e.toString());
                                     }
                                     break;
                                 case 0:
-                                    _dataset.add(e.toString(getActivity()));
+                                    _dataset.add(e.toString());
                                     break;
                             }
                             _enquiresIDs.add(childSnapshot.getKey());
@@ -130,7 +142,7 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
                     }
                     Collections.sort(enquires);
                     for (Enquire e : enquires) {
-                        _dataset.add(e.toString(getActivity()));
+                        _dataset.add(e.toString());
                         _enquiresIDs.add(e.getEnquireID());
                     }
                     Collections.reverse(_enquiresIDs);
@@ -156,7 +168,7 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
         @Override
         public void onItemClick(View v,int pos) {
             _enquireViewFragment.setEnquire(_enquiresIDs.get(pos), _dataset.get(pos));
-            _enquireViewFragment.setPreviousFragment(_foodModuleFragment);
+            _enquireViewFragment.setPreviousFragment(_moduleFragment);
             _mainScreen.setCurrentFragment(_enquireViewFragment);
         }
     }
@@ -171,7 +183,7 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
             for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                 Enquire e = childSnapshot.getValue(Enquire.class);
                 if (e.getType() == Enquire.EnquireType.Food) {
-                    _dataset.add(e.toString(getActivity()));
+                    _dataset.add(e.toString());
                     _enquiresIDs.add(childSnapshot.getKey());
                 }
             }
@@ -202,6 +214,7 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        _moduleType = Enquire.EnquireType.values()[getArguments().getInt("moduleType")];
         _spinnerPaths = new String[]{
                 getResources().getString(R.string.All),
                 getResources().getString(R.string.this_day),
@@ -209,6 +222,7 @@ public class FoodModule extends Fragment implements View.OnClickListener, Adapte
                 getResources().getString(R.string.this_month),
                 getResources().getString(R.string.top_spinner)};
         _mainScreen = (MainScreen) getActivity();
+        _resources = getResources();
         _mapScreen = _mainScreen.getMapScreenFragment();
         _enquireViewFragment = _mainScreen.getEnquireViewFragment();
         _recyclerView = view.findViewById(R.id.food_recycler_view);
