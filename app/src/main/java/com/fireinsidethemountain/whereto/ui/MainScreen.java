@@ -54,10 +54,10 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private MapScreen _mapScreenFragment = new MapScreen();
     private Credits _creditsFragment = new Credits();
     private EnquireCreator _enquireCreatorFragment = new EnquireCreator();
-    private FoodModule _foodModuleFragment = new FoodModule();
-    private EventsModule _eventsModuleFragment = new EventsModule();
-    private FacilitiesModule _facilitiesModuleFragment = new FacilitiesModule();
-    private StayModule _stayModuleFragment = new StayModule();
+    private Module _foodModuleFragment = Module.newIstance(0);
+    private Module _eventsModuleFragment = Module.newIstance(2);
+    private Module _facilitiesModuleFragment = Module.newIstance(3);
+    private Module _stayModuleFragment = Module.newIstance(1);
     private MainMenu _mainMenuFragment;
     private Settings _settingsFragment = new Settings();
     private EnquireView _enquireViewFragment = new EnquireView();

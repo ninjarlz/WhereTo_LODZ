@@ -42,7 +42,7 @@ public class Module extends Fragment implements View.OnClickListener, AdapterVie
     private RecyclerView _recyclerView;
     private RecyclerViewAdapter _adapter;
     private RecyclerView.LayoutManager _layoutManager;
-    private DatabaseReference _foodEnquiresReference = FirebaseDatabase.getInstance().getReference("Enquires");
+    private DatabaseReference _enquiresReference = FirebaseDatabase.getInstance().getReference("Enquires");
     private MapScreen _mapScreen;
     private Module _moduleFragment = this;
     private Enquire.EnquireType _moduleType;
@@ -85,7 +85,7 @@ public class Module extends Fragment implements View.OnClickListener, AdapterVie
 
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         Enquire e = childSnapshot.getValue(Enquire.class);
-                        if (e.getType() == Enquire.EnquireType.Food) {
+                        if (e.getType() == _moduleType) {
                             Date date = e.getCreationDate();
                             Date now = new Date();
                             long diff = now.getTime() - date.getTime();
@@ -117,7 +117,7 @@ public class Module extends Fragment implements View.OnClickListener, AdapterVie
                     Collections.reverse(_dataset);
                     _adapter = new RecyclerViewAdapter(_inflater, _dataset);
                     _recyclerView.setAdapter(_adapter);
-                    _adapter.setClickListener(_foodModuleItemClickListener);
+                    _adapter.setClickListener(_moduleItemClickListener);
                 }
 
                 @Override
@@ -136,7 +136,7 @@ public class Module extends Fragment implements View.OnClickListener, AdapterVie
                     _enquiresIDs = new ArrayList<>();
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         Enquire e = childSnapshot.getValue(Enquire.class);
-                        if (e.getType() == Enquire.EnquireType.Food) {
+                        if (e.getType() == _moduleType) {
                             enquires.add(e);
                         }
                     }
@@ -149,7 +149,7 @@ public class Module extends Fragment implements View.OnClickListener, AdapterVie
                     Collections.reverse(_dataset);
                     _adapter = new RecyclerViewAdapter(_inflater, _dataset);
                     _recyclerView.setAdapter(_adapter);
-                    _adapter.setClickListener(_foodModuleItemClickListener);
+                    _adapter.setClickListener(_moduleItemClickListener);
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -164,7 +164,7 @@ public class Module extends Fragment implements View.OnClickListener, AdapterVie
         // TODO Auto-generated method stub
     }
 
-    private class FoodModuleItemClickListener implements  RecyclerViewAdapter.ItemClickListener {
+    private class ModuleItemClickListener implements  RecyclerViewAdapter.ItemClickListener {
         @Override
         public void onItemClick(View v,int pos) {
             _enquireViewFragment.setEnquire(_enquiresIDs.get(pos), _dataset.get(pos));
@@ -173,7 +173,7 @@ public class Module extends Fragment implements View.OnClickListener, AdapterVie
         }
     }
 
-    private class FoodModuleAllEnquiresEventListener implements ValueEventListener {
+    private class ModuleAllEnquiresEventListener implements ValueEventListener {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -182,7 +182,7 @@ public class Module extends Fragment implements View.OnClickListener, AdapterVie
             _enquiresIDs = new ArrayList<>();
             for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                 Enquire e = childSnapshot.getValue(Enquire.class);
-                if (e.getType() == Enquire.EnquireType.Food) {
+                if (e.getType() == _moduleType) {
                     _dataset.add(e.toString());
                     _enquiresIDs.add(childSnapshot.getKey());
                 }
@@ -191,7 +191,7 @@ public class Module extends Fragment implements View.OnClickListener, AdapterVie
             Collections.reverse(_dataset);
             _adapter = new RecyclerViewAdapter(_inflater, _dataset);
             _recyclerView.setAdapter(_adapter);
-            _adapter.setClickListener(_foodModuleItemClickListener);
+            _adapter.setClickListener(_moduleItemClickListener);
         }
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -200,21 +200,35 @@ public class Module extends Fragment implements View.OnClickListener, AdapterVie
     }
 
 
-    private FoodModuleItemClickListener _foodModuleItemClickListener = new FoodModuleItemClickListener();
-    private FoodModuleAllEnquiresEventListener _foodModuleAllEnquiresEventListener = new FoodModuleAllEnquiresEventListener();
+    private ModuleItemClickListener _moduleItemClickListener = new ModuleItemClickListener();
+    private ModuleAllEnquiresEventListener _moduleAllEnquiresEventListener = new ModuleAllEnquiresEventListener();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        _moduleType = Enquire.EnquireType.values()[getArguments().getInt("moduleType")];
         _inflater = inflater;
-        return inflater.inflate(R.layout.food_module, container, false);
+        switch (_moduleType) {
+            case Food:
+                return inflater.inflate(R.layout.food_module, container, false);
+
+            case Accomodation:
+                return inflater.inflate(R.layout.stay_module, container, false);
+
+            case Events:
+                return inflater.inflate(R.layout.events_module, container, false);
+
+            default:
+                return inflater.inflate(R.layout.facilities_module, container, false);
+
+        }
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        _moduleType = Enquire.EnquireType.values()[getArguments().getInt("moduleType")];
         _spinnerPaths = new String[]{
                 getResources().getString(R.string.All),
                 getResources().getString(R.string.this_day),
@@ -225,22 +239,48 @@ public class Module extends Fragment implements View.OnClickListener, AdapterVie
         _resources = getResources();
         _mapScreen = _mainScreen.getMapScreenFragment();
         _enquireViewFragment = _mainScreen.getEnquireViewFragment();
-        _recyclerView = view.findViewById(R.id.food_recycler_view);
+        switch (_moduleType) {
+            case Food:
+                _recyclerView = view.findViewById(R.id.food_recycler_view);
+                _spinner = view.findViewById(R.id.spinner);
+                _topButton = view.findViewById(R.id.top);
+                _allButton = view.findViewById(R.id.all);
+                _addEnquireButton = view.findViewById(R.id.add_enquire);
+                break;
+            case Accomodation:
+                _recyclerView = view.findViewById(R.id.stay_recycler_view);
+                _spinner = view.findViewById(R.id.stayspinner);
+                _topButton = view.findViewById(R.id.topStay);
+                _allButton = view.findViewById(R.id.allStay);
+                _addEnquireButton = view.findViewById(R.id.add_enquire_stay);
+                break;
+            case Events:
+                _recyclerView = view.findViewById(R.id.events_recycler_view);
+                _spinner = view.findViewById(R.id.eventsspinner);
+                _topButton = view.findViewById(R.id.topEvents);
+                _allButton = view.findViewById(R.id.all_events);
+                _addEnquireButton = view.findViewById(R.id.add_enquire_events);
+                break;
+            case Facilities:
+                _recyclerView = view.findViewById(R.id.facilities_recycler_view);
+                _spinner = view.findViewById(R.id.facilitiesspinner);
+                _topButton = view.findViewById(R.id.topFacility);
+                _allButton = view.findViewById(R.id.allFacilities);
+                _addEnquireButton = view.findViewById(R.id.add_enquire_facilites);
+                break;
+        }
+
         _recyclerView.setHasFixedSize(true);
         _layoutManager = new LinearLayoutManager(getActivity());
         _recyclerView.setLayoutManager(_layoutManager);
-        _currentListener = _foodEnquiresReference.addValueEventListener(_foodModuleAllEnquiresEventListener);
-        _spinner = view.findViewById(R.id.spinner);
+        _currentListener = _enquiresReference.addValueEventListener(_moduleAllEnquiresEventListener);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item, _spinnerPaths);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         _spinner.setAdapter(adapter);
         _spinner.setOnItemSelectedListener(this);
-        _topButton = view.findViewById(R.id.top);
         _topButton.setOnClickListener(this);
-        _allButton = view.findViewById(R.id.all);
         _allButton.setOnClickListener(this);
-        _addEnquireButton = view.findViewById(R.id.add_enquire);
         _addEnquireButton.setOnClickListener(this);
         _buttonClick.setDuration(300);
     }
@@ -256,7 +296,7 @@ public class Module extends Fragment implements View.OnClickListener, AdapterVie
         } else if (view == _addEnquireButton) {
             EnquireCreator enquireCreator = _mainScreen.getEnquireCreatorFragment();
             enquireCreator.setPreviousFragment(this);
-            enquireCreator.getSpinner().setSelection(0);
+            enquireCreator.getSpinner().setSelection(_moduleType.ordinal());
             enquireCreator.resetEnquireContent();
             _mainScreen.setCurrentFragment(enquireCreator);
             view.startAnimation(_buttonClick);
