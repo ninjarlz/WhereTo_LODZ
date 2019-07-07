@@ -48,6 +48,7 @@ public class PlaceView extends Fragment  {
     private ValueEventListener _currentListener;
     private String _placeID;
     private TextView _placeStats;
+    private String _loading;
 
 
 
@@ -75,6 +76,7 @@ public class PlaceView extends Fragment  {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        _loading = MainScreen.getContext().getResources().getString(R.string.loading);
         _mainScreen = (MainScreen) getActivity();
         _mapScreen = _mainScreen.getMapScreenFragment();
         _enquireViewFragment = _mainScreen.getEnquireViewFragment();
@@ -88,15 +90,17 @@ public class PlaceView extends Fragment  {
     public void setPlace(final String placeID) {
         if (placeID != null) {
             _placeID = placeID;
+            _placeStats.setText(_loading);
             if (_currentListener != null) {
+                _enquiresIDs.clear();
+                _dataset.clear();
+                _adapter = new RecyclerViewAdapter(_inflater, _dataset);
+                _recyclerView.setAdapter(_adapter);
                 _databaseReference.removeEventListener(_currentListener);
             }
             _currentListener = _databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                    _enquiresIDs.clear();
-                    _dataset.clear();
                     AnsweredPlace answeredPlace = dataSnapshot.child("AnsweredPlaces").child(placeID).getValue(AnsweredPlace.class);
                     _placeStats.setText(answeredPlace.toString());
 

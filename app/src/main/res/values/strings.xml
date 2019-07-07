@@ -60,4 +60,5 @@ and there’s a passionate fire inside us.</string>
     <string name="numberOfAnswers">Number of answers</string>
     <string name="selectedPlace">Selected place</string>
     <string name="nothing">&#60;empty&#62;</string>
+    <string name="loading">Loading…</string>
 </resources>
