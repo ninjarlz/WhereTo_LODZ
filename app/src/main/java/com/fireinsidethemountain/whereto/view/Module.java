@@ -1,4 +1,4 @@
-package com.fireinsidethemountain.whereto.ui;
+package com.fireinsidethemountain.whereto.view;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,21 +19,17 @@ import android.widget.Spinner;
 
 import com.fireinsidethemountain.whereto.R;
 import com.fireinsidethemountain.whereto.model.Enquire;
-import com.fireinsidethemountain.whereto.model.RecyclerViewAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.EventListener;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.zip.Inflater;
 
 
 public class Module extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {

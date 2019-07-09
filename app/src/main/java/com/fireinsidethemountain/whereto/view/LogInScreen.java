@@ -1,4 +1,4 @@
-package com.fireinsidethemountain.whereto.ui;
+package com.fireinsidethemountain.whereto.view;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -19,7 +18,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.fireinsidethemountain.whereto.R;
-import com.fireinsidethemountain.whereto.model.ProgramClient;
+import com.fireinsidethemountain.whereto.controller.ProgramClient;
 import com.fireinsidethemountain.whereto.util.Constants;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -71,9 +70,6 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
         _mainScreen = new Intent(this, MainScreen.class);
 
 
-        if (_auth.getCurrentUser() != null) {
-            startActivity(_mainScreen);
-        }
 
         setContentView(R.layout.activity_log_in_screen);
         _googleBtn = findViewById(R.id.google);
@@ -109,6 +105,11 @@ public class LogInScreen extends AppCompatActivity implements View.OnClickListen
 
             }
         });
+
+        if (_auth.getCurrentUser() != null) {
+            startActivity(_mainScreen);
+        }
+
 
     }
 

@@ -1,4 +1,4 @@
-package com.fireinsidethemountain.whereto.ui;
+package com.fireinsidethemountain.whereto.view;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -18,7 +18,7 @@ import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.fireinsidethemountain.whereto.R;
-import com.fireinsidethemountain.whereto.model.ProgramClient;
+import com.fireinsidethemountain.whereto.controller.ProgramClient;
 import com.fireinsidethemountain.whereto.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 

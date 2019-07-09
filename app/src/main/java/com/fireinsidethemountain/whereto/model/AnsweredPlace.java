@@ -1,9 +1,8 @@
 package com.fireinsidethemountain.whereto.model;
-import android.content.Context;
 import android.content.res.Resources;
 
 import com.fireinsidethemountain.whereto.R;
-import com.fireinsidethemountain.whereto.ui.MainScreen;
+import com.fireinsidethemountain.whereto.view.MainScreen;
 
 import java.util.HashMap;
 import java.util.Map;

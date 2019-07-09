@@ -1,14 +1,14 @@
 package com.fireinsidethemountain.whereto.model;
 
 import com.fireinsidethemountain.whereto.R;
-import com.fireinsidethemountain.whereto.ui.MainScreen;
+import com.fireinsidethemountain.whereto.view.MainScreen;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import android.content.Context;
+
 import android.content.res.Resources;
 
 @IgnoreExtraProperties

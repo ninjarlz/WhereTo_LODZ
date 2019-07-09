@@ -1,6 +1,5 @@
-package com.fireinsidethemountain.whereto.ui;
+package com.fireinsidethemountain.whereto.view;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;

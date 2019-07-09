@@ -7,7 +7,7 @@
     android:background="@drawable/background"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".ui.LogInScreen">
+    tools:context=".view.LogInScreen">
 
 
     <ImageView

@@ -1,4 +1,4 @@
-package com.fireinsidethemountain.whereto.ui;
+package com.fireinsidethemountain.whereto.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,7 +17,7 @@ import android.widget.Toast;
 import android.content.Context;
 import com.fireinsidethemountain.whereto.R;
 import com.fireinsidethemountain.whereto.model.Enquire;
-import com.fireinsidethemountain.whereto.model.ProgramClient;
+import com.fireinsidethemountain.whereto.controller.ProgramClient;
 
 
 public class EnquireCreator extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {

@@ -1,18 +1,14 @@
-package com.fireinsidethemountain.whereto.ui;
-import com.fireinsidethemountain.whereto.BuildConfig;
+package com.fireinsidethemountain.whereto.view;
 import com.fireinsidethemountain.whereto.R;
-import com.fireinsidethemountain.whereto.model.ProgramClient;
+import com.fireinsidethemountain.whereto.controller.ProgramClient;
 import com.fireinsidethemountain.whereto.util.Constants;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;

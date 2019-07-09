@@ -1,11 +1,9 @@
-package com.fireinsidethemountain.whereto.model;
+package com.fireinsidethemountain.whereto.view;
 
-import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 import com.fireinsidethemountain.whereto.R;
 
 import java.util.List;
-import java.util.zip.Inflater;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 

@@ -1,4 +1,4 @@
-package com.fireinsidethemountain.whereto.ui;
+package com.fireinsidethemountain.whereto.view;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.fireinsidethemountain.whereto.R;
-import com.fireinsidethemountain.whereto.model.ProgramClient;
+import com.fireinsidethemountain.whereto.controller.ProgramClient;
 import com.google.firebase.auth.FirebaseAuth;
 import android.content.Context;
 

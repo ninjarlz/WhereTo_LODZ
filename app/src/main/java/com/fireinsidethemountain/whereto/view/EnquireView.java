@@ -1,4 +1,4 @@
-package com.fireinsidethemountain.whereto.ui;
+package com.fireinsidethemountain.whereto.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,8 +17,6 @@ import android.widget.TextView;
 import com.fireinsidethemountain.whereto.R;
 import com.fireinsidethemountain.whereto.model.AnsweredPlace;
 import com.fireinsidethemountain.whereto.model.Enquire;
-import com.fireinsidethemountain.whereto.model.ProgramClient;
-import com.fireinsidethemountain.whereto.model.RecyclerViewAdapter;
 import com.fireinsidethemountain.whereto.util.Constants;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
